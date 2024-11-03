@@ -39,5 +39,8 @@
     <ClCompile Include="block.cppm">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="game.cppm">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

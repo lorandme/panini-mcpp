@@ -22,6 +22,7 @@
     <ClCompile Include="account.cppm" />
     <ClCompile Include="block.cppm" />
     <ClCompile Include="bullet.cppm" />
+    <ClCompile Include="game.cppm" />
     <ClCompile Include="map.cppm" />
     <ClCompile Include="player.cppm" />
     <ClCompile Include="Source.cpp" />

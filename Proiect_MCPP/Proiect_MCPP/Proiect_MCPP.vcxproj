@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cppm" />
     <ClCompile Include="map.cppm" />
     <ClCompile Include="player.cppm" />
     <ClCompile Include="Source.cpp" />

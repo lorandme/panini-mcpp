@@ -24,5 +24,8 @@
     <ClCompile Include="map.cppm">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="bullet.cppm">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -27,10 +27,10 @@
     <ClCompile Include="bullet.cppm">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="weapon.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="account.cppm">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cppm">
+    <ClCompile Include="team.cppm">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

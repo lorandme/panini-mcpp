@@ -33,5 +33,11 @@
     <ClCompile Include="team.cppm">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="account.cppm">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cppm">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

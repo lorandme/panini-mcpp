@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="account.cppm" />
     <ClCompile Include="bullet.cppm" />
     <ClCompile Include="game.cppm" />
     <ClCompile Include="weapon.cppm" />

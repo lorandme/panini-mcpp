@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cppm" />
+    <ClCompile Include="game.cppm" />
+    <ClCompile Include="weapon.cppm" />
     <ClCompile Include="map.cppm" />
     <ClCompile Include="player.cppm" />
     <ClCompile Include="Source.cpp" />

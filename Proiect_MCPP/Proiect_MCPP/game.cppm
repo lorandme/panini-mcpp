@@ -1,4 +1,4 @@
-export module game;
+﻿export module game;
 
 export class Game {
 

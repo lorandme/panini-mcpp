@@ -1,12 +1,12 @@
-export module account;
+#pragma once
 
-import <string>;
-import <vector>;
-import <iostream>;
-import <unordered_map>;
+#include <string>;
+#include <vector>;
+#include <iostream>;
+#include <unordered_map>;
 
 
-export class Account {
+class Account {
 public:
     Account(const std::string& playerName);
 

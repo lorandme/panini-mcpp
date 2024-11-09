@@ -19,14 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="account.cppm" />
-    <ClCompile Include="block.cppm" />
-    <ClCompile Include="bullet.cppm" />
-    <ClCompile Include="game.cppm" />
-    <ClCompile Include="map.cppm" />
-    <ClCompile Include="player.cppm" />
+    <ClCompile Include="account.h" />
+    <ClCompile Include="block.h" />
+    <ClCompile Include="bullet.h" />
+    <ClCompile Include="game.h" />
+    <ClCompile Include="map.h" />
+    <ClCompile Include="player.h" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="team.cppm" />
+    <ClCompile Include="team.h" />
+    <ClCompile Include="weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

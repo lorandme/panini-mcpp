@@ -18,28 +18,28 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="player.cppm">
+    <ClCompile Include="player.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="map.cppm">
+    <ClCompile Include="map.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cppm">
+    <ClCompile Include="bullet.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="team.cppm">
+    <ClCompile Include="team.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="block.cppm">
+    <ClCompile Include="block.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cppm">
+    <ClCompile Include="game.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="account.cppm">
+    <ClCompile Include="account.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="account.cppm">
+    <ClCompile Include="weapon.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

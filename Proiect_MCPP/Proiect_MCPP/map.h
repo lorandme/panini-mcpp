@@ -1,11 +1,10 @@
-﻿export module map;
+﻿#pragma once
 
-import block;
 #include <vector>
 #include <random>
 #include <iostream>
 
-export class Map {
+class Map {
 private:
     int width;
     int height;

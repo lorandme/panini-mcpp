@@ -1,15 +1,15 @@
-export module block;
+#pragma once
 
 #include <iostream>
 
-export enum class TileType {
+enum class TileType {
     Empty,
     IndestructibleWall,
     DestructibleWall,
     Bomb
 };
 
-export class Tile {
+class Tile {
 public:
     TileType type;
 

@@ -30,7 +30,7 @@
     <ClCompile Include="team.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="block.h">
+    <ClCompile Include="tile.h">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="game.h">

@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="account.h" />
-    <ClCompile Include="block.h" />
+    <ClCompile Include="tile.h" />
     <ClCompile Include="bullet.h" />
     <ClCompile Include="game.h" />
     <ClCompile Include="map.h" />

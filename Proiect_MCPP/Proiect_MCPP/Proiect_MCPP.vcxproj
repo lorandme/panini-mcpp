@@ -30,7 +30,6 @@
     <ClCompile Include="game.h" />
     <ClCompile Include="map.h" />
     <ClCompile Include="player.h" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="team.h" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="weapon.h" />

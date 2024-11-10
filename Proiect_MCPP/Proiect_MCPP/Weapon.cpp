@@ -1,4 +1,5 @@
 #include "weapon.h"
+#include "bullet.h"
 #include <iostream>
 
 Weapon::Weapon(int initialWaitTime, double initialSpeed)
@@ -47,4 +48,13 @@ void Weapon::reset() {
     bulletSpeed = 0.25;
     powerLevel = 1;
     std::cout << "Weapon returned to original state.\n";
+}
+
+void Weapon::shoot(double startX, double startY, Direction direction) {
+    if (canShoot()) {
+        Bullet newBullet(startX, startY, direction, bulletSpeed);
+        bullets.push_back(newBullet); // Add the bullet to the vector
+
+    }
+
 }

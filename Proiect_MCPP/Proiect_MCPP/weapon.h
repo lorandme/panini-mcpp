@@ -1,7 +1,10 @@
 #pragma once
+#include "bullet.h"
+#include <vector>
 
 class Weapon {
 private:
+	std::vector<Bullet> bullets;
 	int waitTime;
 	double bulletSpeed;
 	int powerLevel;
@@ -19,6 +22,7 @@ public:
 
 	void modifyWaitTime(int newWaitT);
 	void modifyBulletSpeed(double newBulletS);
+	void shoot(double startX, double startY, Direction direction);
 
 	//Se va reveni la setarile initiale
 	void reset();

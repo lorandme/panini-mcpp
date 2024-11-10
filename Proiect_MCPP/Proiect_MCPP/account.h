@@ -7,6 +7,11 @@
 
 
 class Account {
+private:
+    std::string username;
+    int points;
+    int score;
+    std::vector<std::string> purchasedUpgrades;
 public:
     Account(const std::string& playerName);
 
@@ -23,9 +28,5 @@ public:
     int getScore() const;
     const std::vector<std::string>& getPurchasedUpgrades() const;
 
-private:
-    std::string name;
-    int points;
-    int score;
-    std::vector<std::string> purchasedUpgrades;
+
 };

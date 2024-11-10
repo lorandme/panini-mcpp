@@ -11,45 +11,15 @@ private:
     int height;
     std::vector<std::vector<Tile>> grid;
 public:
-    Map(int width, int height);/* : width(width), height(height), grid(height, std::vector<Tile>(width)) {
-        generateRandom();
-    }#a se implementa intr-un cpp separat*/
-
-    ~Map();
+    Map(int width, int height);
 
     int getWidth() const;
     int getHeight() const;
 
-    Tile& getTile(int x, int y);/* {
-        return grid[y][x];
-    }#a se implementa intr-un cpp separat*/
+    Tile& getTile(int x, int y);
+    void generateRandom();
 
-    void generateRandom(); /* {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, 3); // 0 - Empty, 1 - IndestructibleWall, 2 - DestructibleWall, 3 - Bomb
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                TileType tileType = static_cast<TileType>(dis(gen));
-                grid[y][x] = Tile(tileType);
-            }
-        }
-    }#a se implementa intr-un cpp separat*/
-
-    // Afișează harta pe consolă (pentru testare)
-    void printMap() const; /*{
-        for (const auto& row : grid) {
-            for (const auto& tile : row) {
-                switch (tile.type) {
-                case TileType::Empty:            std::cout << "."; break;
-                case TileType::IndestructibleWall: std::cout << "#"; break;
-                case TileType::DestructibleWall:  std::cout << "D"; break;
-                }
-            }
-            std::cout << "\n";
-        }
-    }#a se implementa intr-un cpp separat*/
+    void printMap() const;
+      
     
-    void resetMap();
 };

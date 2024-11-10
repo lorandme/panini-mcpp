@@ -42,5 +42,8 @@
     <ClCompile Include="weapon.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

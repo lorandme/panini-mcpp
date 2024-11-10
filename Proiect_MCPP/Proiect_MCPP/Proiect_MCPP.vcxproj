@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="account.h" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="tile.h" />
     <ClCompile Include="bullet.h" />
     <ClCompile Include="game.h" />

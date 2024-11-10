@@ -1,26 +1,22 @@
-#include <iostream>
+#pragma once
 
 enum class TileType {
     EMPTY,
     WALL,
-    DESTRUCTIBE_WALL
+    DESTRUCTIBLE_WALL,
+    BOMB
 };
 
 class Tile {
+private:
+	TileType type;
 public:
-    TileType type;
-    bool hasBomb;
     Tile();
-
-    bool isOccupied() const; /*{
-        return type != TileType::EMPTY;
-    } #a se implementa intr-un cpp separat*/
-
-    void destroy(); /*{
-        if (type == TileType::DESTRUCTIBE_WALL) {
-            type = TileType::EMPTY;
-        }
-    } #a se implementa intr-un cpp separat*/
+    Tile(TileType type);
+    bool isOccupied() const;
+    void destroy();
 
     TileType getType() const;
+	void setType(TileType type);
+    void setBomb();
 };

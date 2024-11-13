@@ -3,23 +3,29 @@
 #include "account.h"
 
 //fiecare jucator are un cont cu un username unic, dar cand intra in joc va avea un playername introdus de el
-class Player : public Account {
+class Player {
 private:
 	std::string playername;
     int x;
     int y;
-    int lives;
-    int score;
+    int lives=3;
+    int score=0;
 
     bool checkCollisionWithEnemies();
 
 public:
-	Player(const std::string& name, int x, int y, int lives, int score);
+	Player(const std::string& name, int startX, int startY);
 
     void moveUp();
     void moveDown();
     void moveLeft();
     void moveRight();
+    void movePlayer(Player& player, char direction, int maxX, int maxY);
+
+    //doar pentru testare
+    void displayPosition() {
+        std::cout << "Player position: (" << x << ", " << y << ")\n";
+    }
 
     void shoot();
     void loseLife();

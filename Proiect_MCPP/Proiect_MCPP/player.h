@@ -2,6 +2,7 @@
 #include <string>
 #include "account.h"
 #include "map.h"
+#include "weapon.h"
 
 //fiecare jucator are un cont cu un username unic, dar cand intra in joc va avea un playername introdus de el
 class Player {
@@ -25,6 +26,10 @@ public:
     void moveLeft();
     void moveRight();
     void movePlayer(Player& player, char direction, int maxX, int maxY, const Map& map);
+
+    void handleInput(Player& player);
+
+    void shoot(Weapon& weapon, Direction direction);
 
     //doar pentru testare
     void displayPosition() {

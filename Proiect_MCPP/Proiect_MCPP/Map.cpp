@@ -19,6 +19,10 @@ Tile& Map::getTile(int x, int y) {
 	return grid[x][y];
 }
 
+const Tile& Map::getTile(int x, int y) const {
+    return grid[x][y];
+}
+
 //TODO: De imbunatatit metoda generateRandom pentru a asigura o cale accesibile pentru toti jucatorii
 void Map::generateRandom() {
     srand(time(0)); 

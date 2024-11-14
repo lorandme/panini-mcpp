@@ -7,6 +7,7 @@ int main()
 {
 	/*Map map(10, 10);
 	map.printMap();*/
+    Map map(10, 10);
     Player player("user1",5, 5);  
     int maxX = 10, maxY = 10; 
 
@@ -18,7 +19,8 @@ int main()
 
             if (key == 'q') break;  
 
-            player.movePlayer(player, key, maxX, maxY);  
+            player.movePlayer(player, key, maxX, maxY, map);
+
             system("cls");  
             player.displayPosition(); 
         }

@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include "account.h"
+#include "map.h"
 
 //fiecare jucator are un cont cu un username unic, dar cand intra in joc va avea un playername introdus de el
 class Player {
@@ -13,6 +14,9 @@ private:
 
     bool checkCollisionWithEnemies();
 
+    // Verifică dacă jucătorul poate să se mute pe o anumită poziție pe hartă
+    bool canMoveTo(const Map& map, int newX, int newY) const;
+
 public:
 	Player(const std::string& name, int startX, int startY);
 
@@ -20,7 +24,7 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
-    void movePlayer(Player& player, char direction, int maxX, int maxY);
+    void movePlayer(Player& player, char direction, int maxX, int maxY, const Map& map);
 
     //doar pentru testare
     void displayPosition() {
@@ -40,4 +44,7 @@ public:
     void updateScore(int points);
 
 	void setPlayerName(const std::string& playerName);
+
+    
+
 };

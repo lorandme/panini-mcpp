@@ -65,7 +65,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scoreBoard.h">
+    <ClInclude Include="scoreboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gameManager.h">

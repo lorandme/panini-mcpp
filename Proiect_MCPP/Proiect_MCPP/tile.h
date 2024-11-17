@@ -34,10 +34,5 @@ public:
     TileType getType() const;
     void setType(TileType type);
 
-<<<<<<< HEAD
     void setBomb();  // Adăugăm funcția setBomb
 };
-=======
-    void setBomb();  // Adăugăm funcția setBomb
-};
->>>>>>> origin/main

@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gameManager.h" />
-    <ClInclude Include="scoreBoard.h" />
+    <ClInclude Include="scoreboard.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -1,5 +1,5 @@
 #pragma once
 
-class	ScoreBoard {
+class ScoreBoard {
 
 };

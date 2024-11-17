@@ -17,6 +17,7 @@ public:
     int getHeight() const;
 
     Tile& getTile(int x, int y);
+    const Tile& getTile(int x, int y) const;  // Supraincarcare pentru obiecte const
     void generateRandom();
 
     void printMap() const;

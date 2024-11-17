@@ -1,27 +1,48 @@
-#include "tile.h"
-#include <iostream>
+#include "Tile.h"
+#include "Player.h"
 
+Tile::Tile() : type(TileType::EMPTY), occupantPlayer(nullptr) {}
 
-Tile::Tile() : type(TileType::EMPTY) {}
-Tile::Tile(TileType type) : type(type) {}
+Tile::Tile(TileType type) : type(type), occupantPlayer(nullptr) {}
 
 bool Tile::isOccupied() const {
-	return type != TileType::EMPTY;
+    return occupantPlayer != nullptr;
+}
+
+bool Tile::isOccupiedByPlayer() const {
+    return occupantPlayer != nullptr;
+}
+
+bool Tile::isOccupiedByProjectile() const {
+    return false;
+}
+
+void Tile::occupyPlayer(std::shared_ptr<Player> player) {
+    occupantPlayer = player;
+}
+
+void Tile::vacate() {
+    occupantPlayer = nullptr;
 }
 
 void Tile::destroy() {
-	if (type == TileType::DESTRUCTIBLE_WALL)
-		type = TileType::EMPTY;
+    if (isDestructible()) {
+        type = TileType::EMPTY;
+    }
+}
+
+bool Tile::isDestructible() const {
+    return type == TileType::DESTRUCTIBLE_WALL;
 }
 
 TileType Tile::getType() const {
-	return type;
+    return type;
 }
 
-void Tile::setType(TileType type) {
-	this->type = type;
+void Tile::setType(TileType newType) {
+    type = newType;
 }
 
 void Tile::setBomb() {
-	type = TileType::BOMB;
+    type = TileType::BOMB;
 }

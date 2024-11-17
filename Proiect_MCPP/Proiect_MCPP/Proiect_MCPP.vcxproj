@@ -19,14 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="account.cppm" />
-    <ClCompile Include="block.cppm" />
-    <ClCompile Include="bullet.cppm" />
-    <ClCompile Include="game.cppm" />
-    <ClCompile Include="map.cppm" />
-    <ClCompile Include="player.cppm" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="team.cppm" />
+    <ClCompile Include="account.h" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="tile.h" />
+    <ClCompile Include="bullet.h" />
+    <ClCompile Include="game.h" />
+    <ClCompile Include="map.h" />
+    <ClCompile Include="player.h" />
+    <ClCompile Include="team.h" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -123,6 +129,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
+      <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

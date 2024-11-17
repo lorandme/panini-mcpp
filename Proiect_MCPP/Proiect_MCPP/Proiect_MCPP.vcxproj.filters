@@ -15,32 +15,47 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="player.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="map.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="account.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="player.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="map.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="team.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="block.cppm">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cppm">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="account.cppm">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="account.cppm">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,12 +1,17 @@
-export module account;
+#pragma once
 
-import <string>;
-import <vector>;
-import <iostream>;
-import <unordered_map>;
+#include <string>;
+#include <vector>;
+#include <iostream>;
+#include <unordered_map>;
 
 
-export class Account {
+class Account {
+private:
+    std::string username;
+    int points;
+    int score;
+    std::vector<std::string> purchasedUpgrades;
 public:
     Account(const std::string& playerName);
 
@@ -23,9 +28,5 @@ public:
     int getScore() const;
     const std::vector<std::string>& getPurchasedUpgrades() const;
 
-private:
-    std::string name;
-    int points;
-    int score;
-    std::vector<std::string> purchasedUpgrades;
+
 };

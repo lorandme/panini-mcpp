@@ -50,6 +50,7 @@ public:
 
 	void setPlayerName(const std::string& playerName);
 
-    
 
+
+    std::string getName() const;
 };

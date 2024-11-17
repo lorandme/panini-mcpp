@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Team.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="tile.h" />
     <ClCompile Include="bullet.h" />

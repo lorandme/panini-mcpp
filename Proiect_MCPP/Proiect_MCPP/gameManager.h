@@ -1,4 +1,6 @@
 #pragma once
+#include "Player.h"
+#include "Map.h"
 
 class GameManager {
 private:

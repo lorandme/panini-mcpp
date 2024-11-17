@@ -57,5 +57,3 @@ void Player::movePlayer(Player& player, char direction, int maxX, int maxY, cons
 void Player::shoot(Weapon& weapon, Direction direction) {
 	weapon.shoot(x, y, direction);
 }
-
-

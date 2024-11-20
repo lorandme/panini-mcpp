@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Map.h"
 
+
 class GameManager {
 private:
 	Map gameMap;
@@ -14,4 +15,7 @@ public:
 	void startGame();
 	void gameLoop();
 	void endGame();
+
+	void detectCollisions();
+
 };

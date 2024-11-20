@@ -45,7 +45,7 @@ void Tile::setType(TileType newType) {
 
 void Tile::setBomb() {
     type = TileType::BOMB;
-<<<<<<< HEAD
+    <<<<<< < HEAD
 }
 =======
 }

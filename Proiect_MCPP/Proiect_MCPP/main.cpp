@@ -1,29 +1,16 @@
-#include "map.h"
-#include "player.h"
-#include <conio.h>
-#include <windows.h>
+﻿#include "GameManager.h"
+#include <iostream>
 
-int main()
-{
-	/*Map map(10, 10);
-	map.printMap();*/
-    Map map(10, 10);
-    Player player("user1",5, 5);  
-    int maxX = 10, maxY = 10; 
+int main() {
+    // Inițializare GameManager
+    GameManager gameManager;
 
-    std::cout << "Utilizeaza tastele WASD pentru a muta playerul. Apasa Q pentru a iesi.\n";
+    // Inițializare joc
+    gameManager.initializeGame();
 
-    while (true) {
-        if (_kbhit()) {
-            char key = _getch();
+    // Start joc
+    std::cout << "Jocul a început! \n";
+    gameManager.startGame();
 
-            if (key == 'q') break;  
-
-            player.movePlayer(player, key, maxX, maxY, map);
-
-            system("cls");  
-            player.displayPosition(); 
-        }
-        Sleep(100); 
-    }
+    return 0;
 }

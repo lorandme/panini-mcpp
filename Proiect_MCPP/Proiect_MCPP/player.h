@@ -18,6 +18,9 @@ private:
     // Verifică dacă jucătorul poate să se mute pe o anumită poziție pe hartă
     bool canMoveTo(const Map& map, int newX, int newY) const;
 
+    Weapon weapon; // Fiecare jucător are o armă
+
+
 public:
 	Player(const std::string& name, int startX, int startY);
 
@@ -29,7 +32,8 @@ public:
 
     void handleInput(Player& player);
 
-    void shoot(Weapon& weapon, Direction direction);
+    void shoot(Direction direction);
+
 
     //doar pentru testare
     void displayPosition() {
@@ -37,6 +41,7 @@ public:
     }
 
     void shoot();
+
     void loseLife();
 
     bool isEliminated() const;
@@ -53,4 +58,7 @@ public:
 
 
     std::string getName() const;
+
+    Weapon& getWeapon();
+
 };

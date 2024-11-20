@@ -27,4 +27,10 @@ public:
 	//Se va reveni la setarile initiale
 	void reset();
 
+	//Getteri
+
+	std::vector<Bullet>& getBullets();
+	void shoot(double startX, double startY, Direction direction);
+
+
 };

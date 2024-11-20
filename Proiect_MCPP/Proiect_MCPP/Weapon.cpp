@@ -58,3 +58,7 @@ void Weapon::shoot(double startX, double startY, Direction direction) {
     }
 
 }
+
+std::vector<Bullet>& Weapon::getBullets() {
+    return bullets;
+}

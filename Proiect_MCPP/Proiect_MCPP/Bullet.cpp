@@ -50,3 +50,8 @@ void Bullet::setPosition(double newX, double newY) {
 void Bullet::setDirection(Direction newDir) {
 	direction = newDir;
 }
+
+bool Bullet::checkCollision(int targetX, int targetY) const {
+    return (static_cast<int>(x) == targetX && static_cast<int>(y) == targetY);
+}
+

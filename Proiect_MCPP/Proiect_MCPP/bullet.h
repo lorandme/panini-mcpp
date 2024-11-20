@@ -22,6 +22,8 @@ public:
 	//Metode
 	void move(double deltaTime);
 	void deactivate();
+	bool checkCollision(int targetX, int targetY) const;
+
 
 	//Getteri
 	std::pair<double, double> getPosition() const;
@@ -30,4 +32,5 @@ public:
 	//Setteri
 	void setPosition(double newX, double newY);
 	void setDirection(Direction newDirection);
+
 };

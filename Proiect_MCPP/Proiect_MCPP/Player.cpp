@@ -59,6 +59,52 @@ void Player::movePlayer(Player& player, char direction, int maxX, int maxY, cons
     }
 
 
-Weapon& Player::getWeapon() {
+    std::string Player::getName() const
+    {
+        return std::string();
+    }
+
+    Weapon& Player::getWeapon() {
     return weapon;
+}
+
+    void Player::shoot()
+    {
+    }
+
+    void Player::loseLife()
+    {
+    }
+
+    bool Player::isEliminated() const
+    {
+        return false;
+    }
+
+    bool Player::hasWon() const
+    {
+        return false;
+    }
+
+    std::pair<int, int> Player::getPosition() const
+{
+    return std::pair<int, int>();
+}
+
+int Player::getScore() const
+{
+    return 0;
+}
+
+int Player::getLives() const
+{
+    return 0;
+}
+
+void Player::updateScore(int points)
+{
+}
+
+void Player::setPlayerName(const std::string& playerName)
+{
 }

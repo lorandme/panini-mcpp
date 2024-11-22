@@ -20,24 +20,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="account.h" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="gamemanager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Team.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="map.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="team.cpp" />
+    <ClCompile Include="tile.cpp" />
     <ClCompile Include="tile.h" />
     <ClCompile Include="bullet.h" />
     <ClCompile Include="game.h" />
     <ClCompile Include="map.h" />
     <ClCompile Include="player.h" />
     <ClCompile Include="team.h" />
-    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="weapon.cpp" />
     <ClCompile Include="weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gameManager.h" />
+    <ClInclude Include="gamemanager.h" />
     <ClInclude Include="scoreboard.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

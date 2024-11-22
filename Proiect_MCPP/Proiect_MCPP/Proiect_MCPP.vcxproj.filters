@@ -39,28 +39,28 @@
     <ClCompile Include="weapon.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
+    <ClCompile Include="weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
+    <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="team.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Team.cpp">
+    <ClCompile Include="gamemanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
+    <ClCompile Include="map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +68,7 @@
     <ClInclude Include="scoreboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameManager.h">
+    <ClInclude Include="gamemanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

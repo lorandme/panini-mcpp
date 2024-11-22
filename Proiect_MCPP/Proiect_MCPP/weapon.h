@@ -30,7 +30,6 @@ public:
 	//Getteri
 
 	std::vector<Bullet>& getBullets();
-	void shoot(double startX, double startY, Direction direction);
 
 
 };

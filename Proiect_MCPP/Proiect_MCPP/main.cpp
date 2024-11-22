@@ -9,7 +9,7 @@ int main() {
     gameManager.initializeGame();
 
     // Start joc
-    std::cout << "Jocul a început! \n";
+    std::cout << "Jocul a inceput! \n";
     gameManager.startGame();
 
     return 0;

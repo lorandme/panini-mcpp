@@ -6,23 +6,22 @@
 
 class Team {
 private:
-	std::string teamName;
-	std::vector<Player> players;
-	int score;
-	
+    std::string teamName;
+    std::vector<Player> players;
+    int score;
+
 public:
-	Team(const std::string& name);
+    Team(const std::string& name);
 
-	void addPlayer(const Player& player);
-	void removePlayer(const std::string& playerName);
-	
-	int getScore() const;
-	void updateScore(int points);
+    void addPlayer(const Player& player);
+    void removePlayer(const std::string& playerName);
 
-	std::string getName() const { return teamName; }
-	std::vector<Player> getPlayers() const { return players; }
+    int getScore() const;
+    void updateScore(int points);
 
-	bool hasPlayer(const std::string& playerName) const;
-	Player* findPlayer(const std::string& playerName);
+    std::string getName() const { return teamName; }
+    std::vector<Player> getPlayers() const { return players; }
 
+    bool hasPlayer(const std::string& playerName) const;
+    Player* findPlayer(const std::string& playerName);
 };

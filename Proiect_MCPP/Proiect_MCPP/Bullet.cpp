@@ -1,13 +1,16 @@
-#include "bullet.h"
+#include "Bullet.h"
 
-Bullet::Bullet(double startX, double startY, Direction dir, double speed)
-	: x(startX), y(startY), direction(dir), speed(speed),isActive(true){}
+Bullet::Bullet(double startX, double startY, Direction dir, double speed): 
+    x(startX), 
+    y(startY),
+    direction(dir),
+    speed(speed),
+    isActive(true){}
 
-// Glontul se deplaseaza ihn directia specificata
 void Bullet::move(double deltaTime) {
-	if (!isActive)
-		return;
-	double distance = speed * deltaTime;
+    if (!isActive) return;
+
+    double distance = speed * deltaTime;
 
     switch (direction) {
     case Direction::UP:
@@ -25,33 +28,27 @@ void Bullet::move(double deltaTime) {
     }
 }
 
-// Se dezactiveaza glontul
 void Bullet::deactivate() {
-	isActive = false;
+    isActive = false;
 }
 
-// Se returneaza pozitia glontului
 std::pair<double, double> Bullet::getPosition() const {
-	return { x,y };
+    return { x, y };
 }
 
-// Se verifica daca glontul este activ
 bool Bullet::isBulletActive() const {
-	return isActive;
+    return isActive;
 }
 
-// Seteaza o pozitie noua pentru glont
 void Bullet::setPosition(double newX, double newY) {
-	x = newX;
-	y = newY;
+    x = newX;
+    y = newY;
 }
 
-//Seteaza o noua directie pentru glont
-void Bullet::setDirection(Direction newDir) {
-	direction = newDir;
+void Bullet::setDirection(Direction newDirection) {
+    direction = newDirection;
 }
 
 bool Bullet::checkCollision(int targetX, int targetY) const {
     return (static_cast<int>(x) == targetX && static_cast<int>(y) == targetY);
 }
-

@@ -30,9 +30,6 @@
     <ClCompile Include="tile.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="account.h">
       <Filter>Header Files</Filter>
     </ClCompile>

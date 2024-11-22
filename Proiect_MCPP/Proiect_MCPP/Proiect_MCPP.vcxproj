@@ -29,7 +29,6 @@
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="tile.h" />
     <ClCompile Include="bullet.h" />
-    <ClCompile Include="game.h" />
     <ClCompile Include="map.h" />
     <ClCompile Include="player.h" />
     <ClCompile Include="team.h" />

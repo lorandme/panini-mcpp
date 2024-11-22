@@ -8,24 +8,32 @@ Map::Map(int width, int height)
     : width(width), height(height), grid(width, std::vector<Tile>(height)) {
     generateRandom();
 }
+
 int Map::getWidth() const {
     return width;
 }
+
 int Map::getHeight() const {
     return height;
 }
 
 Tile& Map::getTile(int x, int y) {
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+        throw std::out_of_range("Tile coordinates out of bounds");
+    }
     return grid[x][y];
 }
 
 const Tile& Map::getTile(int x, int y) const {
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+        throw std::out_of_range("Tile coordinates out of bounds");
+    }
     return grid[x][y];
 }
 
-//TODO: De imbunatatit metoda generateRandom pentru a asigura o cale accesibile pentru toti jucatorii
 void Map::generateRandom() {
-    srand(time(0));
+	srand(static_cast<unsigned int>(time(0)));
+	//static_cast<unsigned int>(time(0)) - converteste timpul in secunde in unsigned int
 
     int emptyPercentage = 60;
     int wallPercentage = 20;
@@ -47,18 +55,13 @@ void Map::generateRandom() {
             }
 
             grid[x][y] = Tile(type);
-
         }
     }
 
-    int edgeX = getHeight() - 1;
-    int edgeY = getWidth() - 1;
-
     grid[0][0].setType(TileType::EMPTY);
-    grid[0][edgeY].setType(TileType::EMPTY);
-    grid[edgeX][0].setType(TileType::EMPTY);
-    grid[edgeX][edgeY].setType(TileType::EMPTY);
-
+    grid[0][height - 1].setType(TileType::EMPTY);
+    grid[width - 1][0].setType(TileType::EMPTY);
+    grid[width - 1][height - 1].setType(TileType::EMPTY);
 }
 
 void Map::printMap() const {
@@ -80,4 +83,3 @@ void Map::printMap() const {
         std::cout << "\n";
     }
 }
-

@@ -2,14 +2,14 @@
 #include "map.h"
 #include "account.h"
 #include "player.h"
+#include <iostream>
+#include <stdexcept>
 
 Player::Player(const std::string& username, int startX, int startY)
-    : playername(username), x(startX), y(startY){}
+    : playername(username), x(startX), y(startY) {}
 
-
-bool Player::checkCollisionWithEnemies(){
-    return true;
-	//TODO: daca se afla un alt jucator pe aceasta pozitie sa nu poata sa se mute
+bool Player::checkCollisionWithEnemies() {
+    return true; // TODO: dacă se află un alt jucător pe această poziție să nu poată să se mute
 }
 
 void Player::moveUp() { y--; }
@@ -17,17 +17,16 @@ void Player::moveDown() { y++; }
 void Player::moveLeft() { x--; }
 void Player::moveRight() { x++; }
 
-void Player::movePlayer(Player& player, char direction, int maxX, int maxY, const Map& map) {
-
+void Player::movePlayer(char direction, int maxX, int maxY, const Map& map) {
     int newX = x;
     int newY = y;
 
     switch (direction) {
-    case 'w': if (player.y > 0) player.moveUp(); break;
-    case 's': if (player.y < maxY - 1) player.moveDown(); break;
-    case 'a': if (player.x > 0) player.moveLeft(); break;
-    case 'd': if (player.x < maxX - 1) player.moveRight(); break;
-    default: break;
+    case 'w': newY--; break; // Move up
+    case 's': newY++; break; // Move down
+    case 'a': newX--; break; // Move left
+    case 'd': newX++; break; // Move right
+    default: return; // Invalid direction
     }
 
     // Verifică dacă jucătorul poate să se mute pe noua poziție
@@ -37,11 +36,11 @@ void Player::movePlayer(Player& player, char direction, int maxX, int maxY, cons
     }
 }
 
-    bool Player::canMoveTo(const Map & map, int newX, int newY) const {
-        // Verifică dacă coordonatele sunt în afara granițelor hărții
-        if (newX < 0 || newY < 0 || newX >= map.getWidth() || newY >= map.getHeight()) {
-            return false;
-        }
+bool Player::canMoveTo(const Map& map, int newX, int newY) const {
+    // Verifică dacă coordonatele sunt în afara granițelor hărții
+    if (newX < 0 || newY < 0 || newX >= map.getWidth() || newY >= map.getHeight()) {
+        return false;
+    }
 
     // Obține tipul de celulă la poziția respectivă
     const Tile& targetTile = map.getTile(newX, newY);
@@ -54,57 +53,53 @@ void Player::movePlayer(Player& player, char direction, int maxX, int maxY, cons
     return true;
 }
 
-    void Player::shoot(Direction direction) {
-        weapon.shoot(x, y, direction);
-    }
+void Player::shoot(Direction direction) {
+    weapon.shoot(x, y, direction);
+}
 
+std::string Player::getName() const {
+    return playername; // Return the player's name
+}
 
-    std::string Player::getName() const
-    {
-        return std::string();
-    }
-
-    Weapon& Player::getWeapon() {
+Weapon& Player::getWeapon() {
     return weapon;
 }
 
-    void Player::shoot()
-    {
-    }
-
-    void Player::loseLife()
-    {
-    }
-
-    bool Player::isEliminated() const
-    {
-        return false;
-    }
-
-    bool Player::hasWon() const
-    {
-        return false;
-    }
-
-    std::pair<int, int> Player::getPosition() const
-{
-    return std::pair<int, int>();
+void Player::shoot() {
+    // Implement shooting logic here
 }
 
-int Player::getScore() const
-{
-    return 0;
+void Player::loseLife() {
+    if (lives > 0) {
+        lives--;
+    }
 }
 
-int Player::getLives() const
-{
-    return 0;
+bool Player::isEliminated() const {
+    return lives <= 0;
 }
 
-void Player::updateScore(int points)
-{
+bool Player::hasWon() const {
+    // Implement winning condition logic here
+    return false;
 }
 
-void Player::setPlayerName(const std::string& playerName)
-{
+std::pair<int, int> Player::getPosition() const {
+    return std::make_pair(x, y); // Return the player's current position
+}
+
+int Player::getScore() const {
+    return score; // Return the player's score
+}
+
+int Player::getLives() const {
+    return lives; // Return the number of lives left
+}
+
+void Player::updateScore(int points) {
+    score += points; // Update the player's score
+}
+
+void Player::setPlayerName(const std::string& playerName) {
+    playername = playerName; // Set the player's name
 }

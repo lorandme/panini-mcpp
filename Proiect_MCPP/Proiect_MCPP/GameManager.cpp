@@ -62,66 +62,66 @@ void GameManager::detectCollisions() {
 
 // Bucla principală de joc
 void GameManager::gameLoop() {
-    while (isRunning) {
-        // Detectează coliziunile
-        detectCollisions();
+    //while (isRunning) {
+    //    // Detectează coliziunile
+    //    detectCollisions();
 
-        // Curățăm ecranul
-        system("cls");
+    //    // Curățăm ecranul
+    //    system("cls");
 
-        // Afișăm harta
-        gameMap.printMap();
+    //    // Afișăm harta
+    //    gameMap.printMap();
 
-        // Afișăm pozițiile și starea jucătorilor
-        for (const auto& player : players) {
-            std::cout << player.getName() << " este la (" << player.getPosition().first << ", " << player.getPosition().second
-                << ") cu " << player.getLives() << " vieți rămase.\n";
-        }
+    //    // Afișăm pozițiile și starea jucătorilor
+    //    for (const auto& player : players) {
+    //        std::cout << player.getName() << " este la (" << player.getPosition().first << ", " << player.getPosition().second
+    //            << ") cu " << player.getLives() << " vieți rămase.\n";
+    //    }
 
-        // Capturăm input-ul de la jucători
-        if (_kbhit()) {
-            char key = _getch();
+    //    // Capturăm input-ul de la jucători
+    //    if (_kbhit()) {
+    //        char key = _getch();
 
-            // Ieșire din joc
-            if (key == 'q') {
-                isRunning = false;
-                break;
-            }
+    //        // Ieșire din joc
+    //        if (key == 'q') {
+    //            isRunning = false;
+    //            break;
+    //        }
 
-            // Controlul jucătorului 1 (WASD pentru mișcare)
-            if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-                players[0].movePlayer(players[0], key, gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            }
+    //        // Controlul jucătorului 1 (WASD pentru mișcare)
+    //        if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
+    //            players[0].movePlayer(players[0], key, gameMap.getWidth(), gameMap.getHeight(), gameMap);
+    //        }
 
-            // Controlul jucătorului 2 (IJKL pentru mișcare)
-            if (key == 'i' || key == 'j' || key == 'k' || key == 'l') {
-                char convertedKey;
-                switch (key) {
-                case 'i': convertedKey = 'w'; break;
-                case 'k': convertedKey = 's'; break;
-                case 'j': convertedKey = 'a'; break;
-                case 'l': convertedKey = 'd'; break;
-                }
-                players[1].movePlayer(players[1], convertedKey, gameMap.getWidth(), gameMap.getHeight(), gameMap);
-            }
+    //        // Controlul jucătorului 2 (IJKL pentru mișcare)
+    //        if (key == 'i' || key == 'j' || key == 'k' || key == 'l') {
+    //            char convertedKey;
+    //            switch (key) {
+    //            case 'i': convertedKey = 'w'; break;
+    //            case 'k': convertedKey = 's'; break;
+    //            case 'j': convertedKey = 'a'; break;
+    //            case 'l': convertedKey = 'd'; break;
+    //            }
+    //            players[1].movePlayer(players[1], convertedKey, gameMap.getWidth(), gameMap.getHeight(), gameMap);
+    //        }
 
-            // Trage un glonț (tasta SPACE pentru jucător 1, ENTER pentru jucător 2)
-            if (key == ' ') {
-                players[0].shoot(Direction::UP);
-            }
-            else if (key == '\r') {
-                players[1].shoot(Direction::UP);
-            }
-        }
+    //        // Trage un glonț (tasta SPACE pentru jucător 1, ENTER pentru jucător 2)
+    //        if (key == ' ') {
+    //            players[0].shoot(Direction::UP);
+    //        }
+    //        else if (key == '\r') {
+    //            players[1].shoot(Direction::UP);
+    //        }
+    //    }
 
-        // Pauză scurtă pentru a preveni utilizarea excesivă a CPU-ului
-        Sleep(100);
-    }
+    //    // Pauză scurtă pentru a preveni utilizarea excesivă a CPU-ului
+    //    Sleep(100);
+    //}
 }
 
 // Încheiere joc
 void GameManager::endGame() {
-    std::cout << "Jocul s-a încheiat!\n";
+    std::cout << "Jocul s-a incheiat!\n";
 
     // Afișăm scorurile finale
     for (const auto& player : players) {

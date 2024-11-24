@@ -1,52 +1,46 @@
 ﻿#include <iostream>
 #include <string>
-#include <curl/curl.h>
-
-size_t write_callback(void* contents, size_t size, size_t nmemb, std::string* out) {
-    size_t total_size = size * nmemb;
-    out->append((char*)contents, total_size);
-    return total_size;
-}
+#include <cpr/cpr.h>
+#include <nlohmann/json.hpp>
 
 int main() {
-    CURL* curl;
-    CURLcode res;
-    std::string read_buffer;
+    // Clientul trimite poziția tancului la server
+    nlohmann::json json_data;
+    json_data["tancX"] = 10;  // Exemplu de poziție X
+    json_data["tancY"] = 20;  // Exemplu de poziție Y
 
-    curl_global_init(CURL_GLOBAL_DEFAULT);
-    curl = curl_easy_init();
+    // Trimiterea cererii POST către server pentru actualizarea poziției
+    cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/update" },
+        cpr::Body{ json_data.dump() },
+        cpr::Header{ {"Content-Type", "application/json"} });
 
-    if (curl) {
-        // Setează URL-ul endpoint-ului "/update" (exemplu: pentru actualizarea poziției tancului)
-        curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:18080/update");
-
-        // Datele JSON pentru poziția tancului
-        std::string json_data = "{\"tancX\": 10, \"tancY\": 20}";
-
-        // Setează datele POST
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_data.c_str());
-
-        // Setează tipul de conținut (application/json)
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_slist_append(NULL, "Content-Type: application/json"));
-
-        // Setează callback-ul pentru a captura răspunsul
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &read_buffer);
-
-        // Trimite cererea
-        res = curl_easy_perform(curl);
-
-        if (res != CURLE_OK) {
-            std::cerr << "Eroare la trimiterea cererii: " << curl_easy_strerror(res) << std::endl;
-        }
-        else {
-            std::cout << "Răspuns server: " << read_buffer << std::endl;
-        }
-
-        // Curăță și termină sesiunea curl
-        curl_easy_cleanup(curl);
+    if (r.status_code == 200) {
+        std::cout << "Poziția a fost actualizată cu succes!" << std::endl;
+    }
+    else {
+        std::cerr << "Eroare la actualizarea poziției: " << r.status_code << std::endl;
     }
 
-    curl_global_cleanup();
+    // Obținerea scorului de la server
+    r = cpr::Get(cpr::Url{ "http://localhost:18080/score" });
+
+    if (r.status_code == 200) {
+        std::cout << "Scor curent: " << r.text << std::endl;
+    }
+    else {
+        std::cerr << "Eroare la obținerea scorului: " << r.status_code << std::endl;
+    }
+
+    // Obținerea poziției curente a tancului de la server
+    r = cpr::Get(cpr::Url{ "http://localhost:18080/position" });
+
+    if (r.status_code == 200) {
+        auto response_json = nlohmann::json::parse(r.text);
+        std::cout << "Poziția tancului: X=" << response_json["tancX"] << " Y=" << response_json["tancY"] << std::endl;
+    }
+    else {
+        std::cerr << "Eroare la obținerea poziției: " << r.status_code << std::endl;
+    }
+
     return 0;
 }

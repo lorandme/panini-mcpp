@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="account.h" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="client.cpp" />
     <ClCompile Include="gamemanager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />

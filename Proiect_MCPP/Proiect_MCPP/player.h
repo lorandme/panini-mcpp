@@ -4,6 +4,7 @@
 #include "account.h"
 #include "map.h"
 #include "weapon.h"
+#include "team.h"
 
 // Fiecare jucător are un cont cu un username unic, dar când intră în joc va avea un playername introdus de el
 class Player {
@@ -13,6 +14,7 @@ private:
     int y;
     int lives = 3;
     int score = 0;
+    Team* team;
 
     bool checkCollisionWithEnemies(); // Check for collisions with other players/enemies
 
@@ -52,4 +54,7 @@ public:
     void setPlayerName(const std::string& playerName);
     std::string getName() const;
     Weapon& getWeapon();
+
+    Team* getTeamName() const; // Obține echipa jucătorului
+    void setTeam(Team* newTeam); // Setează echipa jucătorului
 };

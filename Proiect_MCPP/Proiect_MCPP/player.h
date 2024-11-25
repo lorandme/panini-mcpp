@@ -6,6 +6,7 @@
 #include "weapon.h"
 #include "team.h"
 
+class Team; // Forward declaration
 // Fiecare jucător are un cont cu un username unic, dar când intră în joc va avea un playername introdus de el
 class Player {
 private:

@@ -1,9 +1,11 @@
 ﻿#include <iostream>
 #include <string>
 #include <cpr/cpr.h>
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
-int main() {
+
+/*int main() {
     // Clientul trimite poziția tancului la server
     nlohmann::json json_data;
     json_data["tancX"] = 10;  // Exemplu de poziție X
@@ -44,3 +46,4 @@ int main() {
 
     return 0;
 }
+*/

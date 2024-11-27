@@ -1,4 +1,6 @@
 ﻿#include "crow.h"
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include <sqlite_orm/sqlite_orm.h>
 #include <iostream>
 #include <string>
@@ -21,7 +23,7 @@ auto storage = orm::make_storage(
         orm::make_column("score", &Score::score)
     )
 );
-
+/*
 int main() {
     // Sincronizează schema bazei de date
     storage.sync_schema();
@@ -79,3 +81,4 @@ int main() {
 
     return 0;
 }
+*/

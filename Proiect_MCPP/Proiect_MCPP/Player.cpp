@@ -103,3 +103,8 @@ void Player::updateScore(int points) {
 void Player::setPlayerName(const std::string& playerName) {
     playername = playerName; // Set the player's name
 }
+
+void Player::addReward(int points) {
+    score += points; // Adaugă punctele la scorul jucătorului
+    std::cout << playername << " a primit " << points << " puncte!\n";
+}

@@ -27,6 +27,7 @@ private:
 public:
     Player(const std::string& name, int startX, int startY);
 
+
     void moveUp();
     void moveDown();
     void moveLeft();
@@ -58,4 +59,7 @@ public:
 
     Team* getTeamName() const; // Obține echipa jucătorului
     void setTeam(Team* newTeam); // Setează echipa jucătorului
+
+    void addReward(int points); // Adaugă puncte ca recompensă
+
 };

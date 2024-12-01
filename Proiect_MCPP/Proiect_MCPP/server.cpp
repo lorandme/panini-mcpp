@@ -1,4 +1,5 @@
-﻿#include "crow.h"
+﻿#include "server.h"
+#include "crow.h"  // Include crow pentru serverul web
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
 #include <sqlite_orm/sqlite_orm.h>
@@ -23,11 +24,15 @@ auto storage = orm::make_storage(
         orm::make_column("score", &Score::score)
     )
 );
-/*
-int main() {
+
+// Funcția pentru inițializarea serverului
+void initServer() {
     // Sincronizează schema bazei de date
     storage.sync_schema();
+}
 
+// Funcția pentru a configura rutele și a porni serverul
+void startServer() {
     crow::SimpleApp app;
 
     int scor = 0;  // Scorul jocului, stocat temporar în memorie
@@ -78,7 +83,4 @@ int main() {
 
     // Rulează serverul pe portul 18080
     app.port(18080).multithreaded().run();
-
-    return 0;
 }
-*/

@@ -22,7 +22,7 @@ private:
     // Verifică dacă jucătorul poate să se mute pe o anumită poziție pe hartă
     bool canMoveTo(const Map& map, int newX, int newY) const;
 
-    Weapon weapon; // Fiecare jucător are o armă
+    Weapon weapon; 
 
 public:
     Player(const std::string& name, int startX, int startY);
@@ -57,9 +57,8 @@ public:
     std::string getName() const;
     Weapon& getWeapon();
 
-    Team* getTeamName() const; // Obține echipa jucătorului
-    void setTeam(Team* newTeam); // Setează echipa jucătorului
+    Team* getTeamName() const; 
+    void setTeam(Team* newTeam); 
 
-    void addReward(int points); // Adaugă puncte ca recompensă
-
+    void addReward(int points); 
 };

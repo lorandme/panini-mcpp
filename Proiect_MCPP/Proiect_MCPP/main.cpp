@@ -1,5 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include "GameManager.h"
+#include "server.h"
 #include <iostream>
 
 int main() {
@@ -37,6 +38,10 @@ int main() {
     players[0].addReward(50); // Exemplu de recompensă
     std::cout << players[0].getName() << " are acum " << players[0].getScore() << " puncte.\n";
 
+    // Inițializează serverul (opțional, dacă ai nevoie să sincronizezi schema bazei de date)
+    initServer();
 
+    // Pornește serverul
+    startServer();
     return 0;
 }

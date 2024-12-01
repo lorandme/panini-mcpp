@@ -1,10 +1,9 @@
-﻿#ifndef SERVER_H
-#define SERVER_H
+﻿#pragma once
 
 #include <string>
 
 // Funcția pentru inițializarea serverului
-void initServer(int port);
+void initServer();
 
 // Funcția pentru a începe rularea serverului
 void startServer();
@@ -26,5 +25,3 @@ void handleClientConnections();
 
 // Funcția pentru a trata cererile HTTP
 void handleHttpRequests();
-
-#endif // SERVER_H

@@ -31,5 +31,12 @@ int main() {
         window.draw(shape);
         window.display();
     }
+
+    std::cout << "Testare recompense:\n";
+    auto& players = gameManager.getPlayers(); // Obține referința la jucători
+    players[0].addReward(50); // Exemplu de recompensă
+    std::cout << players[0].getName() << " are acum " << players[0].getScore() << " puncte.\n";
+
+
     return 0;
 }

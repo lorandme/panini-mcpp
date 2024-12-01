@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Player.h"
 #include "Map.h"
 
@@ -15,6 +15,10 @@ public:
 	void startGame();
 	void gameLoop();
 	void endGame();
+
+	// Getter pentru jucători
+	std::vector<Player>& getPlayers();
+
 
 	void detectCollisions();
 

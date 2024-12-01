@@ -35,6 +35,7 @@ void GameManager::detectCollisions() {
                 if (&player != &otherPlayer && bullet.checkCollision(otherPlayer.getPosition().first, otherPlayer.getPosition().second)) {
                     otherPlayer.loseLife();
                     bullet.deactivate();
+                    player.addReward(100); // Recompensă pentru eliminarea unui jucător
                     std::cout << otherPlayer.getName() << " a fost lovit de un glonț!\n";
                 }
             }
@@ -44,6 +45,7 @@ void GameManager::detectCollisions() {
             if (tile.getType() == TileType::DESTRUCTIBLE_WALL) {
                 tile.destroy();
                 bullet.deactivate();
+                player.addReward(50); // Recompensă pentru distrugerea unui zid destructibil
                 std::cout << "Un zid destructibil a fost distrus de un glonț!\n";
             }
 
@@ -128,3 +130,8 @@ void GameManager::endGame() {
         std::cout << player.getName() << " are un scor final de " << player.getScore() << " puncte!\n";
     }
 }
+
+std::vector<Player>& GameManager::getPlayers() {
+    return players;
+}
+

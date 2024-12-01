@@ -1,25 +1,22 @@
-﻿#include "weapon.h"
-#include "map.h"
-#include "account.h"
-#include "player.h"
+﻿#include "player.h"
 #include <iostream>
 #include <stdexcept>
 
 Player::Player(const std::string& username, int startX, int startY)
-    : playername(username), x(startX), y(startY) {}
+    : m_playername(username), m_x(startX), m_y(startY), m_team(nullptr) {}
 
 bool Player::checkCollisionWithEnemies() {
     return true; // TODO: dacă se află un alt jucător pe această poziție să nu poată să se mute
 }
 
-void Player::moveUp() { y--; }
-void Player::moveDown() { y++; }
-void Player::moveLeft() { x--; }
-void Player::moveRight() { x++; }
+void Player::moveUp() { m_y--; }
+void Player::moveDown() { m_y++; }
+void Player::moveLeft() { m_x--; }
+void Player::moveRight() { m_x++; }
 
 void Player::movePlayer(char direction, int maxX, int maxY, const Map& map) {
-    int newX = x;
-    int newY = y;
+    int newX = m_x;
+    int newY = m_y;
 
     switch (direction) {
     case 'w': newY--; break; // Move up
@@ -31,8 +28,8 @@ void Player::movePlayer(char direction, int maxX, int maxY, const Map& map) {
 
     // Verifică dacă jucătorul poate să se mute pe noua poziție
     if (canMoveTo(map, newX, newY)) {
-        x = newX;
-        y = newY;
+        m_x = newX;
+        m_y = newY;
     }
 }
 
@@ -54,15 +51,15 @@ bool Player::canMoveTo(const Map& map, int newX, int newY) const {
 }
 
 void Player::shoot(Direction direction) {
-    weapon.shoot(x, y, direction);
+    m_weapon.shoot(m_x, m_y, direction);
 }
 
 std::string Player::getName() const {
-    return playername; // Return the player's name
+    return m_playername; // Return the player's name
 }
 
 Weapon& Player::getWeapon() {
-    return weapon;
+    return m_weapon;
 }
 
 void Player::shoot() {
@@ -70,13 +67,13 @@ void Player::shoot() {
 }
 
 void Player::loseLife() {
-    if (lives > 0) {
-        lives--;
+    if (m_lives > 0) {
+        m_lives--;
     }
 }
 
 bool Player::isEliminated() const {
-    return lives <= 0;
+    return m_lives <= 0;
 }
 
 bool Player::hasWon() const {
@@ -85,26 +82,26 @@ bool Player::hasWon() const {
 }
 
 std::pair<int, int> Player::getPosition() const {
-    return std::make_pair(x, y); // Return the player's current position
+    return std::make_pair(m_x, m_y); // Return the player's current position
 }
 
 int Player::getScore() const {
-    return score; // Return the player's score
+    return m_score; // Return the player's score
 }
 
 int Player::getLives() const {
-    return lives; // Return the number of lives left
+    return m_lives; // Return the number of lives left
 }
 
 void Player::updateScore(int points) {
-    score += points; // Update the player's score
+    m_score += points; // Update the player's score
 }
 
 void Player::setPlayerName(const std::string& playerName) {
-    playername = playerName; // Set the player's name
+    m_playername = playerName; // Set the player's name
 }
 
 void Player::addReward(int points) {
-    score += points; // Adaugă punctele la scorul jucătorului
-    std::cout << playername << " a primit " << points << " puncte!\n";
+    m_score += points; // Adaugă punctele la scorul jucătorului
+    std::cout << m_playername << " a primit " << points << " puncte!\n";
 }

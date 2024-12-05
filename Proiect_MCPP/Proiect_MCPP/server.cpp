@@ -25,17 +25,37 @@ namespace orm = sqlite_orm;
 // Definirea schemei bazei de date
 auto storage = orm::make_storage(
     "battle_city.db",
-    orm::make_table("scores",
+    orm::make_table(
+        "scores",
         orm::make_column("id", &Score::id, orm::primary_key()),
         orm::make_column("player_name", &Score::player_name),
         orm::make_column("score", &Score::score)
+    ),
+    orm::make_table(
+        "games",
+        orm::make_column("id", &GameSession::gameId, orm::primary_key()),
+        orm::make_column("players", &GameSession::serializedPlayers),
+        orm::make_column("maxPlayers", &GameSession::maxPlayers)
     )
 );
+
 
 // Funcția pentru inițializarea serverului
 void initServer() {
     // Sincronizează schema bazei de date
     storage.sync_schema();
+
+    // Creează o nouă tabelă pentru jocuri
+    storage.sync_schema(orm::make_table(
+        "games",
+        orm::make_column("id", &GameSession::gameId, orm::primary_key()),
+        orm::make_column("players", &GameSession::serializedPlayers),
+        orm::make_column("maxPlayers", &GameSession::maxPlayers)
+    ));
+
+
+
+
 }
 
 // Funcția pentru a configura rutele și a porni serverul
@@ -99,9 +119,33 @@ void startServer() {
 // Structura pentru stocarea jocurilor active
 struct GameSession {
     int gameId;
-    std::vector<std::string> players;  // Lista de jucători
+    std::vector<std::string> players;
     int maxPlayers;
+    std::string serializedPlayers;  // Adăugat pentru compatibilitate cu SQLite
+
+    // Serializare vector în șir
+    void serialize() {
+        serializedPlayers.clear();
+        for (const auto& player : players) {
+            if (!serializedPlayers.empty()) {
+                serializedPlayers += ","; // Separator
+            }
+            serializedPlayers += player;
+        }
+    }
+
+    // Deserializare șir în vector
+    void deserialize() {
+        players.clear();
+        std::istringstream stream(serializedPlayers);
+        std::string player;
+        while (std::getline(stream, player, ',')) {
+            players.push_back(player);
+        }
+    }
 };
+
+
 
 std::queue<std::string> playerQueue;  // Coada de așteptare pentru jucători
 std::unordered_map<int, GameSession> activeGames;  // Jocurile active
@@ -128,6 +172,20 @@ void matchPlayers() {
         if (!playersToMatch.empty()) {
             std::lock_guard<std::mutex> lock(gameMutex);
             activeGames[gameIdCounter] = { gameIdCounter, playersToMatch, 4 };
+
+            // Salvează jocul în baza de date
+            GameSession newGame;
+            newGame.gameId = gameIdCounter;
+            newGame.players = playersToMatch;
+            newGame.maxPlayers = 4;
+            newGame.serialize();  // Pregătește datele pentru stocare
+
+
+            // Salvează jocul în baza de date
+            storage.insert(newGame);
+
+
+
             std::cout << "Joc creat cu ID " << gameIdCounter << " pentru jucătorii: ";
             for (const auto& player : playersToMatch) {
                 std::cout << player << " ";

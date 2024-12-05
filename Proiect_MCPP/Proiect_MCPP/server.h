@@ -1,6 +1,9 @@
 ﻿#pragma once
 
+#include <vector>
 #include <string>
+#include <sstream>
+#include <numeric>
 
 // Funcția pentru inițializarea serverului
 void initServer();
@@ -28,3 +31,30 @@ void handleHttpRequests();
 
 void startServerWithMultigaming();
 
+struct GameSession {
+    int gameId;
+    std::vector<std::string> players;
+    int maxPlayers;
+
+    // Serializare vector în șir
+    std::string serializePlayers() const {
+        std::string result;
+        for (const auto& player : players) {
+            if (!result.empty()) {
+                result += ","; // Separator
+            }
+            result += player;
+        }
+        return result;
+    }
+
+    // Deserializare șir în vector
+    void deserializePlayers(const std::string& data) {
+        players.clear();
+        std::istringstream stream(data);
+        std::string player;
+        while (std::getline(stream, player, ',')) {
+            players.push_back(player);
+        }
+    }
+};

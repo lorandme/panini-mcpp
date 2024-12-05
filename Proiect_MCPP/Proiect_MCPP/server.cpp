@@ -6,6 +6,13 @@
 #include <iostream>
 #include <string>
 
+#include <queue>
+#include <mutex>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
+
 // Structura pentru stocarea scorurilor
 struct Score {
     int id;
@@ -82,5 +89,106 @@ void startServer() {
         });
 
     // Rulează serverul pe portul 18080
+    app.port(18080).multithreaded().run();
+}
+
+
+
+
+
+// Structura pentru stocarea jocurilor active
+struct GameSession {
+    int gameId;
+    std::vector<std::string> players;  // Lista de jucători
+    int maxPlayers;
+};
+
+std::queue<std::string> playerQueue;  // Coada de așteptare pentru jucători
+std::unordered_map<int, GameSession> activeGames;  // Jocurile active
+std::mutex queueMutex;
+std::mutex gameMutex;
+
+// Funcția pentru gestionarea jucătorilor și distribuirea lor în jocuri
+void matchPlayers() {
+    int gameIdCounter = 1;
+
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(5)); // Interval de verificare
+
+        std::vector<std::string> playersToMatch;
+
+        {
+            std::lock_guard<std::mutex> lock(queueMutex);
+            while (!playerQueue.empty() && playersToMatch.size() < 4) {
+                playersToMatch.push_back(playerQueue.front());
+                playerQueue.pop();
+            }
+        }
+
+        if (!playersToMatch.empty()) {
+            std::lock_guard<std::mutex> lock(gameMutex);
+            activeGames[gameIdCounter] = { gameIdCounter, playersToMatch, 4 };
+            std::cout << "Joc creat cu ID " << gameIdCounter << " pentru jucătorii: ";
+            for (const auto& player : playersToMatch) {
+                std::cout << player << " ";
+            }
+            std::cout << std::endl;
+            gameIdCounter++;
+        }
+    }
+}
+
+// Funcția pentru a configura serverul
+void startServerWithMultigaming() {
+    crow::SimpleApp app;
+
+    // Endpoint pentru a adăuga un jucător în coada de așteptare
+    CROW_ROUTE(app, "/join").methods(crow::HTTPMethod::POST)([](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body) {
+            return crow::response(400, "JSON invalid");
+        }
+
+        std::string playerName = body["player_name"].s();
+
+        {
+            std::lock_guard<std::mutex> lock(queueMutex);
+            playerQueue.push(playerName);
+        }
+
+        std::cout << "Jucătorul " << playerName << " a fost adăugat în coadă." << std::endl;
+        return crow::response(200, "Jucător adăugat în coadă");
+        });
+
+    // Endpoint pentru a verifica starea jocurilor active
+    CROW_ROUTE(app, "/games")([]() {
+        crow::json::wvalue result;
+
+        {
+            std::lock_guard<std::mutex> lock(gameMutex);
+            for (const auto& [gameId, game] : activeGames) {
+                crow::json::wvalue gameInfo;
+                gameInfo["gameId"] = game.gameId;
+                gameInfo["players"] = crow::json::wvalue();
+                for (size_t i = 0; i < game.players.size(); ++i) {
+                    gameInfo["players"][i] = game.players[i];
+                }
+                crow::json::wvalue gameEntry;
+                gameEntry["gameId"] = game.gameId;
+                for (size_t i = 0; i < game.players.size(); ++i) {
+                    gameEntry["players"][i] = game.players[i];
+                }
+                result["games"][std::to_string(gameId)] = std::move(gameEntry);
+
+            }
+        }
+
+        return result;
+        });
+
+    // Rulează serverul și thread-ul pentru matchmaking
+    std::thread matchmakingThread(matchPlayers);
+    matchmakingThread.detach();
+
     app.port(18080).multithreaded().run();
 }

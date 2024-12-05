@@ -25,3 +25,6 @@ void handleClientConnections();
 
 // Funcția pentru a trata cererile HTTP
 void handleHttpRequests();
+
+void startServerWithMultigaming();
+

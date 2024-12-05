@@ -41,7 +41,8 @@ int main() {
     // Inițializează serverul (opțional, dacă ai nevoie să sincronizezi schema bazei de date)
     initServer();
 
-    // Pornește serverul
-    startServer();
+    // Pornește serverul cu funcționalitatea de multigaming
+    startServerWithMultigaming();
+
     return 0;
 }

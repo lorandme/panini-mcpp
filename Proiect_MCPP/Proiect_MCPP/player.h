@@ -2,9 +2,9 @@
 
 #include <string>
 #include "account.h"
-#include "map.h"
-#include "weapon.h"
-#include "team.h"
+#include "Map.h"
+#include "Weapon.h"
+#include "Team.h"
 
 class Team; // Forward declaration
 

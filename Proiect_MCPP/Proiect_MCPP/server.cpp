@@ -1,28 +1,13 @@
-﻿#include "server.h"
-#include "crow.h"  // Include crow pentru serverul web
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-
+﻿#include "Server.h"
+#include "crow.h"
 #include <sqlite_orm/sqlite_orm.h>
 #include <iostream>
-#include <string>
-
-#include <queue>
-#include <mutex>
+#include <sstream>
 #include <thread>
-#include <unordered_map>
-#include <vector>
-
-
-// Structura pentru stocarea scorurilor
-struct Score {
-    int id;
-    std::string player_name;
-    int score;
-};
+#include <chrono>
 
 namespace orm = sqlite_orm;
 
-// Definirea schemei bazei de date
 auto storage = orm::make_storage(
     "battle_city.db",
     orm::make_table(
@@ -39,126 +24,42 @@ auto storage = orm::make_storage(
     )
 );
 
-
-// Funcția pentru inițializarea serverului
-void initServer() {
-    // Sincronizează schema bazei de date
-    storage.sync_schema();
-
-    // Creează o nouă tabelă pentru jocuri
-    storage.sync_schema(orm::make_table(
-        "games",
-        orm::make_column("id", &GameSession::gameId, orm::primary_key()),
-        orm::make_column("players", &GameSession::serializedPlayers),
-        orm::make_column("maxPlayers", &GameSession::maxPlayers)
-    ));
-
-
-
-
-}
-
-// Funcția pentru a configura rutele și a porni serverul
-void startServer() {
-    crow::SimpleApp app;
-
-    int scor = 0;  // Scorul jocului, stocat temporar în memorie
-
-    // Endpoint pentru a primi și actualiza poziția tancului
-    CROW_ROUTE(app, "/update").methods(crow::HTTPMethod::POST)([&](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "JSON invalid");
-        }
-
-        int tancX = body["tancX"].i();
-        int tancY = body["tancY"].i();
-
-        std::cout << "Poziția tancului primită: X=" << tancX << " Y=" << tancY << std::endl;
-
-        // Exemplu de calcul al scorului
-        scor += 10;
-
-        // Salvează scorul în baza de date
-        Score new_score = { 0, "Player1", scor };  // Folosim un nume generic pentru jucător
-        storage.insert(new_score);
-
-        return crow::response(200, "Poziție primită și scor actualizat");
-        });
-
-    // Endpoint pentru a returna scorurile
-    CROW_ROUTE(app, "/score")([&]() {
-        auto scores = storage.get_all<Score>();  // Obține toate scorurile din baza de date
-        crow::json::wvalue result;
-        for (size_t i = 0; i < scores.size(); ++i) {
-            result["scores"][i] = crow::json::wvalue{
-                {"id", scores[i].id},
-                {"player_name", scores[i].player_name},
-                {"score", scores[i].score}
-            };
-        }
-        return result;
-        });
-
-    // Endpoint pentru a returna poziția tancului
-    CROW_ROUTE(app, "/position")([&]() {
-        crow::json::wvalue result;
-        result["tancX"] = 10;  // Exemplu de poziție X
-        result["tancY"] = 20;  // Exemplu de poziție Y
-        return result;
-        });
-
-    // Rulează serverul pe portul 18080
-    app.port(18080).multithreaded().run();
-}
-
-
-
-
-
-// Structura pentru stocarea jocurilor active
-struct GameSession {
-    int gameId;
-    std::vector<std::string> players;
-    int maxPlayers;
-    std::string serializedPlayers;  // Adăugat pentru compatibilitate cu SQLite
-
-    // Serializare vector în șir
-    void serialize() {
-        serializedPlayers.clear();
-        for (const auto& player : players) {
-            if (!serializedPlayers.empty()) {
-                serializedPlayers += ","; // Separator
-            }
-            serializedPlayers += player;
-        }
-    }
-
-    // Deserializare șir în vector
-    void deserialize() {
-        players.clear();
-        std::istringstream stream(serializedPlayers);
-        std::string player;
-        while (std::getline(stream, player, ',')) {
-            players.push_back(player);
-        }
-    }
-};
-
-
-
-std::queue<std::string> playerQueue;  // Coada de așteptare pentru jucători
-std::unordered_map<int, GameSession> activeGames;  // Jocurile active
+std::queue<std::string> playerQueue;
+std::unordered_map<int, GameSession> activeGames;
 std::mutex queueMutex;
 std::mutex gameMutex;
 
-// Funcția pentru gestionarea jucătorilor și distribuirea lor în jocuri
+// Implementation of GameSession methods
+void GameSession::serialize() {
+    serializedPlayers.clear();
+    for (const auto& player : players) {
+        if (!serializedPlayers.empty()) {
+            serializedPlayers += ",";
+        }
+        serializedPlayers += player;
+    }
+}
+
+void GameSession::deserialize() {
+    players.clear();
+    std::istringstream stream(serializedPlayers);
+    std::string player;
+    while (std::getline(stream, player, ',')) {
+        players.push_back(player);
+    }
+}
+
+// Initializes the server and database
+void initServer() {
+    storage.sync_schema();
+}
+
+// Matches players and assigns them to game sessions
 void matchPlayers() {
     int gameIdCounter = 1;
 
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(5)); // Interval de verificare
-
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         std::vector<std::string> playersToMatch;
 
         {
@@ -173,20 +74,14 @@ void matchPlayers() {
             std::lock_guard<std::mutex> lock(gameMutex);
             activeGames[gameIdCounter] = { gameIdCounter, playersToMatch, 4 };
 
-            // Salvează jocul în baza de date
             GameSession newGame;
             newGame.gameId = gameIdCounter;
             newGame.players = playersToMatch;
             newGame.maxPlayers = 4;
-            newGame.serialize();  // Pregătește datele pentru stocare
-
-
-            // Salvează jocul în baza de date
+            newGame.serialize();
             storage.insert(newGame);
 
-
-
-            std::cout << "Joc creat cu ID " << gameIdCounter << " pentru jucătorii: ";
+            std::cout << "Game created with ID " << gameIdCounter << " for players: ";
             for (const auto& player : playersToMatch) {
                 std::cout << player << " ";
             }
@@ -196,16 +91,52 @@ void matchPlayers() {
     }
 }
 
-// Funcția pentru a configura serverul
+// Starts the server for single-player functionality
+void startServer() {
+    crow::SimpleApp app;
+
+    int score = 0;
+
+    CROW_ROUTE(app, "/update").methods(crow::HTTPMethod::POST)([&](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body) return crow::response(400, "Invalid JSON");
+
+        int tankX = body["tankX"].i();
+        int tankY = body["tankY"].i();
+
+        std::cout << "Tank position received: X=" << tankX << ", Y=" << tankY << std::endl;
+
+        score += 10;
+        Score newScore = { 0, "Player1", score };
+        storage.insert(newScore);
+
+        return crow::response(200, "Position received, score updated");
+        });
+
+    CROW_ROUTE(app, "/score")([&]() {
+        auto scores = storage.get_all<Score>();
+        crow::json::wvalue result;
+
+        for (size_t i = 0; i < scores.size(); ++i) {
+            result["scores"][i] = crow::json::wvalue{
+                {"id", scores[i].id},
+                {"player_name", scores[i].player_name},
+                {"score", scores[i].score}
+            };
+        }
+        return result;
+        });
+
+    app.port(18080).multithreaded().run();
+}
+
+// Starts the server with multiplayer functionality
 void startServerWithMultigaming() {
     crow::SimpleApp app;
 
-    // Endpoint pentru a adăuga un jucător în coada de așteptare
     CROW_ROUTE(app, "/join").methods(crow::HTTPMethod::POST)([](const crow::request& req) {
         auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "JSON invalid");
-        }
+        if (!body) return crow::response(400, "Invalid JSON");
 
         std::string playerName = body["player_name"].s();
 
@@ -214,11 +145,10 @@ void startServerWithMultigaming() {
             playerQueue.push(playerName);
         }
 
-        std::cout << "Jucătorul " << playerName << " a fost adăugat în coadă." << std::endl;
-        return crow::response(200, "Jucător adăugat în coadă");
+        std::cout << "Player " << playerName << " added to queue." << std::endl;
+        return crow::response(200, "Player added to queue");
         });
 
-    // Endpoint pentru a verifica starea jocurilor active
     CROW_ROUTE(app, "/games")([]() {
         crow::json::wvalue result;
 
@@ -227,26 +157,22 @@ void startServerWithMultigaming() {
             for (const auto& [gameId, game] : activeGames) {
                 crow::json::wvalue gameInfo;
                 gameInfo["gameId"] = game.gameId;
-                gameInfo["players"] = crow::json::wvalue();
                 for (size_t i = 0; i < game.players.size(); ++i) {
                     gameInfo["players"][i] = game.players[i];
                 }
-                crow::json::wvalue gameEntry;
-                gameEntry["gameId"] = game.gameId;
-                for (size_t i = 0; i < game.players.size(); ++i) {
-                    gameEntry["players"][i] = game.players[i];
-                }
-                result["games"][std::to_string(gameId)] = std::move(gameEntry);
-
+                result["games"][std::to_string(gameId)] = std::move(gameInfo);
             }
         }
 
         return result;
         });
 
-    // Rulează serverul și thread-ul pentru matchmaking
     std::thread matchmakingThread(matchPlayers);
     matchmakingThread.detach();
 
     app.port(18080).multithreaded().run();
+}
+
+void stopServer() {
+    // Implementation of server shutdown logic (if needed)
 }

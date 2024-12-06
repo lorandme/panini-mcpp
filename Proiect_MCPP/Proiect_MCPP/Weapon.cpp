@@ -1,5 +1,5 @@
-#include "weapon.h"
-#include "bullet.h"
+#include "Weapon.h"
+#include "Bullet.h"
 #include <iostream>
 
 Weapon::Weapon(int initialWaitTime, double initialSpeed)

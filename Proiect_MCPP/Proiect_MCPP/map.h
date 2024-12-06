@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include "tile.h"
+#include "Tile.h"
 
 class Map {
 private:

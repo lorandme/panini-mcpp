@@ -19,28 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="account.h" />
-    <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="client.cpp" />
-    <ClCompile Include="gamemanager.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="server.cpp" />
+    <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Account.h" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Team.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="tile.h" />
-    <ClCompile Include="bullet.h" />
-    <ClCompile Include="map.h" />
-    <ClCompile Include="player.h" />
-    <ClCompile Include="team.h" />
-    <ClCompile Include="weapon.cpp" />
-    <ClCompile Include="weapon.h" />
+    <ClCompile Include="Team.h" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gamemanager.h" />
-    <ClInclude Include="scoreboard.h" />
-    <ClInclude Include="server.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Scoreboard.h" />
+    <ClInclude Include="Server.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -148,7 +140,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
-      <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -170,6 +162,7 @@
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

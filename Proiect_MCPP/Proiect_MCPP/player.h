@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <string>
-#include "account.h"
+#include "Account.h"
 #include "Map.h"
 #include "Weapon.h"
 #include "Team.h"
@@ -34,8 +34,6 @@ public:
     void movePlayer(char direction, int maxX, int maxY, const Map& map);
 
     void handleInput(); // Handle player input
-
-    void shoot(Direction direction); // Shoot in a specific direction
 
     // Doar pentru testare
     void displayPosition() const {

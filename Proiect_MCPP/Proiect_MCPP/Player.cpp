@@ -1,4 +1,4 @@
-﻿#include "player.h"
+﻿#include "Player.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -33,6 +33,10 @@ void Player::movePlayer(char direction, int maxX, int maxY, const Map& map) {
     }
 }
 
+void Player::handleInput()
+{
+}
+
 bool Player::canMoveTo(const Map& map, int newX, int newY) const {
     // Verifică dacă coordonatele sunt în afara granițelor hărții
     if (newX < 0 || newY < 0 || newX >= map.getWidth() || newY >= map.getHeight()) {
@@ -50,16 +54,21 @@ bool Player::canMoveTo(const Map& map, int newX, int newY) const {
     return true;
 }
 
-void Player::shoot(Direction direction) {
-    m_weapon.shoot(m_x, m_y, direction);
-}
-
 std::string Player::getName() const {
     return m_playername; // Return the player's name
 }
 
 Weapon& Player::getWeapon() {
     return m_weapon;
+}
+
+Team* Player::getTeamName() const
+{
+    return nullptr;
+}
+
+void Player::setTeam(Team* newTeam)
+{
 }
 
 void Player::shoot() {

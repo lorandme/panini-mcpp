@@ -1,6 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include "GameManager.h"
-#include "server.h"
+#include "Server.h"
 #include <iostream>
 
 int main() {

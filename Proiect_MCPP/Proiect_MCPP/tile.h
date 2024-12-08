@@ -15,8 +15,8 @@ class Projectile;
 
 class Tile {
 private:
-    TileType type;
-    std::shared_ptr<Player> occupantPlayer;
+    TileType m_type;
+    std::shared_ptr<Player> m_occupantPlayer;
 
 public:
     Tile();
@@ -34,5 +34,5 @@ public:
     TileType getType() const;
     void setType(TileType type);
 
-    void setBomb();  // Adăugăm funcția setBomb
+    void setBomb();
 };

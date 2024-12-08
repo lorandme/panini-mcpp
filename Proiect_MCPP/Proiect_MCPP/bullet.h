@@ -11,14 +11,14 @@ enum class Direction {
 
 class Bullet {
 private:
-    double x, y;                
-    Direction direction;        
-    double speed;               
-    bool isActive;            
+    double m_x, m_y;
+    Direction m_direction;
+    double m_speed;
+    bool m_isActive;
 
 public:
     Bullet(double startX, double startY, Direction dir, double speed);
-    
+
     void move(double deltaTime);
     void deactivate();
     bool checkCollision(int targetX, int targetY) const;
@@ -26,8 +26,6 @@ public:
     std::pair<double, double> getPosition() const;
     bool isBulletActive() const;
 
-    void setPosition(double newX, double newY);
+    void setPosition(double newX, double newY);  
     void setDirection(Direction newDirection);
 };
-
-

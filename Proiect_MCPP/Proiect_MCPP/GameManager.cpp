@@ -1,137 +1,102 @@
 ﻿#include "GameManager.h"
+#include "Map.h"
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
 
-// Constructor GameManager
-GameManager::GameManager() : gameMap(10, 10), isRunning(false) {}
+GameManager::GameManager() : m_gameMap(10, 10), m_isRunning(false) {}
 
-// Inițializare joc
 void GameManager::initializeGame() {
-    // Creăm harta de 10x10
-    gameMap = Map(10, 10);
-
-    // Adăugăm jucători
-    players.emplace_back(Player("Player1", 0, 0)); // Jucător 1 în colțul stânga-sus
-    players.emplace_back(Player("Player2", 9, 9)); // Jucător 2 în colțul dreapta-jos
-
-    isRunning = true;
+    m_gameMap = Map(10, 10);
+    m_players.emplace_back(Player("Player1", 0, 0));
+    m_players.emplace_back(Player("Player2", 9, 9));
+    m_isRunning = true;
 }
 
-// Pornire joc
 void GameManager::startGame() {
     gameLoop();
     endGame();
 }
 
-// **Metoda detectCollisions (Aici este definită)**
 void GameManager::detectCollisions() {
-    for (auto& player : players) {
-        for (auto& bullet : player.getWeapon().getBullets()) { // Folosim referință non-const
+    for (auto& player : m_players) {
+        for (auto& bullet : player.getWeapon().getBullets()) {
             if (!bullet.isBulletActive()) continue;
 
-            // Coliziunea cu jucători
-            for (auto& otherPlayer : players) {
+            for (auto& otherPlayer : m_players) {
                 if (&player != &otherPlayer && bullet.checkCollision(otherPlayer.getPosition().first, otherPlayer.getPosition().second)) {
                     otherPlayer.loseLife();
                     bullet.deactivate();
-                    player.addReward(100); // Recompensă pentru eliminarea unui jucător
-                    std::cout << otherPlayer.getName() << " a fost lovit de un glonț!\n";
+                    player.addReward(100);
+                    std::cout << otherPlayer.getName() << " was hit by a bullet!\n";
                 }
             }
 
-            // Coliziunea cu ziduri destructibile
-            Tile& tile = gameMap.getTile(static_cast<int>(bullet.getPosition().first), static_cast<int>(bullet.getPosition().second));
+            Tile& tile = m_gameMap.getTile(static_cast<int>(bullet.getPosition().first), static_cast<int>(bullet.getPosition().second));
             if (tile.getType() == TileType::DESTRUCTIBLE_WALL) {
                 tile.destroy();
                 bullet.deactivate();
-                player.addReward(50); // Recompensă pentru distrugerea unui zid destructibil
-                std::cout << "Un zid destructibil a fost distrus de un glonț!\n";
+                player.addReward(50);
+                std::cout << "A destructible wall was destroyed by a bullet!\n";
             }
 
-            // Coliziunea cu alte gloanțe
-            for (auto& otherBullet : player.getWeapon().getBullets()) { // Ambele trebuie să fie non-const
+            for (auto& otherBullet : player.getWeapon().getBullets()) {
                 if (&bullet != &otherBullet && bullet.checkCollision(static_cast<int>(otherBullet.getPosition().first), static_cast<int>(otherBullet.getPosition().second))) {
                     bullet.deactivate();
                     otherBullet.deactivate();
-                    std::cout << "Două gloanțe s-au anulat reciproc!\n";
+                    std::cout << "Two bullets canceled each other out!\n";
                 }
             }
         }
-
     }
 }
 
-// Bucla principală de joc
 void GameManager::gameLoop() {
-    //while (isRunning) {
-    //    // Detectează coliziunile
-    //    detectCollisions();
-
-    //    // Curățăm ecranul
-    //    system("cls");
-
-    //    // Afișăm harta
-    //    gameMap.printMap();
-
-    //    // Afișăm pozițiile și starea jucătorilor
-    //    for (const auto& player : players) {
-    //        std::cout << player.getName() << " este la (" << player.getPosition().first << ", " << player.getPosition().second
-    //            << ") cu " << player.getLives() << " vieți rămase.\n";
-    //    }
-
-    //    // Capturăm input-ul de la jucători
-    //    if (_kbhit()) {
-    //        char key = _getch();
-
-    //        // Ieșire din joc
-    //        if (key == 'q') {
-    //            isRunning = false;
-    //            break;
-    //        }
-
-    //        // Controlul jucătorului 1 (WASD pentru mișcare)
-    //        if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
-    //            players[0].movePlayer(players[0], key, gameMap.getWidth(), gameMap.getHeight(), gameMap);
-    //        }
-
-    //        // Controlul jucătorului 2 (IJKL pentru mișcare)
-    //        if (key == 'i' || key == 'j' || key == 'k' || key == 'l') {
-    //            char convertedKey;
-    //            switch (key) {
-    //            case 'i': convertedKey = 'w'; break;
-    //            case 'k': convertedKey = 's'; break;
-    //            case 'j': convertedKey = 'a'; break;
-    //            case 'l': convertedKey = 'd'; break;
-    //            }
-    //            players[1].movePlayer(players[1], convertedKey, gameMap.getWidth(), gameMap.getHeight(), gameMap);
-    //        }
-
-    //        // Trage un glonț (tasta SPACE pentru jucător 1, ENTER pentru jucător 2)
-    //        if (key == ' ') {
-    //            players[0].shoot(Direction::UP);
-    //        }
-    //        else if (key == '\r') {
-    //            players[1].shoot(Direction::UP);
-    //        }
-    //    }
-
-    //    // Pauză scurtă pentru a preveni utilizarea excesivă a CPU-ului
-    //    Sleep(100);
-    //}
+    // while (m_isRunning) {
+    //     detectCollisions();
+    //     system("cls");
+    //     m_gameMap.printMap();
+    //     for (const auto& player : m_players) {
+    //         std::cout << player.getName() << " is at (" << player.getPosition().first << ", " << player.getPosition().second
+    //             << ") with " << player.getLives() << " lives remaining.\n";
+    //     }
+    //     if (_kbhit()) {
+    //         char key = _getch();
+    //         if (key == 'q') {
+    //             m_isRunning = false;
+    //             break;
+    //         }
+    //         if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
+    //             m_players[0].movePlayer(m_players[0], key, m_gameMap.getWidth(), m_gameMap.getHeight(), m_gameMap);
+    //         }
+    //         if (key == 'i' || key == 'j' || key == 'k' || key == 'l') {
+    //             char convertedKey;
+    //             switch (key) {
+    //             case 'i': convertedKey = 'w'; break;
+    //             case 'k': convertedKey = 's'; break;
+    //             case 'j': convertedKey = 'a'; break;
+    //             case 'l': convertedKey = 'd'; break;
+    //             }
+    //             m_players[1].movePlayer(m_players[1], convertedKey, m_gameMap.getWidth(), m_gameMap.getHeight(), m_gameMap);
+    //         }
+    //         if (key == ' ') {
+    //             m_players[0].shoot(Direction::UP);
+    //         }
+    //         else if (key == '\r') {
+    //             m_players[1].shoot(Direction::UP);
+    //         }
+    //     }
+    //     Sleep(100);
+    // }
 }
 
-// Încheiere joc
 void GameManager::endGame() {
-    std::cout << "Jocul s-a incheiat!\n";
-
-    // Afișăm scorurile finale
-    for (const auto& player : players) {
-        std::cout << player.getName() << " are un scor final de " << player.getScore() << " puncte!\n";
+    std::cout << "The game has ended!\n";
+    for (const auto& player : m_players) {
+        std::cout << player.getName() << " has a final score of " << player.getScore() << " points!\n";
     }
 }
 
 std::vector<Player>& GameManager::getPlayers() {
-    return players;
+    return m_players;
 }
-

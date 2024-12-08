@@ -6,9 +6,9 @@
 
 class GameManager {
 private:
-    Map gameMap;
-    std::vector<Player> players;
-    bool isRunning;
+    Map m_gameMap;                 
+    std::vector<Player> m_players;
+    bool m_isRunning;              
 
 public:
     GameManager();

@@ -21,18 +21,28 @@
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="Account.h" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Team.cpp" />
     <ClCompile Include="Team.h" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.h" />
     <ClInclude Include="GameManager.h" />
+    <ClCompile Include="Map.h" />
+    <ClCompile Include="Player.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="Server.h" />
+    <ClCompile Include="Tile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

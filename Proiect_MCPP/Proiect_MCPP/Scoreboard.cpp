@@ -2,18 +2,18 @@
 #include <iostream>
 #include <unordered_map>
 
-ScoreBoard::ScoreBoard() : isTeamMode(false) {}
+ScoreBoard::ScoreBoard() : m_isTeamMode(false) {}
 
 void ScoreBoard::setTeamMode(bool teamMode) {
-    isTeamMode = teamMode;
+    m_isTeamMode = teamMode;
 }
 
 void ScoreBoard::addPlayer(const Player& player) {
-    players.push_back(player);
+    m_players.push_back(player);
 }
 
 void ScoreBoard::updateScore(const std::string& playerName, int points) {
-    for (auto& player : players) {
+    for (auto& player : m_players) {
         if (player.getName() == playerName) {
             player.updateScore(points);
             break;
@@ -23,13 +23,13 @@ void ScoreBoard::updateScore(const std::string& playerName, int points) {
 
 void ScoreBoard::displayScores() const {
     std::cout << "Scoruri curente:\n";
-    for (const auto& player : players) {
+    for (const auto& player : m_players) {
         std::cout << player.getName() << " - " << player.getScore() << " puncte\n";
     }
 }
 
 Player* ScoreBoard::getPlayer(const std::string& playerName) {
-    for (auto& player : players) {
+    for (auto& player : m_players) {
         if (player.getName() == playerName) {
             return &player;
         }
@@ -38,7 +38,7 @@ Player* ScoreBoard::getPlayer(const std::string& playerName) {
 }
 
 bool ScoreBoard::hasPlayer(const std::string& playerName) const {
-    for (const auto& player : players) {
+    for (const auto& player : m_players) {
         if (player.getName() == playerName) {
             return true;
         }
@@ -47,14 +47,14 @@ bool ScoreBoard::hasPlayer(const std::string& playerName) const {
 }
 
 void ScoreBoard::displayTeamScores() const {
-    if (!isTeamMode) {
+    if (!m_isTeamMode) {
         std::cout << "Nu se joac? în echipe.\n";
         return;
     }
 
     std::unordered_map<std::string, int> teamScores;
 
-    for (const auto& player : players) {
+    for (const auto& player : m_players) {
         teamScores[player.getName()] += player.getScore();
     }
 

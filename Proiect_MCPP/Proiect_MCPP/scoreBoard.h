@@ -3,12 +3,12 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include "Player.h"  
+#include "Player.h"
 
 class ScoreBoard {
 private:
-    std::vector<Player> players;
-    bool isTeamMode;
+    std::vector<Player> m_players;
+    bool m_isTeamMode;
 
 public:
     ScoreBoard();

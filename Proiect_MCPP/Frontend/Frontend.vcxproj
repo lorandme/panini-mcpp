@@ -142,26 +142,6 @@
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Bullet.cpp" />
-    <ClCompile Include="..\Proiect_MCPP\Client.cpp" />
-    <ClCompile Include="..\Proiect_MCPP\main.cpp" />
-    <ClCompile Include="..\Proiect_MCPP\Map.cpp" />
-    <ClCompile Include="..\Proiect_MCPP\Player.cpp" />
-    <ClCompile Include="..\Proiect_MCPP\Tile.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Tile.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Map.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Player.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Bullet.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

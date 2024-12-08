@@ -14,36 +14,4 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\Tile.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Map.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Player.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Bullet.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>

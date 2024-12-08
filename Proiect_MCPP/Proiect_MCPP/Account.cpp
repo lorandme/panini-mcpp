@@ -1,44 +1,51 @@
 #include "Account.h"
 
 Account::Account(const std::string& playerName)
+    : m_username(playerName), m_points(0), m_score(0)
 {
 }
 
 void Account::addPoints(int points)
 {
+    m_points += points;
 }
 
 void Account::addWin()
 {
+    m_score += 1;
 }
 
 bool Account::purchaseUpgrade(const std::string& upgrade, int cost)
 {
-	return false;
+    if (m_points >= cost) {
+        m_points -= cost;
+        m_purchasedUpgrades.push_back(upgrade);
+        return true;
+    }
+    return false;
 }
 
 void Account::displayStatus() const
 {
+    // Example: display account status (e.g., name, points, score, upgrades)
 }
 
 const std::string& Account::getName() const
 {
-	return Account::username;
+    return m_username;
 }
 
 int Account::getPoints() const
 {
-	return 0;
+    return m_points;
 }
 
 int Account::getScore() const
 {
-	return 0;
+    return m_score;
 }
 
 const std::vector<std::string>& Account::getPurchasedUpgrades() const
 {
-	// TODO: insert return statement here
-	std::vector<std::string> temp;
-	return temp;
+    return m_purchasedUpgrades;
 }

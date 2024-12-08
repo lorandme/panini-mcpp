@@ -13,14 +13,14 @@ auto storage = orm::make_storage(
     orm::make_table(
         "scores",
         orm::make_column("id", &Score::id, orm::primary_key()),
-        orm::make_column("player_name", &Score::player_name),
+        orm::make_column("player_name", &Score::playerName),  
         orm::make_column("score", &Score::score)
     ),
     orm::make_table(
         "games",
-        orm::make_column("id", &GameSession::gameId, orm::primary_key()),
-        orm::make_column("players", &GameSession::serializedPlayers),
-        orm::make_column("maxPlayers", &GameSession::maxPlayers)
+        orm::make_column("id", &GameSession::gameId, orm::primary_key()),  
+        orm::make_column("players", &GameSession::serializedPlayers),       
+        orm::make_column("maxPlayers", &GameSession::maxPlayers)            
     )
 );
 
@@ -28,33 +28,29 @@ std::queue<std::string> playerQueue;
 std::unordered_map<int, GameSession> activeGames;
 std::mutex queueMutex;
 std::mutex gameMutex;
-
-// Implementation of GameSession methods
 void GameSession::serialize() {
-    serializedPlayers.clear();
+    serializedPlayers.clear();  
     for (const auto& player : players) {
-        if (!serializedPlayers.empty()) {
-            serializedPlayers += ",";
+        if (!serializedPlayers.empty()) {  
+            serializedPlayers += ",";  
         }
-        serializedPlayers += player;
+        serializedPlayers += player;  
     }
 }
 
 void GameSession::deserialize() {
     players.clear();
-    std::istringstream stream(serializedPlayers);
+    std::istringstream stream(serializedPlayers); 
     std::string player;
     while (std::getline(stream, player, ',')) {
         players.push_back(player);
     }
 }
 
-// Initializes the server and database
 void initServer() {
     storage.sync_schema();
 }
 
-// Matches players and assigns them to game sessions
 void matchPlayers() {
     int gameIdCounter = 1;
 
@@ -75,9 +71,9 @@ void matchPlayers() {
             activeGames[gameIdCounter] = { gameIdCounter, playersToMatch, 4 };
 
             GameSession newGame;
-            newGame.gameId = gameIdCounter;
-            newGame.players = playersToMatch;
-            newGame.maxPlayers = 4;
+            newGame.gameId = gameIdCounter;  
+            newGame.players = playersToMatch; 
+            newGame.maxPlayers = 4;  
             newGame.serialize();
             storage.insert(newGame);
 
@@ -90,8 +86,6 @@ void matchPlayers() {
         }
     }
 }
-
-// Starts the server for single-player functionality
 void startServer() {
     crow::SimpleApp app;
 
@@ -120,7 +114,7 @@ void startServer() {
         for (size_t i = 0; i < scores.size(); ++i) {
             result["scores"][i] = crow::json::wvalue{
                 {"id", scores[i].id},
-                {"player_name", scores[i].player_name},
+                {"player_name", scores[i].playerName},  
                 {"score", scores[i].score}
             };
         }
@@ -130,7 +124,6 @@ void startServer() {
     app.port(18080).multithreaded().run();
 }
 
-// Starts the server with multiplayer functionality
 void startServerWithMultigaming() {
     crow::SimpleApp app;
 
@@ -156,9 +149,9 @@ void startServerWithMultigaming() {
             std::lock_guard<std::mutex> lock(gameMutex);
             for (const auto& [gameId, game] : activeGames) {
                 crow::json::wvalue gameInfo;
-                gameInfo["gameId"] = game.gameId;
-                for (size_t i = 0; i < game.players.size(); ++i) {
-                    gameInfo["players"][i] = game.players[i];
+                gameInfo["gameId"] = game.gameId;  
+                for (size_t i = 0; i < game.players.size(); ++i) {  
+                    gameInfo["players"][i] = game.players[i];  
                 }
                 result["games"][std::to_string(gameId)] = std::move(gameInfo);
             }
@@ -174,5 +167,5 @@ void startServerWithMultigaming() {
 }
 
 void stopServer() {
-    // Implementation of server shutdown logic (if needed)
+   
 }

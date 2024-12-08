@@ -6,25 +6,22 @@
 #include <mutex>
 #include <unordered_map>
 
-// Struct for storing game sessions
 struct GameSession {
-    int gameId;
-    std::vector<std::string> players;
-    int maxPlayers;
-    std::string serializedPlayers;
+    int gameId;                       
+    std::vector<std::string> players;  
+    int maxPlayers;                   
+    std::string serializedPlayers;   
 
     void serialize();
     void deserialize();
 };
 
-// Struct for storing scores
 struct Score {
-    int id;
-    std::string player_name;
-    int score;
+    int id;              
+    std::string playerName; 
+    int score;           
 };
 
-// Function declarations
 void initServer();
 void startServer();
 void stopServer();

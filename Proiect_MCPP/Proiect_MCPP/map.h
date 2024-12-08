@@ -6,9 +6,9 @@
 
 class Map {
 private:
-    int width;
-    int height;
-    std::vector<std::vector<Tile>> grid;
+    int m_width;
+    int m_height;
+    std::vector<std::vector<Tile>> m_grid;
 
 public:
     Map(int width, int height);

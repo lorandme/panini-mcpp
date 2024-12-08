@@ -5,30 +5,30 @@
 #include <iostream>
 
 Map::Map(int width, int height)
-    : width(width), height(height), grid(width, std::vector<Tile>(height)) {
+    : m_width(width), m_height(height), m_grid(width, std::vector<Tile>(height)) {
     generateRandom();
 }
 
 int Map::getWidth() const {
-    return width;
+    return m_width;
 }
 
 int Map::getHeight() const {
-    return height;
+    return m_height;
 }
 
 Tile& Map::getTile(int x, int y) {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
+    if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
         throw std::out_of_range("Tile coordinates out of bounds");
     }
-    return grid[x][y];
+    return m_grid[x][y];
 }
 
 const Tile& Map::getTile(int x, int y) const {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
+    if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
         throw std::out_of_range("Tile coordinates out of bounds");
     }
-    return grid[x][y];
+    return m_grid[x][y];
 }
 
 void Map::generateRandom() {
@@ -39,8 +39,8 @@ void Map::generateRandom() {
     int wallPercentage = 20;
     int destructibleWallPercentage = 10;
 
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
             int randValue = rand() % 100;
 
             TileType type;
@@ -54,20 +54,20 @@ void Map::generateRandom() {
                 type = TileType::DESTRUCTIBLE_WALL;
             }
 
-            grid[x][y] = Tile(type);
+            m_grid[x][y] = Tile(type);
         }
     }
 
-    grid[0][0].setType(TileType::EMPTY);
-    grid[0][height - 1].setType(TileType::EMPTY);
-    grid[width - 1][0].setType(TileType::EMPTY);
-    grid[width - 1][height - 1].setType(TileType::EMPTY);
+    m_grid[0][0].setType(TileType::EMPTY);
+    m_grid[0][m_height - 1].setType(TileType::EMPTY);
+    m_grid[m_width - 1][0].setType(TileType::EMPTY);
+    m_grid[m_width - 1][m_height - 1].setType(TileType::EMPTY);
 }
 
 void Map::printMap() const {
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            const Tile& tile = grid[x][y];
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
+            const Tile& tile = m_grid[x][y];
             switch (tile.getType()) {
             case TileType::EMPTY:
                 std::cout << "E";

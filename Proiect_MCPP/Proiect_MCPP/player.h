@@ -6,23 +6,21 @@
 #include "Weapon.h"
 #include "Team.h"
 
-class Team; // Forward declaration
+class Team;
 
-// Fiecare jucător are un cont cu un username unic, dar când intră în joc va avea un playername introdus de el
 class Player {
 private:
-    std::string m_playername; // Variabila de membru cu prefixul m_
-    int m_x;                   // Variabila de membru cu prefixul m_
-    int m_y;                   // Variabila de membru cu prefixul m_
-    int m_lives = 3;           // Variabila de membru cu prefixul m_
-    int m_score = 0;           // Variabila de membru cu prefixul m_
-    Team* m_team;              // Variabila de membru cu prefixul m_
+    std::string m_playername;
+    int m_x;
+    int m_y;
+    int m_lives = 3;
+    int m_score = 0;
+    Team* m_team;
 
-    bool checkCollisionWithEnemies(); // Check for collisions with other players/enemies
-
+    bool checkCollisionWithEnemies();
     bool canMoveTo(const Map& map, int newX, int newY) const;
 
-    Weapon m_weapon; // Variabila de membru cu prefixul m_
+    Weapon m_weapon;
 
 public:
     Player(const std::string& name, int startX, int startY);
@@ -33,12 +31,9 @@ public:
     void moveRight();
     void movePlayer(char direction, int maxX, int maxY, const Map& map);
 
-    void handleInput(); // Handle player input
+    void handleInput();
 
-    // Doar pentru testare
-    void displayPosition() const {
-        std::cout << "Player position: (" << m_x << ", " << m_y << ")\n";
-    }
+    void displayPosition() const;
 
     void shoot();
     void loseLife();

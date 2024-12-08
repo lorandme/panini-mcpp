@@ -6,9 +6,9 @@
 
 class Team {
 private:
-    std::string teamName;
-    std::vector<Player> players;
-    int score;
+    std::string m_teamName;
+    std::vector<Player> m_players;
+    int m_score;
 
 public:
     Team(const std::string& name);
@@ -19,8 +19,8 @@ public:
     int getScore() const;
     void updateScore(int points);
 
-    std::string getName() const { return teamName; }
-    std::vector<Player> getPlayers() const { return players; }
+    std::string getName() const { return m_teamName; }
+    std::vector<Player> getPlayers() const { return m_players; }
 
     bool hasPlayer(const std::string& playerName) const;
     Player* findPlayer(const std::string& playerName);

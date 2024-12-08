@@ -5,32 +5,24 @@
 
 class Weapon {
 private:
-	std::vector<Bullet> bullets;
-	int waitTime;
-	double bulletSpeed;
-	int powerLevel;
+    std::vector<Bullet> m_bullets;
+    int m_waitTime;
+    double m_bulletSpeed;
+    int m_powerLevel;
 
 public:
-	//Constructor
-	Weapon(int initialWaitTime = 4, double initialSpeed = 0.25);
+    Weapon(int initialWaitTime = 4, double initialSpeed = 0.25);
 
-	//Metode
+    bool canShoot() const;
+    void upgradePower();
+    int getWaitTime() const;
+    double getBulletSpeed() const;
 
-	bool canShoot() const;
-	void upgradePower();
-	int getWaitTime() const;
-	double getBulletSpeed() const;
+    void modifyWaitTime(int newWaitT);
+    void modifyBulletSpeed(double newBulletS);
+    void shoot(double startX, double startY, Direction direction);
 
-	void modifyWaitTime(int newWaitT);
-	void modifyBulletSpeed(double newBulletS);
-	void shoot(double startX, double startY, Direction direction);
+    void reset();
 
-	//Se va reveni la setarile initiale
-	void reset();
-
-	//Getteri
-
-	std::vector<Bullet>& getBullets();
-
-
+    std::vector<Bullet>& getBullets();
 };

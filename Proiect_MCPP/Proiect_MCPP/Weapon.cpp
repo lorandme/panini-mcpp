@@ -3,18 +3,17 @@
 #include <iostream>
 
 Weapon::Weapon(int initialWaitTime, double initialSpeed)
-    : waitTime(initialWaitTime), bulletSpeed(initialSpeed), powerLevel(1) {}
+    : m_waitTime(initialWaitTime), m_bulletSpeed(initialSpeed), m_powerLevel(1) {}
 
 bool Weapon::canShoot() const {
-
     return true;
 }
 
 void Weapon::upgradePower() {
-    if (powerLevel < 4) { //Exista 4 trepte de putere
-        waitTime = waitTime / 2;
-        powerLevel++;
-        std::cout << "Upgraded weapon! New wait time: " << waitTime << " seconds.\n";
+    if (m_powerLevel < 4) { // There are 4 power levels
+        m_waitTime = m_waitTime / 2;
+        m_powerLevel++;
+        std::cout << "Upgraded weapon! New wait time: " << m_waitTime << " seconds.\n";
     }
     else {
         std::cout << "Maximum power level already reached.\n";
@@ -22,35 +21,35 @@ void Weapon::upgradePower() {
 }
 
 int Weapon::getWaitTime() const {
-    return waitTime;
+    return m_waitTime;
 }
 
 double Weapon::getBulletSpeed() const {
-    return bulletSpeed;
+    return m_bulletSpeed;
 }
 
-void Weapon::modifyWaitTime(int newWait) {
-    waitTime = newWait;
+void Weapon::modifyWaitTime(int newWaitTime) {
+    m_waitTime = newWaitTime;
 }
 
-void Weapon::modifyBulletSpeed(double newBulletS) {
-    bulletSpeed = newBulletS;
+void Weapon::modifyBulletSpeed(double newBulletSpeed) {
+    m_bulletSpeed = newBulletSpeed;
 }
 
 void Weapon::reset() {
-    waitTime = 4;
-    bulletSpeed = 0.25;
-    powerLevel = 1;
+    m_waitTime = 4;
+    m_bulletSpeed = 0.25;
+    m_powerLevel = 1;
     std::cout << "Weapon returned to original state.\n";
 }
 
 void Weapon::shoot(double startX, double startY, Direction direction) {
     if (canShoot()) {
-        Bullet newBullet(startX, startY, direction, bulletSpeed);
-        bullets.push_back(newBullet); 
+        Bullet newBullet(startX, startY, direction, m_bulletSpeed);
+        m_bullets.push_back(newBullet);
     }
 }
 
 std::vector<Bullet>& Weapon::getBullets() {
-    return bullets;
+    return m_bullets;
 }

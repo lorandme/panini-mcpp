@@ -72,6 +72,9 @@
     <ClCompile Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ThirdPartySQLite\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scoreboard.h">

@@ -11,6 +11,13 @@ namespace orm = sqlite_orm;
 auto storage = orm::make_storage(
     "battle_city.db",
     orm::make_table(
+        "users",
+        orm::make_column("id", &User::id, orm::primary_key().autoincrement()),
+        orm::make_column("username", &User::username, orm::unique()),
+        orm::make_column("email", &User::email),   
+        orm::make_column("password", &User::password) 
+    ),
+    orm::make_table(
         "scores",
         orm::make_column("id", &Score::id, orm::primary_key()),
         orm::make_column("player_name", &Score::playerName),  
@@ -120,6 +127,52 @@ void startServer() {
         }
         return result;
         });
+
+    CROW_ROUTE(app, "/signup").methods(crow::HTTPMethod::POST)([](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body || !body["username"].s().size() == 0) {
+            return crow::response(400, "Invalid request");
+        }
+        std::string username = body["username"].s();
+        std::string email = body["email"].s(); // Opțional
+        std::string password = body["password"].s(); // Opțional
+
+        // Verifică dacă utilizatorul există deja
+        auto existingUser = storage.get_all<User>(orm::where(orm::c(&User::username) == username));
+        if (!existingUser.empty()) {
+            return crow::response(409, "Username already exists");
+        }
+
+        // Creează un utilizator nou
+        User newUser = { 0, username, email, password };
+        storage.insert(newUser);
+        return crow::response(200, "User registered successfully");
+        });
+
+
+    CROW_ROUTE(app, "/login").methods(crow::HTTPMethod::POST)([](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body || !body["username"].s().size() == 0) {
+            return crow::response(400, "Invalid request");
+        }
+        std::string username = body["username"].s();
+        std::string password = body["password"].s(); // Opțional
+
+        // Găsește utilizatorul în baza de date
+        auto user = storage.get_all<User>(orm::where(orm::c(&User::username) == username));
+        if (user.empty()) {
+            return crow::response(404, "User not found");
+        }
+
+        // Verifică parola (opțional)
+        if (!password.empty() && user[0].password != password) {
+            return crow::response(401, "Invalid password");
+        }
+
+        return crow::response(200, "Login successful");
+        });
+
+
 
     app.port(18080).multithreaded().run();
 }

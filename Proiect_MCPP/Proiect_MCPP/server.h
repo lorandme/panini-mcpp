@@ -22,6 +22,14 @@ struct Score {
     int score;           
 };
 
+struct User {
+    int id;
+    std::string username;
+    std::string email;      
+    std::string password;   
+};
+
+
 void initServer();
 void startServer();
 void stopServer();

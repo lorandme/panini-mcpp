@@ -1,49 +1,97 @@
-﻿#include <iostream>
+﻿#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <string>
-#include <cpr/cpr.h>
-//#include <nlohmann/json.hpp>
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#include <nlohmann/json.hpp>
+#include <cstring>  // Pentru memset
+#include <codecvt>
+#include <locale>
+#include <iostream>
 
+using json = nlohmann::json;
 
-/*int main() {
-    // Clientul trimite poziția tancului la server
-    nlohmann::json json_data;
-    json_data["tancX"] = 10;  // Exemplu de poziție X
-    json_data["tancY"] = 20;  // Exemplu de poziție Y
+class Client {
+private:
+    SOCKET m_socket;
+    std::string m_serverIP;
+    int m_serverPort;
 
-    // Trimiterea cererii POST către server pentru actualizarea poziției
-    cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/update" },
-        cpr::Body{ json_data.dump() },
-        cpr::Header{ {"Content-Type", "application/json"} });
+public:
+    Client(const std::string& serverIP, int serverPort)
+        : m_serverIP(serverIP), m_serverPort(serverPort), m_socket(INVALID_SOCKET) {}
 
-    if (r.status_code == 200) {
-        std::cout << "Poziția a fost actualizată cu succes!" << std::endl;
-    }
-    else {
-        std::cerr << "Eroare la actualizarea poziției: " << r.status_code << std::endl;
-    }
-
-    // Obținerea scorului de la server
-    r = cpr::Get(cpr::Url{ "http://localhost:18080/score" });
-
-    if (r.status_code == 200) {
-        std::cout << "Scor curent: " << r.text << std::endl;
-    }
-    else {
-        std::cerr << "Eroare la obținerea scorului: " << r.status_code << std::endl;
+    ~Client() {
+        if (m_socket != INVALID_SOCKET) {
+            closesocket(m_socket);
+        }
+        WSACleanup();
     }
 
-    // Obținerea poziției curente a tancului de la server
-    r = cpr::Get(cpr::Url{ "http://localhost:18080/position" });
+    // Inițializarea clientului
+    void init() {
+        WSADATA wsaData;
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+            throw std::runtime_error("Eroare la initializarea WinSock.");
+        }
 
-    if (r.status_code == 200) {
-        auto response_json = nlohmann::json::parse(r.text);
-        std::cout << "Poziția tancului: X=" << response_json["tancX"] << " Y=" << response_json["tancY"] << std::endl;
-    }
-    else {
-        std::cerr << "Eroare la obținerea poziției: " << r.status_code << std::endl;
+        m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (m_socket == INVALID_SOCKET) {
+            throw std::runtime_error("Eroare la crearea socket-ului.");
+        }
+
+        sockaddr_in serverAddr{};
+        serverAddr.sin_family = AF_INET;
+        serverAddr.sin_port = htons(m_serverPort);
+        inet_pton(AF_INET, m_serverIP.c_str(), &serverAddr.sin_addr);
+
+        if (connect(m_socket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+            throw std::runtime_error("Eroare la conectarea la server.");
+        }
     }
 
-    return 0;
-}
-*/
+    // Funcție pentru conversia unui șir wide char în UTF-8
+    std::string wstringToUtf8(const std::wstring& wstr) {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+        return converter.to_bytes(wstr);
+    }
+
+    // Trimiterea unui mesaj către server (convertim mesajul în UTF-8)
+    void sendMessage(const json& request) {
+        // Converim JSON-ul într-un string
+        std::string requestStr = request.dump();
+
+        // Verificăm și converim string-ul în UTF-8 (dacă este cazul)
+        std::string utf8Message = wstringToUtf8(std::wstring(requestStr.begin(), requestStr.end()));
+
+        // Trimiterea mesajului
+        send(m_socket, utf8Message.c_str(), utf8Message.size(), 0);
+    }
+
+    // Primirea unui răspuns de la server
+    json receiveMessage() {
+        char buffer[1024];
+        memset(buffer, 0, sizeof(buffer));
+
+        int bytesReceived = recv(m_socket, buffer, sizeof(buffer) - 1, 0);
+        if (bytesReceived <= 0) {
+            throw std::runtime_error("Eroare la primirea mesajului sau serverul s-a deconectat.");
+        }
+
+        // Verificăm dacă există date valide și dacă mesajul poate fi procesat
+        std::string message(buffer);  // Păstrăm doar aceasta linie
+        if (message.empty()) {
+            throw std::runtime_error("Mesajul primit este gol.");
+        }
+        std::cerr << "Mesaj primit de la server: " << message << std::endl;  // Adaugă aceasta linie pentru debug
+
+        try {
+            json response = json::parse(message);
+            return response;
+        }
+        catch (const json::exception& e) {
+            std::cerr << "Eroare la parsarea JSON: " << e.what() << std::endl;
+            throw std::runtime_error("Eroare la parsarea JSON.");
+        }
+    }
+
+
+};

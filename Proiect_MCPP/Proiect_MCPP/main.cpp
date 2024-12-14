@@ -1,7 +1,34 @@
 ﻿#include <SFML/Graphics.hpp>
 #include "GameManager.h"
-#include "Server.h"
+#include "Server.cpp"
+#include "Client.cpp"
 #include <iostream>
+
+void startServer() {
+    // Crează și inițializează serverul pe portul 12345
+    Server server(12345);
+    server.init();
+    server.start();  // Pornește serverul pentru a asculta clienții
+}
+
+void startClient() {
+    // Crează clientul și se conectează la serverul de pe 127.0.0.1 pe portul 12345
+    Client client("127.0.0.1", 12345);
+    client.init();
+
+    // Exemplu de cerere JSON pentru a adăuga un jucător într-o echipă
+    json request;
+    request["command"] = "join_team";
+    request["team_name"] = "Echipa1";
+    request["player_name"] = "Jucator1";
+
+    // Trimite cererea către server
+    client.sendMessage(request);
+
+    // Așteaptă un răspuns de la server
+    json response = client.receiveMessage();
+    std::cout << "Raspunsul serverului  " << response.dump() << std::endl;
+}
 
 int main() {
     // Inițializare GameManager
@@ -39,10 +66,22 @@ int main() {
     std::cout << players[0].getName() << " are acum " << players[0].getScore() << " puncte.\n";
 
     // Inițializează serverul (opțional, dacă ai nevoie să sincronizezi schema bazei de date)
-    initServer();
+    //initServer();
 
     // Pornește serverul cu funcționalitatea de multigaming
-    startServerWithMultigaming();
+    //startServerWithMultigaming();
 
+
+    // Pornește serverul într-un thread separat
+    std::thread serverThread(startServer);
+
+    // Așteaptă un moment pentru ca serverul să se inițializeze și să înceapă să asculte
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Pornește clientul care va trimite o cerere către server
+    startClient();
+
+    // Așteaptă ca serverul să termine procesarea cererii și să finalizeze execuția
+    serverThread.join();
     return 0;
 }

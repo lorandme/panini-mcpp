@@ -31,20 +31,32 @@ struct Player {
     sf::Vector2f position;
     sf::Color color;
     sf::Keyboard::Key up, down, left, right;
+    sf::Keyboard::Key lastDirection;
+};
+
+struct Bullet {
+    sf::Vector2f position;
+    sf::Vector2f direction;
+    float speed = 400.0f;
+
+    void update(float deltaTime) {
+        position += direction * speed * deltaTime;
+    }
 };
 
 struct GameState {
     std::vector<Player> players;
+    std::vector<Bullet> bullets;
 };
 
 GameState mockGameState() {
     GameState state;
 
     state.players = {
-        {1, sf::Vector2f(100, 100), sf::Color::Blue, sf::Keyboard::W, sf::Keyboard::S, sf::Keyboard::A, sf::Keyboard::D},
-        {2, sf::Vector2f(200, 100), sf::Color::Red, sf::Keyboard::Up, sf::Keyboard::Down, sf::Keyboard::Left, sf::Keyboard::Right},
-        {3, sf::Vector2f(100, 200), sf::Color::Yellow, sf::Keyboard::I, sf::Keyboard::K, sf::Keyboard::J, sf::Keyboard::L},
-        {4, sf::Vector2f(200, 200), sf::Color::Green, sf::Keyboard::Numpad8 , sf::Keyboard::Numpad5, sf::Keyboard::Numpad4, sf::Keyboard::Numpad6} 
+        {1, sf::Vector2f(100, 100), sf::Color::Blue, sf::Keyboard::W, sf::Keyboard::S, sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W},
+        {2, sf::Vector2f(200, 100), sf::Color::Red, sf::Keyboard::Up, sf::Keyboard::Down, sf::Keyboard::Left, sf::Keyboard::Right, sf::Keyboard::Up},
+        {3, sf::Vector2f(100, 200), sf::Color::Yellow, sf::Keyboard::I, sf::Keyboard::K, sf::Keyboard::J, sf::Keyboard::L, sf::Keyboard::I},
+        {4, sf::Vector2f(200, 200), sf::Color::Green, sf::Keyboard::Numpad8, sf::Keyboard::Numpad5, sf::Keyboard::Numpad4, sf::Keyboard::Numpad6, sf::Keyboard::Numpad8}
     };
     return state;
 }
@@ -55,16 +67,42 @@ void handleInput(GameState& state, float deltaTime) {
     for (auto& player : state.players) {
         if (sf::Keyboard::isKeyPressed(player.up)) {
             player.position.y -= speed * deltaTime;
+            player.lastDirection = player.up;
         }
         if (sf::Keyboard::isKeyPressed(player.down)) {
             player.position.y += speed * deltaTime;
+            player.lastDirection = player.down;
         }
         if (sf::Keyboard::isKeyPressed(player.left)) {
             player.position.x -= speed * deltaTime;
+            player.lastDirection = player.left;
         }
         if (sf::Keyboard::isKeyPressed(player.right)) {
             player.position.x += speed * deltaTime;
+            player.lastDirection = player.right;
         }
+
+        if (player.id==1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            Bullet newBullet;
+            newBullet.position = player.position;
+            switch (player.lastDirection) {
+            case sf::Keyboard::W: newBullet.direction = sf::Vector2f(0, -1); break;
+            case sf::Keyboard::S: newBullet.direction = sf::Vector2f(0, 1); break;
+            case sf::Keyboard::A: newBullet.direction = sf::Vector2f(-1, 0); break;
+            case sf::Keyboard::D: newBullet.direction = sf::Vector2f(1, 0); break;
+            case sf::Keyboard::Up: newBullet.direction = sf::Vector2f(0, -1); break;
+            case sf::Keyboard::Down: newBullet.direction = sf::Vector2f(0, 1); break;
+            case sf::Keyboard::Left: newBullet.direction = sf::Vector2f(-1, 0); break;
+            case sf::Keyboard::Right: newBullet.direction = sf::Vector2f(1, 0); break;
+            }
+            state.bullets.push_back(newBullet);
+        }
+    }
+}
+
+void updateBullets(GameState& state, float deltaTime) {
+    for (auto& bullet : state.bullets) {
+        bullet.update(deltaTime);
     }
 }
 
@@ -98,6 +136,13 @@ void renderGameState(sf::RenderWindow& window, const GameState& state) {
         playerShape.setPosition(player.position);
         window.draw(playerShape);
     }
+
+    for (const auto& bullet : state.bullets) {
+        sf::RectangleShape bulletShape(sf::Vector2f(10, 10));
+        bulletShape.setFillColor(sf::Color::Yellow);
+        bulletShape.setPosition(bullet.position);
+        window.draw(bulletShape);
+    }
 }
 
 int main() {
@@ -117,6 +162,7 @@ int main() {
         float deltaTime = clock.restart().asSeconds();
 
         handleInput(state, deltaTime);
+        updateBullets(state, deltaTime);
 
         window.clear();
         renderMap(window);

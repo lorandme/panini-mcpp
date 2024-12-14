@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <unordered_map>
 
 enum class TileType {
     Empty,
@@ -32,15 +33,23 @@ struct Player {
     sf::Color color;
     sf::Keyboard::Key up, down, left, right;
     sf::Keyboard::Key lastDirection;
+    float shootCooldown = 0.3f;
+    float timeSinceLastShot = 0.0f;
 };
 
 struct Bullet {
     sf::Vector2f position;
     sf::Vector2f direction;
     float speed = 400.0f;
+    float timeAlive = 0.0f; 
 
     void update(float deltaTime) {
         position += direction * speed * deltaTime;
+        timeAlive += deltaTime;
+    }
+
+    bool isAlive() const {
+        return timeAlive < 5.0f; 
     }
 };
 
@@ -64,6 +73,17 @@ GameState mockGameState() {
 void handleInput(GameState& state, float deltaTime) {
     float speed = 300.0f;
 
+    std::unordered_map<sf::Keyboard::Key, sf::Vector2f> directionMap = {
+        {sf::Keyboard::W, {0, -1}},
+        {sf::Keyboard::S, {0, 1}},
+        {sf::Keyboard::A, {-1, 0}},
+        {sf::Keyboard::D, {1, 0}},
+        {sf::Keyboard::Up, {0, -1}},
+        {sf::Keyboard::Down, {0, 1}},
+        {sf::Keyboard::Left, {-1, 0}},
+        {sf::Keyboard::Right, {1, 0}}
+    };
+
     for (auto& player : state.players) {
         if (sf::Keyboard::isKeyPressed(player.up)) {
             player.position.y -= speed * deltaTime;
@@ -82,20 +102,14 @@ void handleInput(GameState& state, float deltaTime) {
             player.lastDirection = player.right;
         }
 
-        if (player.id==1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        player.timeSinceLastShot += deltaTime;
+
+        if (player.id==1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.timeSinceLastShot >= player.shootCooldown) {
             Bullet newBullet;
             newBullet.position = player.position;
-            switch (player.lastDirection) {
-            case sf::Keyboard::W: newBullet.direction = sf::Vector2f(0, -1); break;
-            case sf::Keyboard::S: newBullet.direction = sf::Vector2f(0, 1); break;
-            case sf::Keyboard::A: newBullet.direction = sf::Vector2f(-1, 0); break;
-            case sf::Keyboard::D: newBullet.direction = sf::Vector2f(1, 0); break;
-            case sf::Keyboard::Up: newBullet.direction = sf::Vector2f(0, -1); break;
-            case sf::Keyboard::Down: newBullet.direction = sf::Vector2f(0, 1); break;
-            case sf::Keyboard::Left: newBullet.direction = sf::Vector2f(-1, 0); break;
-            case sf::Keyboard::Right: newBullet.direction = sf::Vector2f(1, 0); break;
-            }
+            newBullet.direction = directionMap[player.lastDirection];
             state.bullets.push_back(newBullet);
+            player.timeSinceLastShot = 0.0f;
         }
     }
 }

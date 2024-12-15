@@ -129,5 +129,22 @@ public:
         }
     }
 
+    void handleServerResponse(const json& response) {
+        if (response.contains("status") && response["status"] == "error") {
+            std::cerr << "Error: " << response["message"] << std::endl;
+            if (response["message"] == "Connection lost") {
+                reconnectToServer();  // Metodă de reconectare
+            }
+        }
+        else {
+            std::cout << "Success: " << response["message"] << std::endl;
+        }
+    }
+
+    void reconnectToServer() {
+        std::cout << "Trying to reconnect to the server..." << std::endl;
+        init();  // Reinitializează conexiunea
+    }
+
 
 };

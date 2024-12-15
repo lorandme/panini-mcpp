@@ -138,52 +138,53 @@ private:
     }
 
     json processRequest(const json& request) {
-        std::string command = request.value("command", "");
-
+        std::string command = request["command"];
         json response;
 
-        if (command == "join_team") {
-            std::string teamName = request["team_name"];
-            std::string playerName = request["player_name"];
-
-            Team* team = findOrCreateTeam(teamName);
-            Player newPlayer(playerName, 0, 0);
-            team->addPlayer(newPlayer);
-
-            response["status"] = "ok";
-            response["message"] = "Jucatorul a fost adaugat in echipa.";
-        }
-        else if (command == "get_score") {
-            std::string teamName = request["team_name"];
-
-            Team* team = findTeam(teamName);
-            if (team) {
+        try {
+            if (command == "join_team") {
+                std::string teamName = request["team_name"];
+                std::string playerName = request["player_name"];
+                Team* team = findOrCreateTeam(teamName);
+                Player newPlayer(playerName, 0, 0);
+                team->addPlayer(newPlayer);
                 response["status"] = "ok";
-                response["score"] = team->getScore();
+                response["message"] = "Player added to team.";
+            }
+            else if (command == "get_score") {
+                std::string teamName = request["team_name"];
+                Team* team = findTeam(teamName);
+                if (team) {
+                    response["status"] = "ok";
+                    response["score"] = team->getScore();
+                }
+                else {
+                    response["status"] = "error";
+                    response["message"] = "Team not found.";
+                }
+            }
+            else if (command == "update_score") {
+                std::string teamName = request["team_name"];
+                int points = request["points"];
+                Team* team = findTeam(teamName);
+                if (team) {
+                    team->updateScore(points);
+                    response["status"] = "ok";
+                    response["message"] = "Team score updated.";
+                }
+                else {
+                    response["status"] = "error";
+                    response["message"] = "Team not found.";
+                }
             }
             else {
                 response["status"] = "error";
-                response["message"] = "Echipa nu a fost gasita.";
+                response["message"] = "Unknown command.";
             }
         }
-        else if (command == "update_score") {
-            std::string teamName = request["team_name"];
-            int points = request["points"];
-
-            Team* team = findTeam(teamName);
-            if (team) {
-                team->updateScore(points);
-                response["status"] = "ok";
-                response["message"] = "Scorul echipei a fost actualizat.";
-            }
-            else {
-                response["status"] = "error";
-                response["message"] = "Echipa nu a fost gasita.";
-            }
-        }
-        else {
+        catch (const std::exception& e) {
             response["status"] = "error";
-            response["message"] = "Comanda necunoscuta.";
+            response["message"] = "Internal server error: " + std::string(e.what());
         }
 
         return response;

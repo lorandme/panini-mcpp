@@ -93,5 +93,41 @@ public:
         }
     }
 
+    void startGame() {
+        nlohmann::json message = { {"action", "start_game"} };
+        sendMessage(message);
+    }
+
+    void updateScore(const std::string& player, int score) {
+        nlohmann::json message = { {"action", "update_score"}, {"player", player}, {"score", score} };
+        sendMessage(message);
+    }
+
+    void endGame() {
+        nlohmann::json message = { {"action", "end_game"} };
+        sendMessage(message);
+    }
+
+    void processResponse(const nlohmann::json& response) {
+        if (response.contains("action")) {
+            std::string action = response["action"];
+            if (action == "start_game") {
+                std::cout << "Jocul a fost pornit!" << std::endl;
+            }
+            else if (action == "update_score") {
+                std::string player = response["player"];
+                int score = response["score"];
+                std::cout << "Scor actualizat: " << player << " are acum " << score << " puncte!" << std::endl;
+            }
+            else if (action == "end_game") {
+                std::cout << "Jocul s-a terminat!" << std::endl;
+            }
+        }
+
+        if (response.contains("status")) {
+            std::cout << "Status: " << response["status"] << std::endl;
+        }
+    }
+
 
 };

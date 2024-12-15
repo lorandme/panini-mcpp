@@ -5,7 +5,7 @@
 #include <iostream>
 
 void startServer() {
-    // Crează și inițializează serverul pe portul 12345
+    // Creează și inițializează serverul pe portul 12345
     Server server(12345);
     server.init();
     server.start();  // Pornește serverul pentru a asculta clienții

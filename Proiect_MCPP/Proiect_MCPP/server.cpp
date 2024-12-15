@@ -138,7 +138,8 @@ private:
     }
 
     json processRequest(const json& request) {
-        std::string command = request["command"];
+        std::string command = request.value("command", "");
+
         json response;
 
         if (command == "join_team") {

@@ -137,7 +137,6 @@ private:
         }
     }
 
-
     json processRequest(const json& request) {
         std::string command = request["command"];
         json response;

@@ -27,20 +27,31 @@ LoginScreen::LoginScreen(sf::RenderWindow& window) : window(window) {
     passwordBox.setPosition(50, 180);
     passwordBox.setFillColor(sf::Color::White);
 
+    // Modificăm poziția butonului de login și adăugăm butonul de register
     loginButton.setSize({ 150, 50 });
-    loginButton.setPosition(125, 250);
+    loginButton.setPosition(50, 250);
     loginButton.setFillColor(sf::Color(57, 7, 115));
 
-    statusMessage.setFont(font);  // Setează fontul
-    statusMessage.setCharacterSize(20); // Setează dimensiunea textului
-    statusMessage.setFillColor(sf::Color::White); // Setează culoarea textului
-    statusMessage.setPosition(10, 300); // Poziția textului pe ecran
+    registerButton.setSize({ 150, 50 });
+    registerButton.setPosition(220, 250);
+    registerButton.setFillColor(sf::Color(7, 115, 57));
 
-    loginButtonText.setFont(font);      //TREBUIE FACUT SA APARA PE ECRAN
+    loginButtonText.setFont(font);
     loginButtonText.setString("Login");
     loginButtonText.setCharacterSize(20);
     loginButtonText.setFillColor(sf::Color::White);
-    loginButtonText.setPosition(175, 260);
+    loginButtonText.setPosition(100, 260);
+
+    registerButtonText.setFont(font);
+    registerButtonText.setString("Register");
+    registerButtonText.setCharacterSize(20);
+    registerButtonText.setFillColor(sf::Color::White);
+    registerButtonText.setPosition(260, 260);
+
+    statusMessage.setFont(font);
+    statusMessage.setCharacterSize(20);
+    statusMessage.setFillColor(sf::Color::White);
+    statusMessage.setPosition(50, 320);
 }
 
 void LoginScreen::run() {
@@ -65,12 +76,15 @@ void LoginScreen::render() {
 
     window.draw(usernameLabel);
     window.draw(passwordLabel);
+    window.draw(statusMessage);
 
     drawTextBox(window, usernameBox, usernameInput);
     drawTextBox(window, passwordBox, isPasswordActive ? std::string(passwordInput.size(), '*') : passwordInput);
 
     window.draw(loginButton);
+    window.draw(registerButton);
     window.draw(loginButtonText);
+    window.draw(registerButtonText);
 
     window.display();
 }
@@ -88,9 +102,10 @@ void LoginScreen::handleInput(sf::Event& event) {
             isPasswordActive = true;
         }
         else if (loginButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-            std::cout << "Login button clicked!\n";
-            std::cout << "Username: " << usernameInput << "\n";
-            std::cout << "Password: " << passwordInput << "\n";
+            handleLogin();
+        }
+        else if (registerButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+            handleRegister();
         }
         else {
             isUsernameActive = false;
@@ -117,6 +132,50 @@ void LoginScreen::handleInput(sf::Event& event) {
         }
     }
 }
+void LoginScreen::handleLogin() {
+    if (usernameInput.empty() || passwordInput.empty()) {
+        statusMessage.setString("Completați toate câmpurile!");
+        statusMessage.setFillColor(sf::Color::Red);
+        return;
+    }
+
+    Client client("http://localhost:8080");
+    bool success = client.login(usernameInput, passwordInput);
+
+    if (success) {
+        statusMessage.setString("Autentificare reușită!");
+        statusMessage.setFillColor(sf::Color::Green);
+       
+    }
+    else {
+        statusMessage.setString("Username sau parolă incorecte!");
+        statusMessage.setFillColor(sf::Color::Red);
+    }
+}
+
+
+void LoginScreen::handleRegister() {
+    if (usernameInput.empty() || passwordInput.empty()) {
+        statusMessage.setString("Completați toate câmpurile!");
+        statusMessage.setFillColor(sf::Color::Red);
+        return;
+    }
+    Client client("http://localhost:8080");
+    cpr::Response response = client.registerUser(usernameInput, passwordInput);
+
+    if (response.status_code == 201) {
+        statusMessage.setString("Înregistrare reușită!");
+        statusMessage.setFillColor(sf::Color::Green);
+    }
+    else if (response.status_code == 409) {
+        statusMessage.setString("Utilizatorul există deja!");
+        statusMessage.setFillColor(sf::Color::Red);
+    }
+    else {
+        statusMessage.setString("Eroare la înregistrare!");
+        statusMessage.setFillColor(sf::Color::Red);
+    }
+}
 
 void LoginScreen::drawTextBox(sf::RenderWindow& target, sf::RectangleShape& box, const std::string& text) {
     target.draw(box);
@@ -129,25 +188,4 @@ void LoginScreen::drawTextBox(sf::RenderWindow& target, sf::RectangleShape& box,
     displayText.setPosition(box.getPosition().x + 5, box.getPosition().y + 5);
 
     target.draw(displayText);
-}
-
-void LoginScreen::onRegisterButtonClick() {
-    std::string username = usernameInput; // `usernameInput` este deja un `std::string`
-    std::string password = passwordInput; 
-
-    Client client;
-    auto response = client.registerUser(username, password);
-
-    if (response.status_code == 201) {
-        // Mesaj de succes
-        statusMessage.setString("Utilizator înregistrat cu succes!");
-    }
-    else if (response.status_code == 409) {
-        // Mesaj de utilizator existent
-        statusMessage.setString("Eroare: Utilizator deja existent!");
-    }
-    else {
-        // Mesaj de eroare generic
-        statusMessage.setString("Eroare la înregistrare!");
-    }
 }

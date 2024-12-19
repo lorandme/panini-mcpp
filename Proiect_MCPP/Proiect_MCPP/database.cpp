@@ -7,7 +7,7 @@ Database::~Database() {
     close();
 }
 
-//proba 
+
 void Database::testDatabaseFunctionality() {
     std::cout << "=== Testarea bazei de date ===" << std::endl;
 
@@ -21,7 +21,7 @@ void Database::testDatabaseFunctionality() {
         std::cerr << "Eroare la adăugarea utilizatorului de test!" << std::endl;
     }
 
- 
+
     if (userExists(testUsername)) {
         std::cout << "Utilizatorul '" << testUsername << "' există în baza de date." << std::endl;
     }
@@ -57,7 +57,7 @@ bool Database::createUsersTable() {
 }
 
 void Database::printAllUsers() {
-  /*  std::lock_guard<std::mutex> lock(dbMutex); */// Protejăm accesul la baza de date  //cu linia asta da eroare
+   
     std::string query = "SELECT id, username, password FROM data;";
 
     sqlite3_stmt* stmt;
@@ -67,7 +67,7 @@ void Database::printAllUsers() {
         return;
     }
 
-    std::cout << "Conținutul tabelului `data`:\n";
+    std::cout << "Conținutul tabelului data:\n";
     std::cout << "ID | Username | Password\n";
     std::cout << "-------------------------\n";
 
@@ -90,14 +90,14 @@ void Database::printAllUsers() {
 
 
 bool Database::open(const std::string& dbPath) {
-  /*  std::lock_guard<std::mutex> lock(dbMutex);*/  //cu linia asta da eroare
+
     int rc = sqlite3_open(dbPath.c_str(), &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Nu s-a putut deschide baza de date: " << sqlite3_errmsg(db) << std::endl;
         return false;
     }
 
-   
+
     if (!createUsersTable()) {
         std::cerr << "Eroare la crearea tabelei users!" << std::endl;
         return false;
@@ -117,7 +117,7 @@ void Database::close() {
 
 
 bool Database::executeQuery(const std::string& query) {
-    std::lock_guard<std::mutex> lock(dbMutex);
+
     char* errMsg = nullptr;
     int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &errMsg);
     if (rc != SQLITE_OK) {
@@ -129,8 +129,8 @@ bool Database::executeQuery(const std::string& query) {
 }
 
 bool Database::executeQueryWithResults(const std::string& query, std::vector<std::vector<std::string>>& results) {
-    std::lock_guard<std::mutex> lock(dbMutex);
-    sqlite3_stmt* stmt;
+ 
+        sqlite3_stmt * stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
         std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
@@ -154,7 +154,6 @@ bool Database::executeQueryWithResults(const std::string& query, std::vector<std
 
 
 bool Database::userExists(const std::string& username) {
-    std::lock_guard<std::mutex> lock(dbMutex);
     std::string query = "SELECT COUNT(*) FROM data WHERE username = ?;";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
@@ -176,8 +175,7 @@ bool Database::userExists(const std::string& username) {
 }
 
 bool Database::authenticateUser(const std::string& username, const std::string& password) {
-    std::lock_guard<std::mutex> lock(dbMutex);
-    std::string query = "SELECT COUNT(*) FROM data WHERE username = ? AND password = ?;";
+        std::string query = "SELECT COUNT(*) FROM data WHERE username = ? AND password = ?;";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -200,7 +198,6 @@ bool Database::authenticateUser(const std::string& username, const std::string& 
 }
 
 bool Database::addUser(const std::string& username, const std::string& password) {
-    std::lock_guard<std::mutex> lock(dbMutex);
     std::string query = "INSERT INTO data (username, password) VALUES (?, ?);";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
@@ -216,7 +213,7 @@ bool Database::addUser(const std::string& username, const std::string& password)
     sqlite3_finalize(stmt);
 
     if (rc != SQLITE_DONE) {
-        if (rc == SQLITE_CONSTRAINT) { 
+        if (rc == SQLITE_CONSTRAINT) {
             std::cerr << "Utilizatorul " << username << " există deja în baza de date." << std::endl;
         }
         else {
@@ -226,4 +223,3 @@ bool Database::addUser(const std::string& username, const std::string& password)
     }
     return true;
 }
-

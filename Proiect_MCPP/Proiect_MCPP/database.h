@@ -1,6 +1,4 @@
-#ifndef DATABASE_H
-#define DATABASE_H
-
+#pragma once
 #include <string>
 #include <vector>
 #include <mutex>
@@ -33,4 +31,4 @@ private:
     std::mutex dbMutex;
 };
 
-#endif
+

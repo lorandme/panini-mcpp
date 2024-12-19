@@ -27,7 +27,6 @@ LoginScreen::LoginScreen(sf::RenderWindow& window) : window(window) {
     passwordBox.setPosition(50, 180);
     passwordBox.setFillColor(sf::Color::White);
 
-    // Modificăm poziția butonului de login și adăugăm butonul de register
     loginButton.setSize({ 150, 50 });
     loginButton.setPosition(50, 250);
     loginButton.setFillColor(sf::Color(57, 7, 115));
@@ -143,12 +142,12 @@ void LoginScreen::handleLogin() {
     bool success = client.login(usernameInput, passwordInput);
 
     if (success) {
-        statusMessage.setString("Autentificare reușită!");
+        statusMessage.setString("Autentificare reusita!");
         statusMessage.setFillColor(sf::Color::Green);
        
     }
     else {
-        statusMessage.setString("Username sau parolă incorecte!");
+        statusMessage.setString("Username sau parola incorecte!");
         statusMessage.setFillColor(sf::Color::Red);
     }
 }
@@ -156,7 +155,7 @@ void LoginScreen::handleLogin() {
 
 void LoginScreen::handleRegister() {
     if (usernameInput.empty() || passwordInput.empty()) {
-        statusMessage.setString("Completați toate câmpurile!");
+        statusMessage.setString("Completati toate campurile!");
         statusMessage.setFillColor(sf::Color::Red);
         return;
     }
@@ -164,15 +163,15 @@ void LoginScreen::handleRegister() {
     cpr::Response response = client.registerUser(usernameInput, passwordInput);
 
     if (response.status_code == 201) {
-        statusMessage.setString("Înregistrare reușită!");
+        statusMessage.setString("Inregistrare reusita!");
         statusMessage.setFillColor(sf::Color::Green);
     }
     else if (response.status_code == 409) {
-        statusMessage.setString("Utilizatorul există deja!");
+        statusMessage.setString("Utilizator exista deja!");
         statusMessage.setFillColor(sf::Color::Red);
     }
     else {
-        statusMessage.setString("Eroare la înregistrare!");
+        statusMessage.setString("Eroare la inregistrare!");
         statusMessage.setFillColor(sf::Color::Red);
     }
 }

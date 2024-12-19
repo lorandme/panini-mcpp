@@ -2,13 +2,13 @@
 #include <iostream>
 #include <crow.h>
 #include <sqlite3.h>
+#include <regex>
+#include "database.h"
 
-Server::Server() : db(nullptr), gameMap(10,10) {
-    // Constructorul clasei Server
+Server::Server() : db(nullptr) {
 }
 
 void Server::init() {
-    // Inițializare server: deschiderea bazei de date și configurarea rutelor
     if (!openDatabase()) {
         std::cerr << "Eroare la deschiderea bazei de date!" << std::endl;
         return;
@@ -19,14 +19,12 @@ void Server::init() {
 
 
 void Server::run() {
-    // Lansează serverul Crow
     std::cout << "Serverul este acum activ!" << std::endl;
-    app.port(8080).run();  // Ascultă pe portul 8080
+    app.port(8080).run();  
 }
 
 bool Server::openDatabase() {
-    // Deschide conexiunea la baza de date SQLite
-    const char* dbPath = "data.db";  // Calea către fișierul bazei de date
+    const char* dbPath = "data.db";  
     int rc = sqlite3_open(dbPath, &db);
 
     if (rc) {
@@ -34,12 +32,11 @@ bool Server::openDatabase() {
         return false;
     }
 
-    std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
+    std::cout << "Baza de date a fost deschisa cu succes" << std::endl;
     return true;
 }
 
 void Server::closeDatabase() {
-    // Închide baza de date SQLite
     if (db) {
         sqlite3_close(db);
         std::cout << "Baza de date a fost închisă!" << std::endl;
@@ -47,12 +44,9 @@ void Server::closeDatabase() {
 }
 
 void Server::setupRoutes() {
-    // Configurăm rutele serverului
 
-    // Ruta pentru login
     app.route_dynamic("/login")
         .methods("POST"_method)([this](const crow::request& req) {
-        // Obținem username și password din cererea POST
         auto json_data = crow::json::load(req.body);
         if (!json_data) {
             return crow::response(400, "JSON invalid.");
@@ -60,6 +54,12 @@ void Server::setupRoutes() {
 
         std::string username = json_data["username"].s();
         std::string password = json_data["password"].s();
+
+        std::regex username_regex("^[a-zA-Z0-9]{3,15}$");
+
+        if (!std::regex_match(username, username_regex)) {
+            return crow::response(400, "Invalid username format. Must be 3-15 alphanumeric characters.");
+        }
 
         if (authenticate(username, password)) {
             return crow::response(200, "Autentificare reușită!");
@@ -69,23 +69,7 @@ void Server::setupRoutes() {
         }
             });
 
-    CROW_ROUTE(app, "/login")([]() {
-        return "<html>"
-            "<head><title>Login</title></head>"
-            "<body>"
-            "<h1>ASTA ESTE PAGINA DE LOGIN</h1>"
-            "<form action=\"/submit_login\" method=\"post\">"
-            "  <label for=\"username\">Username:</label><br>"
-            "  <input type=\"text\" id=\"username\" name=\"username\"><br><br>"
-            "  <label for=\"password\">Password:</label><br>"
-            "  <input type=\"password\" id=\"password\" name=\"password\"><br><br>"
-            "  <input type=\"submit\" value=\"Login\">"
-            "</form>"
-            "</body>"
-            "</html>";
-        });
 
-    // Ruta pentru procesarea login-ului
     CROW_ROUTE(app, "/submit_login").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
         if (!body) {
@@ -95,7 +79,7 @@ void Server::setupRoutes() {
         std::string username = body["username"].s();
         std::string password = body["password"].s();
 
-        // Salvează sau autentifică utilizatorul
+
         if (authenticate(username, password)) {
             return crow::response(200, "Login successful!");
         }
@@ -119,227 +103,16 @@ void Server::setupRoutes() {
         }
 
         if (registerUser(username, password)) {
-            return crow::response(201, "Utilizator înregistrat cu succes");
+            return crow::response(201, "Utilizator inregistrat cu succes");
         }
         else {
-            return crow::response(500, "Eroare la înregistrarea utilizatorului");
+            return crow::response(500, "Eroare la inregistrarea utilizatorului");
         }
-            });
-
-    CROW_ROUTE(app, "/bullets/info")
-        .methods("GET"_method)([this](const crow::request& req) {
-        // Creează un răspuns JSON
-        crow::json::wvalue response;
-
-        // Creează o listă de bule
-        auto bulletsList = crow::json::wvalue::list();
-
-        // Exemplu de adăugare a informațiilor despre bulă
-        crow::json::wvalue bulletInfo;
-        bulletInfo["x"] = 10.0;
-        bulletInfo["y"] = 20.0;
-        bulletInfo["direction"] = 1; // DOWN
-        bulletInfo["active"] = true;
-
-        // Adaugă informațiile despre bulă în lista de bule
-        bulletsList.push_back(std::move(bulletInfo));
-
-        // Setează lista de bule în răspuns
-        response["bullets"] = std::move(bulletsList);
-    CROW_ROUTE(app, "/map/info")
-        .methods("GET"_method)([this](const crow::request& req) {
-        crow::json::wvalue response;
-        response["width"] = gameMap.getWidth();
-        response["height"] = gameMap.getHeight();
-        return crow::response(response);
-            });
-
-    CROW_ROUTE(app, "/map/tiles")
-        .methods("GET"_method)([this](const crow::request& req) {
-        crow::json::wvalue response;
-        response["tiles"] = crow::json::wvalue(crow::json::type::list);
-
-        for (int y = 0; y < gameMap.getHeight(); ++y) {
-            for (int x = 0; x < gameMap.getWidth(); ++x) {
-                Tile& tile = gameMap.getTile(x, y);
-                crow::json::wvalue tileData;
-                tileData["x"] = x;
-                tileData["y"] = y;
-                tileData["type"] = static_cast<int>(tile.getType());
-                tileData["is_walkable"] = tile.isWalkable();
-                tileData["is_destructible"] = tile.isDestructible();
-
-                response["tiles"].push_back(tileData);
-            }
-        }
-
-        return crow::response(response);
-            });
-
-    CROW_ROUTE(app, "/bullets/create")
-    CROW_ROUTE(app, "/map/tile")
-        .methods("GET"_method)([this](const crow::request& req) {
-        // Use req.url_params.get without a default value
-        std::string xStr = req.url_params.get("x");
-        std::string yStr = req.url_params.get("y");
-
-        int x = xStr.empty() ? 0 : std::stoi(xStr);
-        int y = yStr.empty() ? 0 : std::stoi(yStr);
-
-        if (x < 0 || y < 0 || x >= gameMap.getWidth() || y >= gameMap.getHeight()) {
-            return crow::response(400, "Invalid tile coordinates");
-        }
-
-        Tile& tile = gameMap.getTile(x, y);
-
-        crow::json::wvalue response;
-        response["x"] = x;
-        response["y"] = y;
-        response["type"] = static_cast<int>(tile.getType());
-        response["is_walkable"] = tile.isWalkable();
-        response["is_destructible"] = tile.isDestructible();
-
-        return crow::response(response);
-            });
-
-    CROW_ROUTE(app, "/map/destroy_tile")
-        .methods("POST"_method)([this](const crow::request& req) {
-        auto json_data = crow::json::load(req.body);
-        if (!json_data) {
-            return crow::response(400, "Invalid JSON");
-        }
-
-        // Extract bullet parameters
-        double startX = json_data["startX"].d();
-        double startY = json_data["startY"].d();
-        int directionInt = json_data["direction"].i();
-        int ownerId = json_data["ownerId"].i();
-
-        // Convert int to Direction enum
-        Direction direction;
-        switch (directionInt) {
-        case 0: direction = Direction::UP; break;
-        case 1: direction = Direction::DOWN; break;
-        case 2: direction = Direction::LEFT; break;
-        case 3: direction = Direction::RIGHT; break;
-        default:
-            return crow::response(400, "Invalid direction");
-        }
-
-        // Create bullet
-        Bullet newBullet(startX, startY, direction, ownerId);
-
-        // Răspuns JSON
-        crow::json::wvalue response;
-        response["message"] = "Bullet created successfully";
-        response["x"] = startX;
-        response["y"] = startY;
-
-        return crow::response(201, response);
-            });
-
-    CROW_ROUTE(app, "/create_bomb")
-        .methods("POST"_method)([this](const crow::request& req) {
-        auto json_data = crow::json::load(req.body);
-        if (!json_data || !json_data.has("x") || !json_data.has("y") || !json_data.has("owner")) {
-            return crow::response(400, "JSON invalid.");
-        }
-
-        int x = json_data["x"].i();
-        int y = json_data["y"].i();
-        int owner = json_data["owner"].i();
-
-        Bomb newBomb(x, y, owner);
-        bombs.push_back(newBomb); // Use the bombs vector
-
-        return crow::response(201, "Bomb created successfully.");
-            });
-
-    // Update bomb route
-    CROW_ROUTE(app, "/update_bomb")
-        .methods("POST"_method)([this](const crow::request& req) {
-        auto json_data = crow::json::load(req.body);
-        if (!json_data || !json_data.has("index") || !json_data.has("deltaTime")) {
-            return crow::response(400, "JSON invalid.");
-        }
-
-        int index = json_data["index"].i();
-        float deltaTime = json_data["deltaTime"].d(); // Use d() for double
-
-        if (index < 0 || index >= bombs.size()) {
-            return crow::response(404, "Bomb not found.");
-        }
-
-        bombs[index].update(deltaTime);
-
-        return crow::response(200, "Bomb updated successfully.");
-            });
-
-    // Bombs info route
-    CROW_ROUTE(app, "/bombs/info")
-        .methods("GET"_method)([this](const crow::request& req) {
-        // Create a JSON response
-        crow::json::wvalue response;
-
-        // Create a list of bombs
-        auto bombsList = crow::json::wvalue::list();
-
-        for (const auto& bomb : bombs) {
-            crow::json::wvalue bombInfo;
-            bombInfo["x"] = bomb.getX();
-            bombInfo["y"] = bomb.getY();
-            bombInfo["exploded"] = bomb.isExploded();
-            bombInfo["timer"] = bomb.getTimer();
-            bombInfo["damageDone"] = bomb.hasDamageDone();
-
-            bombsList.push_back(std::move(bombInfo));
-        }
-
-        response["bombs"] = std::move(bombsList);
-
-        return crow::response(200, response.dump());
-        int x = json_data["x"].i();
-        int y = json_data["y"].i();
-
-        if (x < 0 || y < 0 || x >= gameMap.getWidth() || y >= gameMap.getHeight()) {
-            return crow::response(400, "Invalid tile coordinates");
-        }
-
-        Tile& tile = gameMap.getTile(x, y);
-
-        if (!tile.isDestructible()) {
-            return crow::response(400, "Tile is not destructible");
-        }
-
-        tile.destroy();
-
-        return crow::response(200, "Tile destroyed");
-            });
-
-    CROW_ROUTE(app, "/powerups")
-        .methods("GET"_method)([this](const crow::request& req) {
-        auto& powerUps = gameMap.getPowerUps();
-        crow::json::wvalue response;
-        response["powerups"] = crow::json::wvalue(crow::json::type::list);
-
-        for (const auto& powerUp : powerUps) {
-            crow::json::wvalue powerUpData;
-            powerUpData["x"] = powerUp.getX();
-            powerUpData["y"] = powerUp.getY();
-            powerUpData["type"] = powerUp.getTypeName();
-            powerUpData["type_id"] = static_cast<int>(powerUp.getType());
-
-            response["powerups"].push_back(powerUpData);
-        }
-
-        return crow::response(response);
             });
 }
 
 bool Server::authenticate(const std::string& username, const std::string& password) {
-    // Autentificare utilizator - Verificăm dacă datele de autentificare sunt corecte
-
-    std::lock_guard<std::mutex> lock(dbMutex);  // Protejăm accesul la baza de date
+ 
 
     std::string sql = "SELECT * FROM data WHERE username = ? AND password = ?";
     sqlite3_stmt* stmt;
@@ -355,13 +128,12 @@ bool Server::authenticate(const std::string& username, const std::string& passwo
 
     rc = sqlite3_step(stmt);
     if (rc == SQLITE_ROW) {
-        // Dacă există un rând în baza de date care corespunde, utilizatorul este autentificat
         sqlite3_finalize(stmt);
         return true;
     }
     else {
         sqlite3_finalize(stmt);
-        return false;  // Dacă nu există niciun rând corespunzător, autentificarea a eșuat
+        return false;
     }
 }
 
@@ -381,7 +153,6 @@ bool Server::registerUser(const std::string& username, const std::string& passwo
         return false;
     }
 
-    // Adăugăm utilizatorul în baza de date
     if (db.addUser(username, password)) {
         return true;
     }

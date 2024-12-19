@@ -17,7 +17,7 @@
 class Server {
 private:
     crow::SimpleApp app;
-    sqlite3* db;  // Pointer la baza de date SQLite
+    sqlite3* db;  
     std::mutex dbMutex;
     std::vector<Bomb> bombs;
 

@@ -27,7 +27,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Server.cpp" />
-    <ClCompile Include="Team.h" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>

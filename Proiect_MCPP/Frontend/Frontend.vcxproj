@@ -20,14 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="GameMenu.h" />
   </ItemGroup>

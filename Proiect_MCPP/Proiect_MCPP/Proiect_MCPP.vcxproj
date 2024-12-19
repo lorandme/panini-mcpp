@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Account.cpp" />
-    <ClCompile Include="Account.h" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Database.cpp" />
@@ -28,11 +26,9 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
-    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Team.h" />
     <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
@@ -42,7 +38,6 @@
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
-    <ClInclude Include="Scoreboard.h" />
     <ClCompile Include="Tile.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>

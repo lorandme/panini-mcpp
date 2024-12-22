@@ -23,6 +23,7 @@
     <ClCompile Include="Account.h" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="database.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />
@@ -107,12 +109,12 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
-      <AdditionalIncludeDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.h</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqlite3.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -127,14 +129,14 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
-      <AdditionalIncludeDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.h</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqlite3.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -148,12 +150,12 @@
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
       <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.h</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)External\SFML\lib;%(AdditionalLibraryDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\SFML\lib;%(AdditionalLibraryDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqlite3.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -168,7 +170,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <BuildStlModules>true</BuildStlModules>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.h</AdditionalIncludeDirectories>
       <AdditionalOptions>/D_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -176,7 +178,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)External\SFML\lib;%(AdditionalLibraryDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\SFML\lib;%(AdditionalLibraryDirectories);C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite;C:\Users\matei\Documents\Proiect_MC\Proiect_MCPP\ThirdPartySQLite\sqlite3.lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqlite3.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

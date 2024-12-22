@@ -3,6 +3,8 @@
 #include "Server.cpp"
 #include "Client.cpp"
 #include <iostream>
+#include "database.h"
+
 
 void startServer() {
     // Creează și inițializează serverul pe portul 12345
@@ -31,6 +33,9 @@ void startClient() {
 }
 
 int main() {
+
+    initializeDatabase();
+
     // Inițializare GameManager
     GameManager gameManager;
 
@@ -83,5 +88,8 @@ int main() {
 
     // Așteaptă ca serverul să termine procesarea cererii și să finalizeze execuția
     serverThread.join();
+
+    
+
     return 0;
 }

@@ -22,11 +22,20 @@ public:
     Tile();
     Tile(TileType type);
 
-    bool isOccupied() const;
+    bool isOccupied() const
+    {
+        return m_occupantPlayer != nullptr;
+    };
     bool isOccupiedByPlayer() const;
     bool isOccupiedByProjectile() const;
-    void occupyPlayer(std::shared_ptr<Player> player);
-    void vacate();
+    void occupyPlayer(std::shared_ptr<Player> player)
+    {
+        m_occupantPlayer = player;
+    };
+    void vacate()
+    {
+        m_occupantPlayer = nullptr;
+    };
 
     void destroy();
     bool isDestructible() const;

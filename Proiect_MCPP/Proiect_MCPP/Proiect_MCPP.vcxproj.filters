@@ -75,6 +75,9 @@
     <ClCompile Include="database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="loginPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scoreboard.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loginPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

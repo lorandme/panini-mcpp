@@ -14,7 +14,7 @@ bool Tile::isOccupiedByPlayer() const {
 }
 
 bool Tile::isOccupiedByProjectile() const {
-    return false; // Assuming the Tile doesn't have projectiles for now
+    return false; 
 }
 
 void Tile::occupyPlayer(std::shared_ptr<Player> player) {

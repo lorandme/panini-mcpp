@@ -25,6 +25,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="database.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="loginPage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />
+    <ClInclude Include="loginPage.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="Server.h" />
     <ClCompile Include="Tile.h" />

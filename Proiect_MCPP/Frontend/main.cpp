@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "LoginPage.h"
 #include <chrono>
 #include <unordered_map>
 
@@ -160,7 +161,23 @@ void renderGameState(sf::RenderWindow& window, const GameState& state) {
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Mock Test");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Game with Login");
+
+    // Run the login page
+    LoginPage loginPage(window);
+    std::vector<PlayerLoginData> players = loginPage.run();
+
+    // Check if the login page returned valid players
+    if (players.empty()) {
+        std::cout << "Login process terminated or window closed." << std::endl;
+        return 1; // Exit if the login page is closed
+    }
+
+    // Display the players who logged in
+    std::cout << "Players logged in:" << std::endl;
+    for (const auto& player : players) {
+        std::cout << "Player " << player.playerId << ": " << player.username << std::endl;
+    }
     GameState state = mockGameState();
     generateMockMap();
 

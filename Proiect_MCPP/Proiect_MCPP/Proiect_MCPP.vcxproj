@@ -23,9 +23,9 @@
     <ClCompile Include="Account.h" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="database.cpp" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="loginPage.cpp" />
+    <ClCompile Include="LoginPage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -40,11 +40,11 @@
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="database.h" />
+    <ClInclude Include="Database.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />
-    <ClInclude Include="loginPage.h" />
+    <ClInclude Include="LoginPage.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="Server.h" />
     <ClCompile Include="Tile.h" />

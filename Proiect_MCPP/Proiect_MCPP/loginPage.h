@@ -31,4 +31,5 @@ private:
 public:
     LoginPage(sf::RenderWindow& win);
     void run();
+    std::vector<Player> getPlayers() const;
 };

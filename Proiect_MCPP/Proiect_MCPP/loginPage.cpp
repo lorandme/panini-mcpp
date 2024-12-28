@@ -2,6 +2,9 @@
 
 const int MAX_PLAYERS = 4;
 
+std::vector<Player> LoginPage::getPlayers() const {
+    return players;
+}
 LoginPage::LoginPage(sf::RenderWindow& win) : window(win) {
     // Load font
     if (!font.loadFromFile("Arial.ttf")) {
@@ -116,4 +119,3 @@ void LoginPage::run() {
         render();
     }
 }
-#pragma once

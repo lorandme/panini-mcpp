@@ -1,13 +1,16 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <vector>
+#include <unordered_map>
+#include <iostream>
 #include "LoginPage.h"
 #include <chrono>
-#include <unordered_map>
 
 enum class TileType {
     Empty,
     Wall,
-    DestructibleWall
+    DestructibleWall,
+    PowerUp,  // Adăugat un tip nou de tile pentru power-ups
+    Enemy
 };
 
 const int mapWidth = 10;
@@ -24,6 +27,9 @@ static void generateMockMap() {
             else if (x == 4 && y == 3) {
                 mockMap[y][x] = TileType::DestructibleWall;
             }
+            else if (x == 5 && y == 5) {
+                mockMap[y][x] = TileType::PowerUp;  // Power-up pe hartă
+            }
         }
     }
 }
@@ -36,13 +42,14 @@ struct Player {
     sf::Keyboard::Key lastDirection;
     float shootCooldown = 0.3f;
     float timeSinceLastShot = 0.0f;
+    int score = 0;  // Scorul jucătorului
 };
 
 struct Bullet {
     sf::Vector2f position;
     sf::Vector2f direction;
     float speed = 400.0f;
-    float timeAlive = 0.0f; 
+    float timeAlive = 0.0f;
 
     void update(float deltaTime) {
         position += direction * speed * deltaTime;
@@ -50,7 +57,7 @@ struct Bullet {
     }
 
     bool isAlive() const {
-        return timeAlive < 5.0f; 
+        return timeAlive < 5.0f;
     }
 };
 
@@ -105,7 +112,7 @@ static void handleInput(GameState& state, float deltaTime) {
 
         player.timeSinceLastShot += deltaTime;
 
-        if (player.id==1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.timeSinceLastShot >= player.shootCooldown) {
+        if (player.id == 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && player.timeSinceLastShot >= player.shootCooldown) {
             Bullet newBullet;
             newBullet.position = player.position;
             newBullet.direction = directionMap[player.lastDirection];
@@ -116,8 +123,16 @@ static void handleInput(GameState& state, float deltaTime) {
 }
 
 static void updateBullets(GameState& state, float deltaTime) {
-    for (auto& bullet : state.bullets) {
-        bullet.update(deltaTime);
+    for (auto it = state.bullets.begin(); it != state.bullets.end(); ) {
+        it->update(deltaTime);
+
+        // Dacă proiectilul a ieșit din viață sau a lovit un perete, elimină-l
+        if (!it->isAlive() || checkCollision(it->position)) {
+            it = state.bullets.erase(it);  // Șterge proiectilul din listă
+        }
+        else {
+            ++it;
+        }
     }
 }
 
@@ -136,6 +151,9 @@ static void renderMap(sf::RenderWindow& window) {
                 break;
             case TileType::Empty:
                 tile.setFillColor(sf::Color::Black);
+                break;
+            case TileType::PowerUp:
+                tile.setFillColor(sf::Color::Green); // Power-up de culoare verde
                 break;
             }
 
@@ -160,6 +178,22 @@ static void renderGameState(sf::RenderWindow& window, const GameState& state) {
     }
 }
 
+void renderScores(sf::RenderWindow& window, const std::vector<Player>& players) {
+    sf::Font font;
+    if (!font.loadFromFile("arial.ttf")) {  // Încarcă fontul
+        std::cout << "Failed to load font!" << std::endl;
+        return;  // Dacă nu reușește să încarce fontul
+    }
+
+    for (const auto& player : players) {
+        sf::Text scoreText;
+        scoreText.setFont(font);
+        scoreText.setString("Player " + std::to_string(player.id) + ": " + std::to_string(player.score));
+        scoreText.setPosition(10, 10 + player.id * 30);  // Poziția textului pe ecran
+        window.draw(scoreText);
+    }
+}
+
 bool checkCollision(const sf::Vector2f& newPosition) {
     int x = static_cast<int>(newPosition.x / 80);
     int y = static_cast<int>(newPosition.y / 80);
@@ -171,24 +205,18 @@ bool checkCollision(const sf::Vector2f& newPosition) {
     return mockMap[y][x] == TileType::Wall;
 }
 
-
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game with Login");
-
-    // Run the login page
     LoginPage loginPage(window);
     loginPage.run();
 
-    // Obținem jucătorii care s-au autentificat
     std::vector<Player> players = loginPage.getPlayers();
 
-    // Verificăm dacă jucătorii au fost validați
     if (players.empty()) {
         std::cout << "Login process terminated or window closed." << std::endl;
-        return 1; // Iesim daca loginul a fost inexistent
+        return 1;
     }
 
-    // Afișăm jucătorii autentificați
     std::cout << "Players logged in:" << std::endl;
     for (const auto& player : players) {
         std::cout << "Player: " << player.id << std::endl;
@@ -198,6 +226,7 @@ int main() {
     generateMockMap();
 
     sf::Clock clock;
+    bool isPaused = false;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -206,14 +235,34 @@ int main() {
                 window.close();
         }
 
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+            isPaused = !isPaused;
+            sf::sleep(sf::seconds(0.2f)); // Delay pentru a preveni comutarea rapidă
+        }
+
         float deltaTime = clock.restart().asSeconds();
 
-        handleInput(state, deltaTime);
-        updateBullets(state, deltaTime);
-
         window.clear();
-        renderMap(window);
-        renderGameState(window, state);
+
+        if (!isPaused) {
+            handleInput(state, deltaTime);
+            updateBullets(state, deltaTime);
+            renderMap(window);
+            renderGameState(window, state);
+            renderScores(window, players);
+        }
+        else {
+            sf::Font font;
+            if (!font.loadFromFile("arial.ttf")) {
+                std::cout << "Failed to load font!" << std::endl;
+                return 1;
+            }
+            sf::Text pauseText("Game Paused", font, 30);
+            pauseText.setFillColor(sf::Color::Red);
+            pauseText.setPosition(300, 250);
+            window.draw(pauseText);
+        }
+
         window.display();
     }
 

@@ -129,6 +129,15 @@ public:
         }
     }
 
+    void sendGreetingToServer() {
+        // Creăm un obiect JSON cu mesajul dorit
+        nlohmann::json greetingMessage = { {"message", "Salut server"} };
+
+        // Trimitem acest mesaj serverului
+        sendMessage(greetingMessage);
+    }
+
+
     void handleServerResponse(const json& response) {
         if (response.contains("status") && response["status"] == "error") {
             std::cerr << "Error: " << response["message"] << std::endl;

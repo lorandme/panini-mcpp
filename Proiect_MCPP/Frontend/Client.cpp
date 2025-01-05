@@ -48,25 +48,19 @@ public:
         }
     }
 
-    // Funcție pentru conversia unui șir wide char în UTF-8
     std::string wstringToUtf8(const std::wstring& wstr) {
         std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
         return converter.to_bytes(wstr);
     }
 
-    // Trimiterea unui mesaj către server (convertim mesajul în UTF-8)
     void sendMessage(const json& request) {
-        // Converim JSON-ul într-un string
         std::string requestStr = request.dump();
 
-        // Verificăm și converim string-ul în UTF-8 (dacă este cazul)
         std::string utf8Message = wstringToUtf8(std::wstring(requestStr.begin(), requestStr.end()));
 
-        // Trimiterea mesajului
         send(m_socket, utf8Message.c_str(), utf8Message.size(), 0);
     }
 
-    // Primirea unui răspuns de la server
     json receiveMessage() {
         char buffer[1024];
         memset(buffer, 0, sizeof(buffer));
@@ -76,12 +70,11 @@ public:
             throw std::runtime_error("Eroare la primirea mesajului sau serverul s-a deconectat.");
         }
 
-        // Verificăm dacă există date valide și dacă mesajul poate fi procesat
-        std::string message(buffer);  // Păstrăm doar aceasta linie
+        std::string message(buffer);  
         if (message.empty()) {
             throw std::runtime_error("Mesajul primit este gol.");
         }
-        std::cerr << "Mesaj primit de la server: " << message << std::endl;  // Adaugă aceasta linie pentru debug
+        std::cerr << "Mesaj primit de la server: " << message << std::endl;  
 
         try {
             json response = json::parse(message);
@@ -129,14 +122,7 @@ public:
         }
     }
 
-    void sendGreetingToServer() {
-        // Creăm un obiect JSON cu mesajul dorit
-        nlohmann::json greetingMessage = { {"message", "Salut server"} };
-
-        // Trimitem acest mesaj serverului
-        sendMessage(greetingMessage);
-    }
-
+ 
 
     void handleServerResponse(const json& response) {
         if (response.contains("status") && response["status"] == "error") {
@@ -152,7 +138,7 @@ public:
 
     void reconnectToServer() {
         std::cout << "Trying to reconnect to the server..." << std::endl;
-        init();  // Reinitializează conexiunea
+        init(); 
     }
 
 

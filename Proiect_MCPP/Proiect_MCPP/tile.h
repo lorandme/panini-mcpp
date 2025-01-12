@@ -7,7 +7,8 @@ enum class TileType {
     EMPTY,
     WALL,
     DESTRUCTIBLE_WALL,
-    BOMB
+    BOMB,
+    POWERUP
 };
 
 class Player;

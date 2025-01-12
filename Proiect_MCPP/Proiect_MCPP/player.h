@@ -22,6 +22,12 @@ private:
 
     Weapon m_weapon;
 
+    int m_shieldDuration = 0; // Durata scutului
+    bool m_hasShield = false; // Starea scutului
+
+    int m_speedBoostDuration = 0; // Durata creșterii vitezei
+    bool m_speedBoosted = false; // Starea de viteză crescută
+
 public:
     Player(const std::string& name, int startX, int startY);
 
@@ -53,4 +59,16 @@ public:
     void setTeam(Team* newTeam);
 
     void addReward(int points);
+
+    int getX() const { return m_x; }
+    int getY() const { return m_y; }
+
+    void addHP(int hp) { m_lives += hp; }
+
+    void activateShield(int duration) { m_shieldDuration = duration; m_hasShield = true; }
+
+    void increaseSpeed(int duration) { m_speedBoostDuration = duration; m_speedBoosted = true; }
+
+
+
 };

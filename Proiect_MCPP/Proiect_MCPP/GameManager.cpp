@@ -11,6 +11,9 @@ void GameManager::initializeGame() {
     m_players.emplace_back(Player("Player1", 0, 0));
     m_players.emplace_back(Player("Player2", 9, 9));
     m_isRunning = true;
+
+    // Afișarea hărții după inițializare
+    renderMap();
 }
 
 void GameManager::startGame() {
@@ -100,3 +103,65 @@ void GameManager::endGame() {
 std::vector<Player>& GameManager::getPlayers() {
     return m_players;
 }
+
+void GameManager::generatePowerUps(int count) {
+    for (int i = 0; i < count; ++i) {
+        PowerUp powerUp = PowerUp::generateRandom(
+            m_gameMap.getWidth(), m_gameMap.getHeight(), m_gameMap.getGrid()
+        );
+        m_powerUps.push_back(powerUp);
+        m_gameMap.getTile(powerUp.getX(), powerUp.getY()).setType(TileType::POWERUP);
+    }
+}
+
+
+void GameManager::checkPlayerPowerUpCollision() {
+    for (auto& player : m_players) {
+        for (auto it = m_powerUps.begin(); it != m_powerUps.end();) {
+            if (player.getX() == it->getX() && player.getY() == it->getY()) {
+                switch (it->getType()) {
+                case PowerUp::EXTRA_HP:
+                    player.addHP(1);
+                    break;
+                case PowerUp::SHIELD:
+                    player.activateShield(5);
+                    break;
+                case PowerUp::SPEED_BOOST:
+                    player.increaseSpeed(5);
+                    break;
+                }
+                it = m_powerUps.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+    }
+}
+
+void GameManager::renderMap() const {
+    const auto& grid = m_gameMap.getGrid(); // Obține grila hărții
+    for (int y = 0; y < grid.size(); ++y) {
+        for (int x = 0; x < grid[y].size(); ++x) {
+            TileType type = grid[y][x].getType(); // Obține tipul tile-ului curent
+            switch (type) {
+            case TileType::EMPTY:
+                std::cout << '.'; // Reprezentare vizuală pentru spațiu liber
+                break;
+            case TileType::WALL:
+                std::cout << '#'; // Zid indestructibil
+                break;
+            case TileType::DESTRUCTIBLE_WALL:
+                std::cout << '*'; // Zid destructibil
+                break;
+            case TileType::BOMB:
+                std::cout << 'B'; // Bombă (dacă este relevant)
+                break;
+            default:
+                std::cout << '?'; // Necunoscut
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+

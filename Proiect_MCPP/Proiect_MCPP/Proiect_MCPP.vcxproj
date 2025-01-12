@@ -29,6 +29,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Team.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />
     <ClInclude Include="LoginPage.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="Server.h" />
     <ClCompile Include="Tile.h" />

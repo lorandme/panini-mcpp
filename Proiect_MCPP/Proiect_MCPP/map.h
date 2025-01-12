@@ -19,6 +19,8 @@ public:
     Tile& getTile(int x, int y);
     const Tile& getTile(int x, int y) const;
     void generateRandom();
+    const std::vector<std::vector<Tile>>& getGrid() const;
+
 
     void printMap() const;
 };

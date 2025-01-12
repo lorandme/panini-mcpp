@@ -1,6 +1,29 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-void initializeDatabase();
+#include <string>
+#include <vector>
+#include <mutex>
+#include <sqlite3.h>
 
-#endif // DATABASE_H
+class Database {
+public:
+    Database();
+    ~Database();
+
+    bool open(const std::string& dbPath);
+    void close();
+
+    bool userExists(const std::string& username);
+    bool authenticateUser(const std::string& username, const std::string& password);
+
+private:
+    bool createUsersTable();
+    bool executeQuery(const std::string& query);
+    bool executeQueryWithResults(const std::string& query, std::vector<std::vector<std::string>>& results);
+
+    sqlite3* db;
+    std::mutex dbMutex;
+};
+
+#endif

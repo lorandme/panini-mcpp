@@ -17,6 +17,9 @@ public:
     bool userExists(const std::string& username);
     bool authenticateUser(const std::string& username, const std::string& password);
 
+    bool addUser(const std::string& username, const std::string& password);
+
+
 private:
     bool createUsersTable();
     bool executeQuery(const std::string& query);

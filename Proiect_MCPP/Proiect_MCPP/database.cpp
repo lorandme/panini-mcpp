@@ -123,3 +123,32 @@ bool Database::authenticateUser(const std::string& username, const std::string& 
     sqlite3_finalize(stmt);
     return authenticated;
 }
+
+bool Database::addUser(const std::string& username, const std::string& password) {
+    std::lock_guard<std::mutex> lock(dbMutex);
+    std::string query = "INSERT INTO users (username, password) VALUES (?, ?);";
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if (rc != SQLITE_DONE) {
+        if (rc == SQLITE_CONSTRAINT) {  // Constrângere UNIQUE încălcată
+            std::cerr << "Utilizatorul " << username << " există deja în baza de date." << std::endl;
+        }
+        else {
+            std::cerr << "Eroare la adăugarea utilizatorului: " << sqlite3_errmsg(db) << std::endl;
+        }
+        return false;
+    }
+    return true;
+}
+

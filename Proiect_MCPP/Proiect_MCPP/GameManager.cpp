@@ -19,7 +19,7 @@ void GameManager::initializeGame() {
 void GameManager::startGame() {
     gameLoop();
     endGame();
-}
+} 
 
 void GameManager::detectCollisions() {
     for (auto& player : m_players) {

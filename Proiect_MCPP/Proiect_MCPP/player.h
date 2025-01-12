@@ -3,6 +3,7 @@
 #include <string>
 #include "Account.h"
 #include "Map.h"
+#include "player.h"
 #include "Weapon.h"
 #include "Team.h"
 

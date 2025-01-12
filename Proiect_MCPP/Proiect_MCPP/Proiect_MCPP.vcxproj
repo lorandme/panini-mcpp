@@ -22,7 +22,6 @@
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="Account.h" />
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="LoginPage.cpp" />
@@ -40,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
-    <ClInclude Include="Client.h" />
+    <ClInclude Include="..\Frontend\LoginPage.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />
@@ -48,8 +47,8 @@
     <ClInclude Include="LoginPage.h" />
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Scoreboard.h" />
-    <ClInclude Include="Server.h" />
     <ClCompile Include="Tile.h" />
+    <ClInclude Include="Server.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

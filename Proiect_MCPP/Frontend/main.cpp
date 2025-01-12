@@ -126,7 +126,7 @@
 //    for (auto it = state.bullets.begin(); it != state.bullets.end(); ) {
 //        it->update(deltaTime);
 //
-//        // Dacă proiectilul a ieșit din viață sau a lovit un perete, elimină-l
+//         Dacă proiectilul a ieșit din viață sau a lovit un perete, elimină-l
 //        if (!it->isAlive() || checkCollision(it->position)) {
 //            it = state.bullets.erase(it);  // Șterge proiectilul din listă
 //        }
@@ -268,10 +268,10 @@
 //
 //    return 0;
 //}
-
-
-//!!! MOCK TEST PENTRU INTERFATA GRAFICA !!!
-
+//
+//
+////!!! MOCK TEST PENTRU INTERFATA GRAFICA !!!
+////
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
@@ -309,7 +309,7 @@ struct Player {
     float shootCooldown = 0.3f;
     float timeSinceLastShot = 0.0f;
 
-    // Add frame switching logic
+    /* Add frame switching logic*/
     float frameTimer = 0.0f;  // Timer to switch frames
     bool isFrame1 = true;      // Indicates if the current frame is the first one
 };
@@ -432,7 +432,6 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
         const auto& player = state.players[i];
         sf::Sprite playerSprite;
 
-        // Choose the correct frame based on isFrame1
         if (player.isFrame1) {
             playerSprite.setTexture(playerTextures[i * 2]);  // Use frame 1 (pl1_fr1.png, pl2_fr1.png, etc.)
         }
@@ -442,7 +441,6 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
 
         playerSprite.setPosition(player.position);
 
-        // Scale player textures to be slightly bigger than the tile size
         playerSprite.setScale(100.0f / 64.0f, 100.0f / 64.0f);  // Scaling player to fit the 80x80 tiles
         window.draw(playerSprite);
     }
@@ -497,6 +495,44 @@ int main() {
         renderGameState(window, state, playerTextures, bulletTexture);
         window.display();
     }
-
     return 0;
 }
+ 
+//}
+//#include <iostream>
+//#include "Client.h"
+//#include <nlohmann/json.hpp>
+//
+//int main() {
+//    // Define server IP and port
+//    std::string serverIP = "127.0.0.1"; // Localhost for testing
+//    int serverPort = 8080;
+//
+//    // Initialize the Client
+//    Client client(serverIP, serverPort);
+//
+//    try {
+//        client.init(); // Initialize socket and connect to the server
+//        std::cout << "Connected to the server at " << serverIP << ":" << serverPort << std::endl;
+//
+//        // Create a sample request to send to the server
+//        nlohmann::json request = {
+//            {"type", "test"},
+//            {"message", "Hello, server!"}
+//        };
+//
+//        // Send the request
+//        client.sendMessage(request);
+//        std::cout << "Message sent to the server: " << request.dump() << std::endl;
+//
+//        // Receive the server's response
+//        nlohmann::json response = client.receiveMessage();
+//        std::cout << "Response received from server: " << response.dump() << std::endl;
+//
+//    }
+//    catch (const std::exception& e) {
+//        std::cerr << "Error: " << e.what() << std::endl;
+//    }
+//
+//    return 0;
+//}

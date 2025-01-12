@@ -450,7 +450,6 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
         bulletSprite.setTexture(bulletTexture);
         bulletSprite.setPosition(bullet.position);
 
-        // Scale the bullet texture to 8x8
         bulletSprite.setScale(16.0f / bulletTexture.getSize().x, 16.0f / bulletTexture.getSize().y);
 
         window.draw(bulletSprite);

@@ -447,10 +447,13 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
     }
 
     for (const auto& bullet : state.bullets) {
-        sf::RectangleShape bulletShape(sf::Vector2f(10, 10));
-        bulletShape.setFillColor(sf::Color::Yellow);
-        bulletShape.setPosition(bullet.position);
-        window.draw(bulletShape);
+        sf::Sprite bulletSprite;
+        bulletSprite.setTexture(bulletTexture);
+        bulletSprite.setPosition(bullet.position);
+
+        bulletSprite.setScale(16.0f / bulletTexture.getSize().x, 16.0f / bulletTexture.getSize().y);
+
+        window.draw(bulletSprite);
     }
 }
 
@@ -500,6 +503,7 @@ int main() {
     if (!wallTexture.loadFromFile("../assets/wall.png") ||
         !destructibleWallTexture.loadFromFile("../assets/destructible.png") ||
         !emptyTileTexture.loadFromFile("../assets/empty.png") ||
+        !bulletTexture.loadFromFile("../assets/fire.png") || // Load fire.png for bullets
         !playerTextures[0].loadFromFile("../assets/pl1_fr1.png") ||
         !playerTextures[1].loadFromFile("../assets/pl1_fr2.png") ||
         !playerTextures[2].loadFromFile("../assets/pl2_fr1.png") ||

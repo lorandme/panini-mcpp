@@ -1,36 +1,29 @@
 ﻿#pragma once
 
+
 #include <vector>
+#include "crow.h"
 #include <string>
 #include <queue>
+#include <sqlite3.h>
 #include <mutex>
 #include <unordered_map>
 
-struct GameSession {
-    int gameId;                       
-    std::vector<std::string> players;  
-    int maxPlayers;                   
-    std::string serializedPlayers;   
 
-    void serialize();
-    void deserialize();
+class Server {
+private:
+    crow::SimpleApp app;
+    sqlite3* db;  // Pointer la baza de date SQLite
+    std::mutex dbMutex;
+
+public:
+    Server();
+    void init();
+    void run();
+
+private:
+    void setupRoutes();
+    bool authenticate(const std::string& username, const std::string& password);
+    bool openDatabase();
+    void closeDatabase();
 };
-
-struct Score {
-    int id;              
-    std::string playerName; 
-    int score;           
-};
-
-struct User {
-    int id;
-    std::string username;
-    std::string email;      
-    std::string password;   
-};
-
-
-void initServer();
-void startServer();
-void stopServer();
-void startServerWithMultigaming();

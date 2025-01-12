@@ -1,4 +1,4 @@
-#include "map.h"
+﻿#include "map.h"
 #include "tile.h"
 #include <cstdlib>
 #include <ctime>
@@ -82,4 +82,8 @@ void Map::printMap() const {
         }
         std::cout << "\n";
     }
+}
+
+const std::vector<std::vector<Tile>>& Map::getGrid() const {
+    return m_grid;
 }

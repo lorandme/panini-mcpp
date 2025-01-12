@@ -24,6 +24,7 @@
   <ItemGroup>
     <ClInclude Include="..\Proiect_MCPP\Client.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="LoginPage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -289,4 +289,3 @@ bool Server::authenticate(const std::string& username, const std::string& passwo
         return false;  // Dacă nu există niciun rând corespunzător, autentificarea a eșuat
     }
 }
-

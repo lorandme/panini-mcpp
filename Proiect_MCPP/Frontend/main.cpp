@@ -276,6 +276,7 @@
 #include <vector>
 #include <chrono>
 #include <unordered_map>
+//#include "Database.h"
 
 enum class TileType {
     Empty,
@@ -453,7 +454,44 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
     }
 }
 
+#include <iostream>
+#include "../Proiect_MCPP/database.h"
+
+void testDatabaseOperations() {
+    Database db;
+
+    // Deschide baza de date
+    if (db.open("game_database.db")) {
+        std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
+
+        // Adaugă utilizatori
+        if (db.addUser("player1", "1234")) {
+            std::cout << "Utilizator adăugat cu succes!" << std::endl;
+        }
+        else {
+            std::cerr << "Eroare la adăugarea utilizatorului!" << std::endl;
+        }
+
+        // Autentificare
+        if (db.authenticateUser("player1", "1234")) {
+            std::cout << "Autentificare reușită!" << std::endl;
+        }
+        else {
+            std::cerr << "Eșec la autentificare!" << std::endl;
+        }
+    }
+    else {
+        std::cerr << "Nu s-a putut deschide baza de date!" << std::endl;
+    }
+
+    db.close();
+}
+
+
 int main() {
+    // Apelează funcțiile de test ale serverului
+    testDatabaseOperations();
+    
     sf::RenderWindow window(sf::VideoMode(800, 600), "Mock Test");
 
     sf::Texture wallTexture, destructibleWallTexture, emptyTileTexture, bulletTexture;
@@ -495,6 +533,7 @@ int main() {
         renderGameState(window, state, playerTextures, bulletTexture);
         window.display();
     }
+
     return 0;
 }
  

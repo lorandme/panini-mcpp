@@ -39,7 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
-    <ClInclude Include="..\Frontend\LoginPage.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />

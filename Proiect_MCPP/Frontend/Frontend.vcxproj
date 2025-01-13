@@ -22,7 +22,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Proiect_MCPP\Client.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="LoginPage.h" />
   </ItemGroup>

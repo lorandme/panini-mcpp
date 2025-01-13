@@ -24,6 +24,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="init_database.cpp" />
     <ClCompile Include="LoginPage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />

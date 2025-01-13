@@ -188,10 +188,222 @@
 //    }
 //};
 
+//#include "Server.h"
+//#include <iostream>
+//#include <crow.h>
+//#include <sqlite3.h>
+//
+//Server::Server() : db(nullptr) {
+//    // Constructorul clasei Server
+//}
+//
+//void Server::init() {
+//    // Inițializare server: deschiderea bazei de date și configurarea rutelor
+//    if (!openDatabase()) {
+//        std::cerr << "Eroare la deschiderea bazei de date!" << std::endl;
+//        return;
+//    }
+//
+//    setupRoutes();
+//}
+//
+//void Server::run() {
+//    // Lansează serverul Crow
+//    std::cout << "Serverul este acum activ!" << std::endl;
+//    app.port(8080).run();  // Ascultă pe portul 8080
+//}
+//
+//bool Server::openDatabase() {
+//    // Deschide conexiunea la baza de date SQLite
+//    const char* dbPath = "data.db";  // Calea către fișierul bazei de date
+//    int rc = sqlite3_open(dbPath, &db);
+//
+//    if (rc) {
+//        std::cerr << "Eroare la deschiderea bazei de date: " << sqlite3_errmsg(db) << std::endl;
+//        return false;
+//    }
+//
+//    std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
+//    return true;
+//}
+//
+//void Server::closeDatabase() {
+//    // Închide baza de date SQLite
+//    if (db) {
+//        sqlite3_close(db);
+//        std::cout << "Baza de date a fost închisă!" << std::endl;
+//    }
+//}
+//
+//void Server::setupRoutes() {
+//    // Configurăm rutele serverului
+//
+//    // Ruta pentru login
+//    app.route_dynamic("/login")
+//        .methods("POST"_method)([this](const crow::request& req) {
+//        // Obținem username și password din cererea POST
+//        auto json_data = crow::json::load(req.body);
+//        if (!json_data) {
+//            return crow::response(400, "JSON invalid.");
+//        }
+//
+//        std::string username = json_data["username"].s();
+//        std::string password = json_data["password"].s();
+//
+//        if (authenticate(username, password)) {
+//            return crow::response(200, "Autentificare reușită!");
+//        }
+//        else {
+//            return crow::response(401, "Autentificare eșuată!");
+//        }
+//            });
+//
+//    // Poți adăuga și alte rute pentru operațiuni suplimentare.
+//}
+//
+//bool Server::authenticate(const std::string& username, const std::string& password) {
+//    // Autentificare utilizator - Verificăm dacă datele de autentificare sunt corecte
+//
+//    std::lock_guard<std::mutex> lock(dbMutex);  // Protejăm accesul la baza de date
+//
+//    std::string sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+//    sqlite3_stmt* stmt;
+//
+//    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+//        return false;
+//    }
+//
+//    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+//    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+//
+//    rc = sqlite3_step(stmt);
+//    if (rc == SQLITE_ROW) {
+//        // Dacă există un rând în baza de date care corespunde, utilizatorul este autentificat
+//        sqlite3_finalize(stmt);
+//        return true;
+//    }
+//    else {
+//        sqlite3_finalize(stmt);
+//        return false;  // Dacă nu există niciun rând corespunzător, autentificarea a eșuat
+//    }
+//}
+
+
+//#include "Server.h"
+//#include <iostream>
+//#include <crow.h>
+//#include <sqlite3.h>
+//#include "LoginPage.h"
+//
+//
+//bool Server::openDatabase() {
+//    // Deschide conexiunea la baza de date SQLite
+//    const char* dbPath = "data.db";  // Calea către fișierul bazei de date
+//    int rc = sqlite3_open(dbPath, &db);
+//
+//    if (rc) {
+//        std::cerr << "Eroare la deschiderea bazei de date: " << sqlite3_errmsg(db) << std::endl;
+//        return false;
+//    }
+//
+//    // Crearea tabelei `users` dacă nu există deja
+//    const char* createTableSQL = R"(
+//        CREATE TABLE IF NOT EXISTS users (
+//            id INTEGER PRIMARY KEY AUTOINCREMENT,
+//            username TEXT UNIQUE NOT NULL,
+//            password TEXT NOT NULL
+//        );
+//    )";
+//
+//    char* errMsg = nullptr;
+//    rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Eroare la crearea tabelei: " << errMsg << std::endl;
+//        sqlite3_free(errMsg);
+//        return false;
+//    }
+//
+//    std::cout << "Baza de date a fost deschisă și tabelul `users` a fost creat!" << std::endl;
+//    return true;
+//}
+//void Server::setupRoutes() {
+//    // Ruta pentru login
+//    app.route_dynamic("/login")
+//        .methods("POST"_method)([this](const crow::request& req) {
+//        auto json_data = crow::json::load(req.body);
+//        if (!json_data) {
+//            return crow::response(400, "JSON invalid.");
+//        }
+//
+//        std::string username = json_data["username"].s();
+//        std::string password = json_data["password"].s();
+//
+//        if (authenticate(username, password)) {
+//            return crow::response(200, "Autentificare reușită!");
+//        }
+//        else {
+//            return crow::response(401, "Autentificare eșuată!");
+//        }
+//            });
+//
+//    // Ruta pentru înregistrare
+//    app.route_dynamic("/register")
+//        .methods("POST"_method)([this](const crow::request& req) {
+//        auto json_data = crow::json::load(req.body);
+//        if (!json_data) {
+//            return crow::response(400, "JSON invalid.");
+//        }
+//
+//        std::string username = json_data["username"].s();
+//        std::string password = json_data["password"].s();
+//
+//        // Adaugă utilizatorul în baza de date
+//        if (registerUser(username, password)) {
+//            return crow::response(200, "Utilizator înregistrat cu succes!");
+//        }
+//        else {
+//            return crow::response(400, "Eroare la înregistrare.");
+//        }
+//            });
+//}
+//
+//bool Server::registerUser(const std::string& username, const std::string& password) {
+//    // Înregistrează un utilizator în baza de date
+//    std::lock_guard<std::mutex> lock(dbMutex);  // Protejăm accesul la baza de date
+//
+//    std::string sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+//    sqlite3_stmt* stmt;
+//
+//    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+//        return false;
+//    }
+//
+//    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+//    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+//
+//    rc = sqlite3_step(stmt);
+//    if (rc != SQLITE_DONE) {
+//        std::cerr << "Eroare la executarea interogării: " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_finalize(stmt);
+//        return false;
+//    }
+//
+//    sqlite3_finalize(stmt);
+//    return true;
+//}
+
+#define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>
+#include <mswsock.h>
 #include "Server.h"
 #include <iostream>
 #include <crow.h>
 #include <sqlite3.h>
+#include <string>
 
 Server::Server() : db(nullptr) {
     // Constructorul clasei Server
@@ -223,7 +435,24 @@ bool Server::openDatabase() {
         return false;
     }
 
-    std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
+    // Crearea tabelei `users` dacă nu există deja
+    const char* createTableSQL = R"(
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        );
+    )";
+
+    char* errMsg = nullptr;
+    rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la crearea tabelei: " << errMsg << std::endl;
+        sqlite3_free(errMsg);
+        return false;
+    }
+
+    std::cout << "Baza de date a fost deschisă și tabelul `users` a fost creat!" << std::endl;
     return true;
 }
 
@@ -241,7 +470,6 @@ void Server::setupRoutes() {
     // Ruta pentru login
     app.route_dynamic("/login")
         .methods("POST"_method)([this](const crow::request& req) {
-        // Obținem username și password din cererea POST
         auto json_data = crow::json::load(req.body);
         if (!json_data) {
             return crow::response(400, "JSON invalid.");
@@ -258,12 +486,29 @@ void Server::setupRoutes() {
         }
             });
 
-    // Poți adăuga și alte rute pentru operațiuni suplimentare.
+    // Ruta pentru înregistrare
+    app.route_dynamic("/register")
+        .methods("POST"_method)([this](const crow::request& req) {
+        auto json_data = crow::json::load(req.body);
+        if (!json_data) {
+            return crow::response(400, "JSON invalid.");
+        }
+
+        std::string username = json_data["username"].s();
+        std::string password = json_data["password"].s();
+
+        // Adaugă utilizatorul în baza de date
+        if (registerUser(username, password)) {
+            return crow::response(200, "Utilizator înregistrat cu succes!");
+        }
+        else {
+            return crow::response(400, "Eroare la înregistrare.");
+        }
+            });
 }
 
 bool Server::authenticate(const std::string& username, const std::string& password) {
     // Autentificare utilizator - Verificăm dacă datele de autentificare sunt corecte
-
     std::lock_guard<std::mutex> lock(dbMutex);  // Protejăm accesul la baza de date
 
     std::string sql = "SELECT * FROM users WHERE username = ? AND password = ?";
@@ -288,4 +533,31 @@ bool Server::authenticate(const std::string& username, const std::string& passwo
         sqlite3_finalize(stmt);
         return false;  // Dacă nu există niciun rând corespunzător, autentificarea a eșuat
     }
+}
+
+bool Server::registerUser(const std::string& username, const std::string& password) {
+    // Înregistrează un utilizator în baza de date
+    std::lock_guard<std::mutex> lock(dbMutex);  // Protejăm accesul la baza de date
+
+    std::string sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        std::cerr << "Eroare la executarea interogării: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }

@@ -20,12 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp" />
-    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Proiect_MCPP\LoginPage.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="LoginScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

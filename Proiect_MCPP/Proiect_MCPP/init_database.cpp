@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-void initializeDatabase(const std::string& db_name) {
+void static initializeDatabase(const std::string& db_name) {
     sqlite3* db;
     char* err_msg = nullptr;
 
@@ -32,13 +32,13 @@ void initializeDatabase(const std::string& db_name) {
     sqlite3_close(db);
 }
 
-int main() {
-    try {
-        initializeDatabase("battle_city.db");
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
-    return 0;
-}
+//int main() {
+//    try {
+//        initializeDatabase("battle_city.db");
+//    }
+//    catch (const std::exception& e) {
+//        std::cerr << "Error: " << e.what() << std::endl;
+//        return 1;
+//    }
+//    return 0;
+//}

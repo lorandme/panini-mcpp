@@ -457,89 +457,124 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
     }
 }
 
+//#include <iostream>
+//#include "../Proiect_MCPP/database.h"
+//
+//void testDatabaseOperations() {
+//    Database db;
+//
+//    // Deschide baza de date
+//    if (db.open("game_database.db")) {
+//        std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
+//
+//        // Adaugă utilizatori
+//        if (db.addUser("player1", "1234")) {
+//            std::cout << "Utilizator adăugat cu succes!" << std::endl;
+//        }
+//        else {
+//            std::cerr << "Eroare la adăugarea utilizatorului!" << std::endl;
+//        }
+//
+//        // Autentificare
+//        if (db.authenticateUser("player1", "1234")) {
+//            std::cout << "Autentificare reușită!" << std::endl;
+//        }
+//        else {
+//            std::cerr << "Eșec la autentificare!" << std::endl;
+//        }
+//    }
+//    else {
+//        std::cerr << "Nu s-a putut deschide baza de date!" << std::endl;
+//    }
+//
+//    db.close();
+//}
+
+#include "GameMenu.h"
+#include "LoginScreen.h";
 #include <iostream>
-#include "../Proiect_MCPP/database.h"
-
-void testDatabaseOperations() {
-    Database db;
-
-    // Deschide baza de date
-    if (db.open("game_database.db")) {
-        std::cout << "Baza de date a fost deschisă cu succes!" << std::endl;
-
-        // Adaugă utilizatori
-        if (db.addUser("player1", "1234")) {
-            std::cout << "Utilizator adăugat cu succes!" << std::endl;
-        }
-        else {
-            std::cerr << "Eroare la adăugarea utilizatorului!" << std::endl;
-        }
-
-        // Autentificare
-        if (db.authenticateUser("player1", "1234")) {
-            std::cout << "Autentificare reușită!" << std::endl;
-        }
-        else {
-            std::cerr << "Eșec la autentificare!" << std::endl;
-        }
-    }
-    else {
-        std::cerr << "Nu s-a putut deschide baza de date!" << std::endl;
-    }
-
-    db.close();
-}
-
-
 int main() {
+
+    sf::RenderWindow window(sf::VideoMode(400, 400), "Login Screen", sf::Style::Close);
+
+    try {
+        LoginScreen loginScreen(window);
+        loginScreen.run();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    //    sf::RenderWindow window(sf::VideoMode(400, 600), "Game Menu");
+
+    //    try {
+    //        MenuRenderer menu(window);
+    //        GameMode selectedMode = menu.run();
+
+    //        switch (selectedMode) {
+    //        case GameMode::SOLO_4PLAYERS:
+    //            // Logică pentru inițializare joc 1v1v1v1
+    //            break;
+    //        case GameMode::TEAM_2V2:
+    //            // Logică pentru inițializare joc 2v2
+    //            break;
+    //        case GameMode::EXIT:
+    //            return 0;
+    //        }
+    //    }
+    //    catch (const std::exception& e) {
+    //        std::cerr << "Error: " << e.what() << std::endl;
+    //        return -1;
+    //    }
+
+        return 0;
+    }
     // Apelează funcțiile de test ale serverului
-    testDatabaseOperations();
-    
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Mock Test");
+//    testDatabaseOperations();
+//    
+//    sf::RenderWindow window(sf::VideoMode(800, 600), "Mock Test");
+//
+//    sf::Texture wallTexture, destructibleWallTexture, emptyTileTexture, bulletTexture;
+//    sf::Texture playerTextures[8];  // 4 players, each having 2 frames
+//
+//    if (!wallTexture.loadFromFile("../assets/wall.png") ||
+//        !destructibleWallTexture.loadFromFile("../assets/destructible.png") ||
+//        !emptyTileTexture.loadFromFile("../assets/empty.png") ||
+//        !bulletTexture.loadFromFile("../assets/fire.png") || // Load fire.png for bullets
+//        !playerTextures[0].loadFromFile("../assets/pl1_fr1.png") ||
+//        !playerTextures[1].loadFromFile("../assets/pl1_fr2.png") ||
+//        !playerTextures[2].loadFromFile("../assets/pl2_fr1.png") ||
+//        !playerTextures[3].loadFromFile("../assets/pl2_fr2.png") ||
+//        !playerTextures[4].loadFromFile("../assets/pl3_fr1.png") ||
+//        !playerTextures[5].loadFromFile("../assets/pl3_fr2.png") ||
+//        !playerTextures[6].loadFromFile("../assets/pl4_fr1.png") ||
+//        !playerTextures[7].loadFromFile("../assets/pl4_fr2.png")) {
+//        return -1;
+//    }
+//
+//    GameState state = mockGameState();
+//    generateMockMap();
+//
+//    sf::Clock clock;
+//
+//    while (window.isOpen()) {
+//        sf::Event event;
+//        while (window.pollEvent(event)) {
+//            if (event.type == sf::Event::Closed)
+//                window.close();
+//        }
+//
+//        float deltaTime = clock.restart().asSeconds();
+//
+//        handleInput(state, deltaTime);
+//        updateBullets(state, deltaTime);
+//
+//        window.clear();
+//        renderMap(window, wallTexture, destructibleWallTexture, emptyTileTexture);
+//        renderGameState(window, state, playerTextures, bulletTexture);
+//        window.display();
+//    }
 
-    sf::Texture wallTexture, destructibleWallTexture, emptyTileTexture, bulletTexture;
-    sf::Texture playerTextures[8];  // 4 players, each having 2 frames
-
-    if (!wallTexture.loadFromFile("../assets/wall.png") ||
-        !destructibleWallTexture.loadFromFile("../assets/destructible.png") ||
-        !emptyTileTexture.loadFromFile("../assets/empty.png") ||
-        !bulletTexture.loadFromFile("../assets/fire.png") || // Load fire.png for bullets
-        !playerTextures[0].loadFromFile("../assets/pl1_fr1.png") ||
-        !playerTextures[1].loadFromFile("../assets/pl1_fr2.png") ||
-        !playerTextures[2].loadFromFile("../assets/pl2_fr1.png") ||
-        !playerTextures[3].loadFromFile("../assets/pl2_fr2.png") ||
-        !playerTextures[4].loadFromFile("../assets/pl3_fr1.png") ||
-        !playerTextures[5].loadFromFile("../assets/pl3_fr2.png") ||
-        !playerTextures[6].loadFromFile("../assets/pl4_fr1.png") ||
-        !playerTextures[7].loadFromFile("../assets/pl4_fr2.png")) {
-        return -1;
-    }
-
-    GameState state = mockGameState();
-    generateMockMap();
-
-    sf::Clock clock;
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        float deltaTime = clock.restart().asSeconds();
-
-        handleInput(state, deltaTime);
-        updateBullets(state, deltaTime);
-
-        window.clear();
-        renderMap(window, wallTexture, destructibleWallTexture, emptyTileTexture);
-        renderGameState(window, state, playerTextures, bulletTexture);
-        window.display();
-    }
-
-    return 0;
-}
  
 //}
 //#include <iostream>

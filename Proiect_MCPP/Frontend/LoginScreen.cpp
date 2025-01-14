@@ -28,7 +28,7 @@ LoginScreen::LoginScreen(sf::RenderWindow& window) : window(window) {
 
     loginButton.setSize({ 150, 50 });
     loginButton.setPosition(125, 250);
-    loginButton.setFillColor(sf::Color(100, 150, 250));
+    loginButton.setFillColor(sf::Color(57, 7, 115));
 
     loginButtonText.setFont(font);
     loginButtonText.setString("Login");

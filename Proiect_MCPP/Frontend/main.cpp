@@ -490,6 +490,7 @@ void renderGameState(sf::RenderWindow& window, const GameState& state, sf::Textu
 //    db.close();
 //}
 
+#include "GameMenu.h"
 #include "LoginScreen.h";
 #include <iostream>
 int main() {
@@ -502,6 +503,31 @@ int main() {
     }
     catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    //    sf::RenderWindow window(sf::VideoMode(400, 600), "Game Menu");
+
+    //    try {
+    //        MenuRenderer menu(window);
+    //        GameMode selectedMode = menu.run();
+
+    //        switch (selectedMode) {
+    //        case GameMode::SOLO_4PLAYERS:
+    //            // Logică pentru inițializare joc 1v1v1v1
+    //            break;
+    //        case GameMode::TEAM_2V2:
+    //            // Logică pentru inițializare joc 2v2
+    //            break;
+    //        case GameMode::EXIT:
+    //            return 0;
+    //        }
+    //    }
+    //    catch (const std::exception& e) {
+    //        std::cerr << "Error: " << e.what() << std::endl;
+    //        return -1;
+    //    }
+
+        return 0;
     }
     // Apelează funcțiile de test ale serverului
 //    testDatabaseOperations();
@@ -549,8 +575,6 @@ int main() {
 //        window.display();
 //    }
 
-    return 0;
-}
  
 //}
 //#include <iostream>

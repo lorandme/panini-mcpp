@@ -47,6 +47,10 @@
     <ClCompile Include="Tile.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data.db" />
+    <None Include="users.db" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

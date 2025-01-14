@@ -19,16 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp" />
-    <ClCompile Include="GameMenu.cpp" />
-    <ClCompile Include="LoginScreen.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Proiect_MCPP\LoginPage.h" />
+    <ClInclude Include="..\Proiect_MCPP\Client.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="LoginScreen.h" />
-    <ClInclude Include="GameMenu.h" />
+    <ClInclude Include="LoginPage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

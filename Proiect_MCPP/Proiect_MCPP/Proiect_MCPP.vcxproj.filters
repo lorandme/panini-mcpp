@@ -93,4 +93,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data.db" />
+    <None Include="users.db" />
+  </ItemGroup>
 </Project>

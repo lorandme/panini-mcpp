@@ -9,7 +9,7 @@ Database::~Database() {
 
 bool Database::createUsersTable() {
     std::string createTableQuery = R"(
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
@@ -80,7 +80,7 @@ bool Database::executeQueryWithResults(const std::string& query, std::vector<std
 
 bool Database::userExists(const std::string& username) {
     std::lock_guard<std::mutex> lock(dbMutex);
-    std::string query = "SELECT COUNT(*) FROM users WHERE username = ?;";
+    std::string query = "SELECT COUNT(*) FROM data WHERE username = ?;";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -102,7 +102,7 @@ bool Database::userExists(const std::string& username) {
 
 bool Database::authenticateUser(const std::string& username, const std::string& password) {
     std::lock_guard<std::mutex> lock(dbMutex);
-    std::string query = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?;";
+    std::string query = "SELECT COUNT(*) FROM data WHERE username = ? AND password = ?;";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -126,7 +126,7 @@ bool Database::authenticateUser(const std::string& username, const std::string& 
 
 bool Database::addUser(const std::string& username, const std::string& password) {
     std::lock_guard<std::mutex> lock(dbMutex);
-    std::string query = "INSERT INTO users (username, password) VALUES (?, ?);";
+    std::string query = "INSERT INTO data (username, password) VALUES (?, ?);";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {

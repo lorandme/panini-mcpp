@@ -118,12 +118,11 @@ void Server::setupRoutes() {
         }
 
         // Înregistrăm utilizatorul în baza de date
-        if (Database.addUser(username, password)) {
+        Database database;
+        if (database.addUser(username, password))
             return crow::response(201, "Utilizator înregistrat cu succes.");
-        }
-        else {
+          else
             return crow::response(500, "Eroare la înregistrarea utilizatorului.");
-        }
             });
 }
 

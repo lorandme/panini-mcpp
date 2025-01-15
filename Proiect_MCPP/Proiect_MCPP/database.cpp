@@ -1,6 +1,5 @@
 ﻿#include "Database.h"
 #include <iostream>
-#include <sqlite3.h>
 
 Database::Database() : db(nullptr) {}
 
@@ -10,7 +9,7 @@ Database::~Database() {
 
 bool Database::createUsersTable() {
     std::string createTableQuery = R"(
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
@@ -27,6 +26,7 @@ bool Database::open(const std::string& dbPath) {
         return false;
     }
 
+    // Creează tabela users dacă nu există
     if (!createUsersTable()) {
         std::cerr << "Eroare la crearea tabelei users!" << std::endl;
         return false;
@@ -55,10 +55,8 @@ bool Database::executeQuery(const std::string& query) {
     return true;
 }
 
-bool Database::addUser(const std::string& username, const std::string& password) {
+bool Database::executeQueryWithResults(const std::string& query, std::vector<std::vector<std::string>>& results) {
     std::lock_guard<std::mutex> lock(dbMutex);
-
-    std::string query = "INSERT INTO users (username, password) VALUES (?, ?);";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -66,47 +64,23 @@ bool Database::addUser(const std::string& username, const std::string& password)
         return false;
     }
 
-    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
-
     rc = sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
-
-    if (rc != SQLITE_DONE) {
-        std::cerr << "Eroare la adăugarea utilizatorului: " << sqlite3_errmsg(db) << std::endl;
-        return false;
-    }
-    return true;
-}
-
-bool Database::authenticateUser(const std::string& username, const std::string& password) {
-    std::lock_guard<std::mutex> lock(dbMutex);
-
-    std::string query = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?;";
-    sqlite3_stmt* stmt;
-    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
-        return false;
-    }
-
-    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
-
-    rc = sqlite3_step(stmt);
-    bool authenticated = false;
-    if (rc == SQLITE_ROW) {
-        authenticated = sqlite3_column_int(stmt, 0) > 0;
+    while (rc == SQLITE_ROW) {
+        std::vector<std::string> row;
+        for (int col = 0; col < sqlite3_column_count(stmt); ++col) {
+            row.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, col)));
+        }
+        results.push_back(row);
+        rc = sqlite3_step(stmt);
     }
 
     sqlite3_finalize(stmt);
-    return authenticated;
+    return rc == SQLITE_DONE;
 }
 
 bool Database::userExists(const std::string& username) {
     std::lock_guard<std::mutex> lock(dbMutex);
-
-    std::string query = "SELECT COUNT(*) FROM users WHERE username = ?;";
+    std::string query = "SELECT COUNT(*) FROM data WHERE username = ?;";
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -125,3 +99,56 @@ bool Database::userExists(const std::string& username) {
     sqlite3_finalize(stmt);
     return exists;
 }
+
+bool Database::authenticateUser(const std::string& username, const std::string& password) {
+    std::lock_guard<std::mutex> lock(dbMutex);
+    std::string query = "SELECT COUNT(*) FROM data WHERE username = ? AND password = ?;";
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+
+    bool authenticated = false;
+    if (rc == SQLITE_ROW) {
+        authenticated = sqlite3_column_int(stmt, 0) > 0;
+    }
+
+    sqlite3_finalize(stmt);
+    return authenticated;
+}
+
+bool Database::addUser(const std::string& username, const std::string& password) {
+    std::lock_guard<std::mutex> lock(dbMutex);
+    std::string query = "INSERT INTO data (username, password) VALUES (?, ?);";
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if (rc != SQLITE_DONE) {
+        if (rc == SQLITE_CONSTRAINT) {  // Constrângere UNIQUE încălcată
+            std::cerr << "Utilizatorul " << username << " există deja în baza de date." << std::endl;
+        }
+        else {
+            std::cerr << "Eroare la adăugarea utilizatorului: " << sqlite3_errmsg(db) << std::endl;
+        }
+        return false;
+    }
+    return true;
+}
+

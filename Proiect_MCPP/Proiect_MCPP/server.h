@@ -1,26 +1,27 @@
-﻿#ifndef SERVER_H
-#define SERVER_H
+﻿#pragma once
 
-#include <crow.h>
+#include "crow.h"
+#include <string>
 #include <sqlite3.h>
 #include <mutex>
 
+
+
 class Server {
+private:
+    crow::SimpleApp app;
+    sqlite3* db;  // Pointer la baza de date SQLite
+    std::mutex dbMutex;
+
 public:
-    Server(); // Constructor
-    void init(); // Inițializare server și conexiune la DB
-    void run(); // Lansează serverul
+    Server();
+    void init();
+    void run();
 
 private:
-    bool openDatabase(); // Deschide baza de date
-    void closeDatabase(); // Închide baza de date
-    void setupRoutes(); // Configurează rutele
-    bool authenticate(const std::string& username, const std::string& password); // Autentifică utilizatorii
-    bool registerUser(const std::string& username, const std::string& password); // Înregistrează utilizatori noi
-
-    sqlite3* db; // Conexiune la baza de date SQLite
-    crow::SimpleApp app; // Serverul Crow
-    std::mutex dbMutex; // Mutex pentru a proteja accesul la baza de date
+    void setupRoutes();
+    bool authenticate(const std::string& username, const std::string& password);
+    bool openDatabase();
+    void closeDatabase();
+    bool registerUser(const std::string& username, const std::string& password);
 };
-
-#endif

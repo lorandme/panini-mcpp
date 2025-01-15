@@ -18,10 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LoginScreen.cpp">
+    <ClCompile Include="Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameMenu.cpp">
@@ -29,14 +26,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Proiect_MCPP\Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Proiect_MCPP\LoginPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LoginScreen.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="LoginPage.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameMenu.h">
       <Filter>Header Files</Filter>

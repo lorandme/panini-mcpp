@@ -11,7 +11,9 @@ int main() {
     std::cout << "Introduceți parola: ";
     std::cin >> password;
 
-    if (client.registerUser(username, password)) {
+    cpr::Response response = client.registerUser(username, password);
+
+    if (response.status_code == 201) {
         std::cout << "Înregistrare reușită!" << std::endl;
     }
     else {

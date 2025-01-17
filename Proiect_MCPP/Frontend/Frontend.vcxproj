@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,13 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
+    <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Proiect_MCPP\Client.h" />
+    <ClInclude Include="..\Proiect_MCPP\LoginPage.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="LoginPage.h" />
+    <ClInclude Include="LoginScreen.h" />
+    <ClInclude Include="GameMenu.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

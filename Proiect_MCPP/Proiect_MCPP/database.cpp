@@ -7,6 +7,44 @@ Database::~Database() {
     close();
 }
 
+//proba 
+void Database::testDatabaseFunctionality() {
+    std::cout << "=== Testarea bazei de date ===" << std::endl;
+
+    std::string testUsername = "testuser";
+    std::string testPassword = "testpass";
+
+    if (addUser(testUsername, testPassword)) {
+        std::cout << "Utilizatorul '" << testUsername << "' a fost adăugat cu succes." << std::endl;
+    }
+    else {
+        std::cerr << "Eroare la adăugarea utilizatorului de test!" << std::endl;
+    }
+
+ 
+    if (userExists(testUsername)) {
+        std::cout << "Utilizatorul '" << testUsername << "' există în baza de date." << std::endl;
+    }
+    else {
+        std::cerr << "Utilizatorul '" << testUsername << "' NU există în baza de date!" << std::endl;
+    }
+
+
+    std::vector<std::vector<std::string>> results;
+    std::string query = "SELECT id, username, password FROM data;";
+    if (executeQueryWithResults(query, results)) {
+        std::cout << "Utilizatori în baza de date:" << std::endl;
+        for (const auto& row : results) {
+            std::cout << "ID: " << row[0] << ", Username: " << row[1] << ", Password: " << row[2] << std::endl;
+        }
+    }
+    else {
+        std::cerr << "Eroare la obținerea utilizatorilor din baza de date!" << std::endl;
+    }
+
+    std::cout << "=== Test finalizat ===" << std::endl;
+}
+
 bool Database::createUsersTable() {
     std::string createTableQuery = R"(
         CREATE TABLE IF NOT EXISTS data (
@@ -18,15 +56,48 @@ bool Database::createUsersTable() {
     return executeQuery(createTableQuery);
 }
 
+void Database::printAllUsers() {
+  /*  std::lock_guard<std::mutex> lock(dbMutex); */// Protejăm accesul la baza de date  //cu linia asta da eroare
+    std::string query = "SELECT id, username, password FROM data;";
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Eroare la pregătirea interogării: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    std::cout << "Conținutul tabelului `data`:\n";
+    std::cout << "ID | Username | Password\n";
+    std::cout << "-------------------------\n";
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        const char* username = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        const char* password = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+
+        std::cout << id << " | " << (username ? username : "NULL") << " | "
+            << (password ? password : "NULL") << "\n";
+    }
+
+    if (rc != SQLITE_DONE) {
+        std::cerr << "Eroare la iterarea rezultatelor: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+
+
 bool Database::open(const std::string& dbPath) {
-    std::lock_guard<std::mutex> lock(dbMutex);
+  /*  std::lock_guard<std::mutex> lock(dbMutex);*/  //cu linia asta da eroare
     int rc = sqlite3_open(dbPath.c_str(), &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Nu s-a putut deschide baza de date: " << sqlite3_errmsg(db) << std::endl;
         return false;
     }
 
-    // Creează tabela users dacă nu există
+   
     if (!createUsersTable()) {
         std::cerr << "Eroare la crearea tabelei users!" << std::endl;
         return false;
@@ -42,6 +113,8 @@ void Database::close() {
         db = nullptr;
     }
 }
+
+
 
 bool Database::executeQuery(const std::string& query) {
     std::lock_guard<std::mutex> lock(dbMutex);
@@ -77,6 +150,8 @@ bool Database::executeQueryWithResults(const std::string& query, std::vector<std
     sqlite3_finalize(stmt);
     return rc == SQLITE_DONE;
 }
+
+
 
 bool Database::userExists(const std::string& username) {
     std::lock_guard<std::mutex> lock(dbMutex);
@@ -141,7 +216,7 @@ bool Database::addUser(const std::string& username, const std::string& password)
     sqlite3_finalize(stmt);
 
     if (rc != SQLITE_DONE) {
-        if (rc == SQLITE_CONSTRAINT) {  // Constrângere UNIQUE încălcată
+        if (rc == SQLITE_CONSTRAINT) { 
             std::cerr << "Utilizatorul " << username << " există deja în baza de date." << std::endl;
         }
         else {

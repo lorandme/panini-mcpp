@@ -107,22 +107,26 @@ void Server::setupRoutes() {
         }
         });
 
-    app.route_dynamic("/register")
+    CROW_ROUTE(app, "/register")
         .methods("POST"_method)([this](const crow::request& req) {
-        // Citim username și parola ca parametri din formular
-        std::string username = req.url_params.get("username");
-        std::string password = req.url_params.get("password");
-
-        if (username.empty() || password.empty()) {
-            return crow::response(400, "Username sau parola sunt goale.");
+        auto json_data = crow::json::load(req.body);
+        if (!json_data) {
+            return crow::response(400, "JSON invalid");
         }
 
-        // Înregistrăm utilizatorul în baza de date
-        Database database;
-        if (database.addUser(username, password))
-            return crow::response(201, "Utilizator înregistrat cu succes.");
-          else
-            return crow::response(500, "Eroare la înregistrarea utilizatorului.");
+        std::string username = json_data["username"].s();
+        std::string password = json_data["password"].s();
+
+        if (username.empty() || password.empty()) {
+            return crow::response(400, "Username sau parola sunt goale");
+        }
+
+        if (registerUser(username, password)) {
+            return crow::response(201, "Utilizator înregistrat cu succes");
+        }
+        else {
+            return crow::response(500, "Eroare la înregistrarea utilizatorului");
+        }
             });
 }
 
@@ -154,6 +158,10 @@ bool Server::authenticate(const std::string& username, const std::string& passwo
         return false;  // Dacă nu există niciun rând corespunzător, autentificarea a eșuat
     }
 }
+
+
+
+
 
 bool Server::registerUser(const std::string& username, const std::string& password) {
     Database db;

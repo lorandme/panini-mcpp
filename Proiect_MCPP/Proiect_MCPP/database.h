@@ -19,6 +19,10 @@ public:
 
     bool addUser(const std::string& username, const std::string& password);
 
+    void testDatabaseFunctionality();
+    void printAllUsers();
+
+
 
 private:
     bool createUsersTable();

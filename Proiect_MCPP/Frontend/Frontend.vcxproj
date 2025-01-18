@@ -20,16 +20,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp" />
+    <ClCompile Include="BombDisplay.cpp" />
+    <ClCompile Include="BulletDisplay.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapDisplay.cpp" />
+    <ClCompile Include="PlayerDisplay.cpp" />
+    <ClCompile Include="PowerUpDisplay.cpp" />
+    <ClCompile Include="TileDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Proiect_MCPP\LoginPage.h" />
+    <ClInclude Include="BombDisplay.h" />
+    <ClInclude Include="BulletDisplay.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="GameMenu.h" />
+    <ClInclude Include="MapDisplay.h" />
+    <ClInclude Include="PlayerDisplay.h" />
+    <ClInclude Include="PowerUpDisplay.h" />
+    <ClInclude Include="TileDisplay.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

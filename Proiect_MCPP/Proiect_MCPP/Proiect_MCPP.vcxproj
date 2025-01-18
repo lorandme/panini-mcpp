@@ -41,6 +41,7 @@
     <ClCompile Include="Bullet.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Database.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />
     <ClCompile Include="Player.h" />

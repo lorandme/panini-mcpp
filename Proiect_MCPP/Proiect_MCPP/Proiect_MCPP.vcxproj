@@ -34,7 +34,6 @@
     <ClCompile Include="Team.cpp" />
     <ClCompile Include="Team.h" />
     <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,39 +1,26 @@
 ﻿#pragma once
 
-#include <optional>  
-#include <memory>    
-
 enum class TileType {
     EMPTY,
     WALL,
-    DESTRUCTIBLE_WALL,
-    BOMB,
-    POWERUP
+    DESTRUCTIBLE_WALL
 };
-
-class Player;
-class Projectile;
 
 class Tile {
 private:
     TileType m_type;
-    std::shared_ptr<Player> m_occupantPlayer;
+    bool m_wasJustDestroyed;
 
 public:
-    Tile();
-    Tile(TileType type);
+    Tile(TileType type = TileType::EMPTY);
 
-    bool isOccupied() const;
-    bool isOccupiedByPlayer() const;
-    bool isOccupiedByProjectile() const;
-    void occupyPlayer(std::shared_ptr<Player> player);
-    void vacate();
-
+    bool isWalkable() const;
     void destroy();
     bool isDestructible() const;
-
     TileType getType() const;
     void setType(TileType type);
+    void vacate();
 
-    void setBomb();
+    bool wasJustDestroyed() const;
+    void resetDestroyedFlag();
 };

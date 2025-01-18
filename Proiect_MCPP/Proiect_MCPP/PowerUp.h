@@ -1,10 +1,6 @@
-#ifndef POWERUP_H
-#define POWERUP_H
-
+#pragma once
 #include <string>
 #include <random>
-#include "Tile.h"
-
 
 class PowerUp {
 public:
@@ -21,12 +17,7 @@ public:
     Type getType() const;
     std::string getTypeName() const;
 
-    static PowerUp generateRandom(int maxX, int maxY, const std::vector<std::vector<Tile>>& map);
-
 private:
     int x, y;
     Type type;
 };
-
-#endif // POWERUP_H
-

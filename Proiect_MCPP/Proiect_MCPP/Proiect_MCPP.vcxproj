@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="Account.h" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="GameManager.h" />
     <ClCompile Include="Map.h" />

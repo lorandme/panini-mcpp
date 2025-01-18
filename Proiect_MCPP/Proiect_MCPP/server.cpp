@@ -183,3 +183,28 @@ bool Server::registerUser(const std::string& username, const std::string& passwo
         return false;
     }
 }
+
+
+void setupRoutes(crow::SimpleApp& app, Database& database) {
+    app.route_dynamic("/register").methods("POST"_method)
+        ([&database](const crow::request& req) {
+        auto json_data = crow::json::load(req.body);
+        if (!json_data || !json_data.has("username") || !json_data.has("password")) {
+            return crow::response(400, "JSON invalid.");
+        }
+
+        std::string username = json_data["username"].s();
+        std::string password = json_data["password"].s();
+
+        if (database.userExists(username)) {
+            return crow::response(409, "Utilizator deja existent.");
+        }
+
+        if (database.addUser(username, password)) {
+            return crow::response(201, "Utilizator înregistrat cu succes.");
+        }
+        else {
+            return crow::response(500, "Eroare la inserarea în baza de date.");
+        }
+            });
+}

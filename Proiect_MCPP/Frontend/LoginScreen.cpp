@@ -1,5 +1,6 @@
-#include "LoginScreen.h"
+﻿#include "LoginScreen.h"
 #include <iostream>
+#include "Client.h"
 
 LoginScreen::LoginScreen(sf::RenderWindow& window) : window(window) {
     if (!font.loadFromFile("../assets/arial.ttf")) {
@@ -30,7 +31,12 @@ LoginScreen::LoginScreen(sf::RenderWindow& window) : window(window) {
     loginButton.setPosition(125, 250);
     loginButton.setFillColor(sf::Color(57, 7, 115));
 
-    loginButtonText.setFont(font);
+    statusMessage.setFont(font);  // Setează fontul
+    statusMessage.setCharacterSize(20); // Setează dimensiunea textului
+    statusMessage.setFillColor(sf::Color::White); // Setează culoarea textului
+    statusMessage.setPosition(10, 300); // Poziția textului pe ecran
+
+    loginButtonText.setFont(font);      //TREBUIE FACUT SA APARA PE ECRAN
     loginButtonText.setString("Login");
     loginButtonText.setCharacterSize(20);
     loginButtonText.setFillColor(sf::Color::White);
@@ -123,4 +129,25 @@ void LoginScreen::drawTextBox(sf::RenderWindow& target, sf::RectangleShape& box,
     displayText.setPosition(box.getPosition().x + 5, box.getPosition().y + 5);
 
     target.draw(displayText);
+}
+
+void LoginScreen::onRegisterButtonClick() {
+    std::string username = usernameInput; // `usernameInput` este deja un `std::string`
+    std::string password = passwordInput; 
+
+    Client client;
+    auto response = client.registerUser(username, password);
+
+    if (response.status_code == 201) {
+        // Mesaj de succes
+        statusMessage.setString("Utilizator înregistrat cu succes!");
+    }
+    else if (response.status_code == 409) {
+        // Mesaj de utilizator existent
+        statusMessage.setString("Eroare: Utilizator deja existent!");
+    }
+    else {
+        // Mesaj de eroare generic
+        statusMessage.setString("Eroare la înregistrare!");
+    }
 }

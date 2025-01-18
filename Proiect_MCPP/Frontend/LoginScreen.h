@@ -7,6 +7,7 @@ class LoginScreen {
 public:
     explicit LoginScreen(sf::RenderWindow& window);
     void run();
+    void onRegisterButtonClick();
 
 private:
     sf::RenderWindow& window;
@@ -18,6 +19,8 @@ private:
     sf::RectangleShape passwordBox;
     sf::RectangleShape loginButton;
     sf::Text loginButtonText;
+    sf::Text statusMessage; 
+
 
     std::string usernameInput;
     std::string passwordInput;

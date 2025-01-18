@@ -6,7 +6,11 @@
 
 Client::Client(const std::string& serverUrl) : serverUrl(serverUrl) {}
 
-bool Client::registerUser(const std::string& username, const std::string& password) {
+Client::Client() {
+    // Inițializări necesare, dacă există
+}
+
+cpr::Response Client::registerUser(const std::string& username, const std::string& password) {
     nlohmann::json json_data;
     json_data["username"] = username;
     json_data["password"] = password;
@@ -19,12 +23,17 @@ bool Client::registerUser(const std::string& username, const std::string& passwo
 
     if (response.status_code == 201) { 
         std::cout << "Înregistrare reușită!" << std::endl;
-        return true;
+        return cpr::Post(
+            cpr::Url{ "http://localhost:8080/register" },
+            cpr::Body{ R"({"username":")" + username + R"(","password":")" + password + R"("})" },
+            cpr::Header{ {"Content-Type", "application/json"} }
+        );
     }
     else {
         std::cerr << "Eroare la înregistrare: " << response.text << std::endl;
-        return false;
+        return cpr::Post(cpr::Url{ "http://localhost:invalid" });
     }
+
 }   
 
 bool Client::login(const std::string& username, const std::string& password) {

@@ -53,6 +53,11 @@
     <None Include="data.db" />
     <None Include="users.db" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PlayerDLL\PlayerDLL.vcxproj">
+      <Project>{6fd2c24c-2236-4b30-8f74-a021f694773f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -2,9 +2,13 @@
 #include <iostream>
 #include "server.h"
 #include "database.h"
+#include "../PlayerDLL/PlayerLogger.h"; 
 
 int main() {
     try {
+        PlayerLogger logger("../log.txt");  // Creates the logger, logging to "log.txt"
+        logger.LogPlayerMove("Player1", 10, 20);  // Logs player movement
+
         Server server;  
         server.init(); 
         server.run();   

@@ -1,75 +1,80 @@
 ﻿#pragma once
 
 #include <string>
-#include "Account.h"
-#include "Map.h"
-#include "player.h"
-#include "Weapon.h"
-#include "Team.h"
-
-class Team;
+#include <utility>
+#include "Direction.h"
+#include "PowerUp.h"
 
 class Player {
 private:
     std::string m_playername;
+    int m_id;
     int m_x;
     int m_y;
+
+    Direction m_lastDirection = Direction::DOWN;
+
     int m_lives = 3;
+    static const int MAX_LIVES = 5;
     int m_score = 0;
-    Team* m_team;
 
-    bool checkCollisionWithEnemies();
-    bool canMoveTo(const Map& map, int newX, int newY) const;
+    float m_lastMoveTime = 0.0f;
 
-    Weapon m_weapon;
+    static constexpr float SHIELD_DURATION = 2.0f;
+    static constexpr float SPEED_BOOST_DURATION = 5.0f;
+    static constexpr float BASE_MOVE_COOLDOWN = 0.15f;
+    static constexpr float SPEED_BOOST_MULTIPLIER = 0.3f;
 
-    int m_shieldDuration = 0; // Durata scutului
-    bool m_hasShield = false; // Starea scutului
-
-    int m_speedBoostDuration = 0; // Durata creșterii vitezei
-    bool m_speedBoosted = false; // Starea de viteză crescută
+    float m_baseMoveCooldown = BASE_MOVE_COOLDOWN;
+    float m_currentMoveCooldown = BASE_MOVE_COOLDOWN;
+    float m_shieldTimer = 0.0f;
+    float m_speedBoostTimer = 0.0f;
+    bool m_hasShield = false;
+    bool m_speedBoosted = false;
 
 public:
+    Player(int id, int startX, int startY);
     Player(const std::string& name, int startX, int startY);
 
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
-    void movePlayer(char direction, int maxX, int maxY, const Map& map);
+    void move(int deltaX, int deltaY, float deltaTime);
+    void setLastDirection(Direction dir);
+    Direction getLastDirection() const;
 
-    void handleInput();
+    float getMoveCooldown() const { return m_currentMoveCooldown; }
+    float getLastMoveTime() const { return m_lastMoveTime; }
+    void incrementLastMoveTime(float deltaTime) { m_lastMoveTime += deltaTime; }
+    void resetLastMoveTime() { m_lastMoveTime = 0.0f; }
 
-    void displayPosition() const;
-
-    void shoot();
-    void loseLife();
-    bool isEliminated() const;
-    bool hasWon() const;
+    void setX(int x);
+    void setY(int y);
+    void setPlayerName(const std::string& playerName);
 
     std::pair<int, int> getPosition() const;
     int getScore() const;
     int getLives() const;
-
-    void updateScore(int points);
-    void setPlayerName(const std::string& playerName);
+    int getId() const;
+    int getX() const;
+    int getY() const;
     std::string getName() const;
-    Weapon& getWeapon();
 
-    Team* getTeamName() const;
-    void setTeam(Team* newTeam);
-
+    void shoot();
+    void loseLife();
     void addReward(int points);
+    void addHP(int hp);
 
-    int getX() const { return m_x; }
-    int getY() const { return m_y; }
+    void gainLife();
+    void activateShield();
+    void activateSpeedBoost();
+    bool hasShield() const;
+    bool isSpeedBoosted() const;
+    void updatePowerUps(float deltaTime);
+    void collectPowerUp(PowerUp::Type powerUpType);
 
-    void addHP(int hp) { m_lives += hp; }
+    bool isEliminated() const;
+    bool hasWon() const;
 
-    void activateShield(int duration) { m_shieldDuration = duration; m_hasShield = true; }
+    bool operator==(const Player& other) const;
+    bool operator!=(const Player& other) const;
 
-    void increaseSpeed(int duration) { m_speedBoostDuration = duration; m_speedBoosted = true; }
-
-
-
+    void debugLastDirection() const;
 };

@@ -1,0 +1,1 @@
+Player Player1 moved to position (10, 20)

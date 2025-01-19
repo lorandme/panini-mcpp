@@ -179,3 +179,19 @@ int main() {
 
     return 0;
 }
+
+
+/*de integrat
+
+#include "GameManager.h"
+
+int main() {
+    const int mapWidth = 15;
+    const int mapHeight = 10;
+    const float tileSize = 80.0f;
+
+    GameManager game(mapWidth, mapHeight, tileSize);
+    game.run();
+
+    return 0;
+}*/

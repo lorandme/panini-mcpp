@@ -6,8 +6,8 @@
 
 int main() {
     try {
-        PlayerLogger logger("../log.txt");  // Creates the logger, logging to "log.txt"
-        logger.LogPlayerMove("Player1", 10, 20);  // Logs player movement
+        PlayerLogger logger("../log.txt"); 
+        logger.LogPlayerMove("Player1", 10, 20);  
 
         Server server;  
         server.init(); 

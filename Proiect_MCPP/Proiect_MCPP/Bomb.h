@@ -12,6 +12,7 @@ private:
     float m_timeSinceExplosion = 0.0f;
 
 public:
+    float getMaxTimer() const { return m_explosionTime; }
     Bomb(int x, int y, int owner);
     Bomb(const Bomb& other);
     Bomb& operator=(const Bomb& other);

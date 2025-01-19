@@ -6,10 +6,10 @@ Bullet::Bullet(double startX, double startY, Direction dir, int ownerId)
     m_direction(dir),
     m_speed(BASE_SPEED),
     m_isActive(true),
-    m_ownerId(ownerId) {
+    m_ownerId(ownerId),
+    m_lifetime(0.0) {
 }
 
-// In Bullet.cpp
 void Bullet::move(double deltaTime) {
     if (m_isActive) {
         switch (m_direction) {
@@ -25,6 +25,11 @@ void Bullet::move(double deltaTime) {
         case Direction::RIGHT:
             m_x += m_speed * deltaTime;
             break;
+        }
+
+        m_lifetime += deltaTime;
+        if (m_lifetime >= MAX_LIFETIME) {
+            deactivate();
         }
     }
 }
@@ -49,6 +54,10 @@ bool Bullet::isBulletActive() const {
     return m_isActive;
 }
 
+double Bullet::getLifetime() const {
+    return m_lifetime;
+}
+
 void Bullet::setPosition(double newX, double newY) {
     m_x = newX;
     m_y = newY;
@@ -57,3 +66,4 @@ void Bullet::setPosition(double newX, double newY) {
 void Bullet::setDirection(Direction newDirection) {
     m_direction = newDirection;
 }
+

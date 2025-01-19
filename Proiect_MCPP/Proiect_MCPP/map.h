@@ -54,6 +54,8 @@ public:
     void spawnBombOnDestruction(int x, int y);
     void updateBombs(float deltaTime);
 
+    void destroySurroundingTiles(int bombX, int bombY);
+
     void updatePowerUps(float deltaTime);
     void collectPowerUps(Player& player);
 

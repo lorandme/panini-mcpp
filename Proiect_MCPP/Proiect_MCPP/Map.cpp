@@ -222,11 +222,17 @@ bool Map::checkBulletCollisions(Bullet& bullet) {
     for (size_t i = 0; i < m_players.size(); ++i) {
         auto& player = m_players[i];
         if (bullet.checkCollision(player.getX(), player.getY()) && i != bullet.getOwner()) {
+            auto& shooter = m_players[bullet.getOwner()];
+
             if (!player.hasShield()) {
+                shooter.addScore(1);
+
                 player.loseLife();
                 std::cout << "Player " << player.getId() << " hit! Remaining lives: " << player.getLives() << std::endl;
 
                 if (player.isEliminated()) {
+                    shooter.addScore(3);
+                    shooter.incrementKills();
                     std::cout << "Player " << player.getId() << " has been eliminated!" << std::endl;
                 }
             }
@@ -234,6 +240,7 @@ bool Map::checkBulletCollisions(Bullet& bullet) {
             return true;
         }
     }
+
 
     auto pos = bullet.getPosition();
     int tileX = static_cast<int>(pos.first);
@@ -285,6 +292,12 @@ void Map::spawnBombOnDestruction(int x, int y) {
         std::cout << "Bomb spawn failed: Tile not destructible" << std::endl;
         return;
     }
+
+    if (m_bombs.size() >= 1) {
+        std::cout << "Cannot spawn bomb: Maximum number of bombs reached." << std::endl;
+        return;
+    }
+
     std::uniform_real_distribution<> distribution(0.0, 1.0);
     double randomValue = distribution(m_randomGenerator);
 
@@ -314,6 +327,8 @@ void Map::updateBombs(float deltaTime) {
 
         if (it->isExploded()) {
             if (!it->hasDamageDone()) {
+                destroySurroundingTiles(it->getX(), it->getY());
+
                 for (auto& player : m_players) {
                     if (isPlayerInExplosionRadius(player, it->getX(), it->getY())) {
                         player.loseLife();
@@ -333,6 +348,25 @@ void Map::updateBombs(float deltaTime) {
         }
         else {
             ++it;
+        }
+    }
+}
+
+void Map::destroySurroundingTiles(int bombX, int bombY) {
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
+
+            int targetX = bombX + dx;
+            int targetY = bombY + dy;
+
+            if (targetX >= 0 && targetX < m_width && targetY >= 0 && targetY < m_height) {
+                Tile& targetTile = getTile(targetX, targetY);
+                if (targetTile.isDestructible()) {
+                    targetTile.destroy();
+                    std::cout << "Tile at (" << targetX << ", " << targetY << ") destroyed." << std::endl;
+                }
+            }
         }
     }
 }

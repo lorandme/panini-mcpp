@@ -4,6 +4,8 @@
 
 class Bullet {
 private:
+    double m_lifetime = 0.0;
+    static constexpr double MAX_LIFETIME = 0.5;
     static constexpr double BASE_SPEED = 10.0;
     double m_x, m_y;
     Direction m_direction;
@@ -24,6 +26,7 @@ public:
     std::pair<double, double> getPosition() const;
     bool isBulletActive() const;
 
+    double getLifetime() const;
     void setPosition(double newX, double newY);
     void setDirection(Direction newDirection);
 };

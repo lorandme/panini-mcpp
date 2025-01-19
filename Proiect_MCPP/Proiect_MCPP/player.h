@@ -17,13 +17,15 @@ private:
     int m_lives = 3;
     static const int MAX_LIVES = 5;
     int m_score = 0;
+    int m_kills = 0;
+
 
     float m_lastMoveTime = 0.0f;
 
     static constexpr float SHIELD_DURATION = 2.0f;
     static constexpr float SPEED_BOOST_DURATION = 5.0f;
-    static constexpr float BASE_MOVE_COOLDOWN = 0.15f;
-    static constexpr float SPEED_BOOST_MULTIPLIER = 0.3f;
+    static constexpr float BASE_MOVE_COOLDOWN = 0.125f;
+    static constexpr float SPEED_BOOST_MULTIPLIER = 0.5f;
 
     float m_baseMoveCooldown = BASE_MOVE_COOLDOWN;
     float m_currentMoveCooldown = BASE_MOVE_COOLDOWN;
@@ -56,6 +58,11 @@ public:
     int getX() const;
     int getY() const;
     std::string getName() const;
+    void addScore(int points);
+    void resetScore();
+
+    void incrementKills();
+    int getKills() const;
 
     void shoot();
     void loseLife();

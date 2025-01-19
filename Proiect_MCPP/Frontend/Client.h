@@ -8,7 +8,7 @@ public:
     Client(const std::string& serverUrl);
     Client();
     cpr::Response registerUser(const std::string& username, const std::string& password);
-    bool login(const std::string& username, const std::string& password); // Changed return type from bool to cpr::Response
+    bool login(const std::string& username, const std::string& password); 
 private:
     std::string serverUrl;
 };

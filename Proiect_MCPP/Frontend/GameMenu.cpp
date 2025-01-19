@@ -69,7 +69,6 @@ void MenuRenderer::handleEvents() {
                 m_selectedIndex = (m_selectedIndex + 1) % m_menuItems.size();
                 break;
             case sf::Keyboard::Enter:
-                // Logică selectare
                 m_selectionMade = true;
                 m_selectedMode = static_cast<GameMode>(m_selectedIndex);
 

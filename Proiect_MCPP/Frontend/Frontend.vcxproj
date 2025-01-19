@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\Proiect_MCPP\LoginPage.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="..\Proiect_MCPP\LoginPage.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="GameMenu.h" />
   </ItemGroup>

@@ -17,7 +17,7 @@ PlayerDisplay::PlayerDisplay(Player* player, const std::string& texturePrefix)
         }
     }
 
-    m_sprite.setTexture(m_texturesFrame1[m_player->getId()]); 
+    m_sprite.setTexture(m_texturesFrame1[m_player->getId()]);
 
     m_sprite.setScale(100.0f / 64.0f, 100.0f / 64.0f);
 }
@@ -32,7 +32,8 @@ void PlayerDisplay::updateDisplay(float deltaTime) {
 
         if (m_currentFrame) {
             m_sprite.setTexture(m_texturesFrame2[m_player->getId()]);
-        } else {
+        }
+        else {
             m_sprite.setTexture(m_texturesFrame1[m_player->getId()]);
         }
     }
@@ -41,10 +42,10 @@ void PlayerDisplay::updateDisplay(float deltaTime) {
 void PlayerDisplay::render(sf::RenderWindow& window) {
     auto position = m_player->getPosition();
     float tileSize = 80.0f;
-    float playerSize = m_sprite.getGlobalBounds().width; 
+    float playerSize = m_sprite.getGlobalBounds().width;
 
     m_sprite.setPosition(
-        static_cast<float>(position.first * tileSize + (tileSize - playerSize) / 2), 
+        static_cast<float>(position.first * tileSize + (tileSize - playerSize) / 2),
         static_cast<float>(position.second * tileSize + (tileSize - playerSize) / 2)
     );
 

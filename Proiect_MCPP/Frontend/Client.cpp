@@ -2,7 +2,7 @@
 #include "Client.h"
 #include <iostream>
 #include <cpr/cpr.h>
-#include <nlohmann/json.hpp>// Folosim biblioteca CPR pentru cereri HTTP
+#include <nlohmann/json.hpp>
 
 Client::Client(const std::string& serverUrl) : serverUrl(serverUrl) {}
 

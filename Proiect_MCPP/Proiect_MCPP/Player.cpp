@@ -58,6 +58,24 @@ std::string Player::getName() const {
     return m_playername;
 }
 
+void Player::addScore(int points)
+{
+    m_score += points;
+}
+
+void Player::resetScore() {
+    m_score = 0;
+    m_kills = 0;
+}
+
+void Player::incrementKills() {
+    m_kills++;
+}
+
+int Player::getKills() const {
+    return m_kills;
+}
+
 Direction Player::getLastDirection() const {
     return m_lastDirection;
 }

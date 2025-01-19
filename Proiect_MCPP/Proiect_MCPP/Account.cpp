@@ -27,7 +27,6 @@ bool Account::purchaseUpgrade(const std::string& upgrade, int cost)
 
 void Account::displayStatus() const
 {
-    // Example: display account status (e.g., name, points, score, upgrades)
 }
 
 const std::string& Account::getName() const

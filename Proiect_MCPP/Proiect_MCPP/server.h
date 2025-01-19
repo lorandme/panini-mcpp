@@ -1,11 +1,16 @@
 ﻿#pragma once
-
-#include "crow.h"
-#include <string>
+#include <crow.h>
 #include <sqlite3.h>
 #include <mutex>
 #include "Bomb.h"
 #include <vector>
+#include <string>
+#include "Map.h"  
+#include "Database.h"
+#include "PowerUp.h"
+#include "Tile.h"
+#include "Player.h"
+
 
 
 

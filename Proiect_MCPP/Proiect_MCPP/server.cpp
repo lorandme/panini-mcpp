@@ -1,14 +1,9 @@
-﻿
-
-#include "Server.h"
+﻿#include "Server.h"
 #include <iostream>
 #include <crow.h>
 #include <sqlite3.h>
-#include "database.h"
-#include "Bullet.h"
-#include "Bomb.h"
 
-Server::Server() : db(nullptr) {
+Server::Server() : db(nullptr), gameMap(10,10) {
     // Constructorul clasei Server
 }
 
@@ -151,11 +146,63 @@ void Server::setupRoutes() {
 
         // Setează lista de bule în răspuns
         response["bullets"] = std::move(bulletsList);
+    CROW_ROUTE(app, "/map/info")
+        .methods("GET"_method)([this](const crow::request& req) {
+        crow::json::wvalue response;
+        response["width"] = gameMap.getWidth();
+        response["height"] = gameMap.getHeight();
+        return crow::response(response);
+            });
+
+    CROW_ROUTE(app, "/map/tiles")
+        .methods("GET"_method)([this](const crow::request& req) {
+        crow::json::wvalue response;
+        response["tiles"] = crow::json::wvalue(crow::json::type::list);
+
+        for (int y = 0; y < gameMap.getHeight(); ++y) {
+            for (int x = 0; x < gameMap.getWidth(); ++x) {
+                Tile& tile = gameMap.getTile(x, y);
+                crow::json::wvalue tileData;
+                tileData["x"] = x;
+                tileData["y"] = y;
+                tileData["type"] = static_cast<int>(tile.getType());
+                tileData["is_walkable"] = tile.isWalkable();
+                tileData["is_destructible"] = tile.isDestructible();
+
+                response["tiles"].push_back(tileData);
+            }
+        }
 
         return crow::response(response);
             });
 
     CROW_ROUTE(app, "/bullets/create")
+    CROW_ROUTE(app, "/map/tile")
+        .methods("GET"_method)([this](const crow::request& req) {
+        // Use req.url_params.get without a default value
+        std::string xStr = req.url_params.get("x");
+        std::string yStr = req.url_params.get("y");
+
+        int x = xStr.empty() ? 0 : std::stoi(xStr);
+        int y = yStr.empty() ? 0 : std::stoi(yStr);
+
+        if (x < 0 || y < 0 || x >= gameMap.getWidth() || y >= gameMap.getHeight()) {
+            return crow::response(400, "Invalid tile coordinates");
+        }
+
+        Tile& tile = gameMap.getTile(x, y);
+
+        crow::json::wvalue response;
+        response["x"] = x;
+        response["y"] = y;
+        response["type"] = static_cast<int>(tile.getType());
+        response["is_walkable"] = tile.isWalkable();
+        response["is_destructible"] = tile.isDestructible();
+
+        return crow::response(response);
+            });
+
+    CROW_ROUTE(app, "/map/destroy_tile")
         .methods("POST"_method)([this](const crow::request& req) {
         auto json_data = crow::json::load(req.body);
         if (!json_data) {
@@ -251,6 +298,41 @@ void Server::setupRoutes() {
         response["bombs"] = std::move(bombsList);
 
         return crow::response(200, response.dump());
+        int x = json_data["x"].i();
+        int y = json_data["y"].i();
+
+        if (x < 0 || y < 0 || x >= gameMap.getWidth() || y >= gameMap.getHeight()) {
+            return crow::response(400, "Invalid tile coordinates");
+        }
+
+        Tile& tile = gameMap.getTile(x, y);
+
+        if (!tile.isDestructible()) {
+            return crow::response(400, "Tile is not destructible");
+        }
+
+        tile.destroy();
+
+        return crow::response(200, "Tile destroyed");
+            });
+
+    CROW_ROUTE(app, "/powerups")
+        .methods("GET"_method)([this](const crow::request& req) {
+        auto& powerUps = gameMap.getPowerUps();
+        crow::json::wvalue response;
+        response["powerups"] = crow::json::wvalue(crow::json::type::list);
+
+        for (const auto& powerUp : powerUps) {
+            crow::json::wvalue powerUpData;
+            powerUpData["x"] = powerUp.getX();
+            powerUpData["y"] = powerUp.getY();
+            powerUpData["type"] = powerUp.getTypeName();
+            powerUpData["type_id"] = static_cast<int>(powerUp.getType());
+
+            response["powerups"].push_back(powerUpData);
+        }
+
+        return crow::response(response);
             });
 }
 

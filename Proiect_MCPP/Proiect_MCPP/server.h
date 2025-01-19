@@ -4,6 +4,8 @@
 #include <string>
 #include <sqlite3.h>
 #include <mutex>
+#include "Bomb.h"
+#include <vector>
 
 
 
@@ -12,6 +14,7 @@ private:
     crow::SimpleApp app;
     sqlite3* db;  // Pointer la baza de date SQLite
     std::mutex dbMutex;
+    std::vector<Bomb> bombs;
 
 public:
     Server();

@@ -5,6 +5,8 @@
 #include <crow.h>
 #include <sqlite3.h>
 #include "database.h"
+#include "Bullet.h"
+#include "Bomb.h"
 
 Server::Server() : db(nullptr) {
     // Constructorul clasei Server
@@ -127,6 +129,128 @@ void Server::setupRoutes() {
         else {
             return crow::response(500, "Eroare la înregistrarea utilizatorului");
         }
+            });
+
+    CROW_ROUTE(app, "/bullets/info")
+        .methods("GET"_method)([this](const crow::request& req) {
+        // Creează un răspuns JSON
+        crow::json::wvalue response;
+
+        // Creează o listă de bule
+        auto bulletsList = crow::json::wvalue::list();
+
+        // Exemplu de adăugare a informațiilor despre bulă
+        crow::json::wvalue bulletInfo;
+        bulletInfo["x"] = 10.0;
+        bulletInfo["y"] = 20.0;
+        bulletInfo["direction"] = 1; // DOWN
+        bulletInfo["active"] = true;
+
+        // Adaugă informațiile despre bulă în lista de bule
+        bulletsList.push_back(std::move(bulletInfo));
+
+        // Setează lista de bule în răspuns
+        response["bullets"] = std::move(bulletsList);
+
+        return crow::response(response);
+            });
+
+    CROW_ROUTE(app, "/bullets/create")
+        .methods("POST"_method)([this](const crow::request& req) {
+        auto json_data = crow::json::load(req.body);
+        if (!json_data) {
+            return crow::response(400, "Invalid JSON");
+        }
+
+        // Extract bullet parameters
+        double startX = json_data["startX"].d();
+        double startY = json_data["startY"].d();
+        int directionInt = json_data["direction"].i();
+        int ownerId = json_data["ownerId"].i();
+
+        // Convert int to Direction enum
+        Direction direction;
+        switch (directionInt) {
+        case 0: direction = Direction::UP; break;
+        case 1: direction = Direction::DOWN; break;
+        case 2: direction = Direction::LEFT; break;
+        case 3: direction = Direction::RIGHT; break;
+        default:
+            return crow::response(400, "Invalid direction");
+        }
+
+        // Create bullet
+        Bullet newBullet(startX, startY, direction, ownerId);
+
+        // Răspuns JSON
+        crow::json::wvalue response;
+        response["message"] = "Bullet created successfully";
+        response["x"] = startX;
+        response["y"] = startY;
+
+        return crow::response(201, response);
+            });
+
+    CROW_ROUTE(app, "/create_bomb")
+        .methods("POST"_method)([this](const crow::request& req) {
+        auto json_data = crow::json::load(req.body);
+        if (!json_data || !json_data.has("x") || !json_data.has("y") || !json_data.has("owner")) {
+            return crow::response(400, "JSON invalid.");
+        }
+
+        int x = json_data["x"].i();
+        int y = json_data["y"].i();
+        int owner = json_data["owner"].i();
+
+        Bomb newBomb(x, y, owner);
+        bombs.push_back(newBomb); // Use the bombs vector
+
+        return crow::response(201, "Bomb created successfully.");
+            });
+
+    // Update bomb route
+    CROW_ROUTE(app, "/update_bomb")
+        .methods("POST"_method)([this](const crow::request& req) {
+        auto json_data = crow::json::load(req.body);
+        if (!json_data || !json_data.has("index") || !json_data.has("deltaTime")) {
+            return crow::response(400, "JSON invalid.");
+        }
+
+        int index = json_data["index"].i();
+        float deltaTime = json_data["deltaTime"].d(); // Use d() for double
+
+        if (index < 0 || index >= bombs.size()) {
+            return crow::response(404, "Bomb not found.");
+        }
+
+        bombs[index].update(deltaTime);
+
+        return crow::response(200, "Bomb updated successfully.");
+            });
+
+    // Bombs info route
+    CROW_ROUTE(app, "/bombs/info")
+        .methods("GET"_method)([this](const crow::request& req) {
+        // Create a JSON response
+        crow::json::wvalue response;
+
+        // Create a list of bombs
+        auto bombsList = crow::json::wvalue::list();
+
+        for (const auto& bomb : bombs) {
+            crow::json::wvalue bombInfo;
+            bombInfo["x"] = bomb.getX();
+            bombInfo["y"] = bomb.getY();
+            bombInfo["exploded"] = bomb.isExploded();
+            bombInfo["timer"] = bomb.getTimer();
+            bombInfo["damageDone"] = bomb.hasDamageDone();
+
+            bombsList.push_back(std::move(bombInfo));
+        }
+
+        response["bombs"] = std::move(bombsList);
+
+        return crow::response(200, response.dump());
             });
 }
 
